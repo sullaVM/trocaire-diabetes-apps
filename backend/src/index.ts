@@ -1,26 +1,44 @@
-import bodyParser from "body-parser";
-import cors from "cors";
-import express from "express";
-import logger from "morgan";
+import bodyParser from 'body-parser';
+import express from 'express';
+import logger from 'morgan';
+import { check, validationResult } from 'express-validator';
+import * as db from './database';
+import * as requests from './models/requests';
 
-const API_PORT = 8080;
+const apiPort = 8080;
 const app = express();
 const router = express.Router();
 
-app.use(cors());
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(logger("dev"));
+app.use(logger('dev'));
 
-router.get("/placeHolder", cors(), (request, response) => {
-  response.status(200).send({
-    success: "true",
-    message: "Request successful"
-  });
+router.get('/createUser', (request, response) => {
+  const createUserRequest: requests.ICreateUser = {
+    doctorID: request.body.doctorID,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    mobileNumber: request.body.mobileNumber,
+    photoUrl: request.body.photoUrl,
+    password: request.body.password,
+  };
+
+  db.createUser(createUserRequest)
+    .then(result => {
+      response.status(200).send({
+        success: 'true',
+        message: 'Request successful',
+      });
+    })
+    .catch(error => {
+      response.status(500).send({
+        success: 'true',
+        message: 'Request unsuccessful' + error,
+      });
+    });
 });
 
-app.use("/api", router);
-app.disable("etag");
+app.use('/api', router);
+app.disable('etag');
 
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}/api`));
+app.listen(apiPort, () => console.log(`LISTENING ON PORT ${apiPort}/api`));
