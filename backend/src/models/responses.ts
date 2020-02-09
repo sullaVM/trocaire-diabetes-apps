@@ -1,1 +1,3 @@
-export interface ICreateUser {}
+export interface ICreateUser {
+  success: boolean;
+}

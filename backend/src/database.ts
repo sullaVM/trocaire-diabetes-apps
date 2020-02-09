@@ -18,15 +18,16 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const createUser = async (
   request: requests.ICreateUser
 ): Promise<responses.ICreateUser> => {
-  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password) VALUES (${request.doctorID},${request.firstName},${request.lastName},${request.mobileNumber},${request.photoUrl},${request.password})`;
+  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password) 
+  VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${request.mobileNumber}','${request.photoUrl}','${request.password}');`;
 
   const result = await new Promise<responses.ICreateUser>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
+        resolve({ success: false });
       }
-      console.log({ results, fields });
-      resolve({});
+      resolve({ success: true });
     });
   });
 

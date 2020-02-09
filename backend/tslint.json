@@ -5,7 +5,8 @@
   "rules": {
     "no-console": false,
     "quotemark": [true, "single"],
-    "no-empty-interface": false
+    "no-empty-interface": false,
+    "interface-name": [true, "always-prefix"]
   },
   "rulesDirectory": []
 }

@@ -1,9 +1,9 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import logger from 'morgan';
-import { check, validationResult } from 'express-validator';
 import * as db from './database';
 import * as requests from './models/requests';
+import * as responses from './models/responses';
 
 const apiPort = 8080;
 const app = express();
@@ -23,16 +23,27 @@ router.get('/createUser', (request, response) => {
     password: request.body.password,
   };
 
-  db.createUser(createUserRequest)
+  const createUserResponse: Promise<responses.ICreateUser> = db.createUser(
+    createUserRequest
+  );
+
+  createUserResponse
     .then(result => {
-      response.status(200).send({
-        success: 'true',
-        message: 'Request successful',
-      });
+      if (result.success) {
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+        });
+      } else {
+        response.status(500).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
     })
     .catch(error => {
       response.status(500).send({
-        success: 'true',
+        success: 'false',
         message: 'Request unsuccessful' + error,
       });
     });
