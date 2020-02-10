@@ -37,10 +37,8 @@ public class Patient_Signup extends AppCompatActivity {
 
     Button back;
     Button enter;
-    Button load;
     Button cameraB;
     EditText enterName;
-    TextView loadedText;
     ImageView imageView;
     Bitmap photo;
     int currentNumber;
@@ -52,10 +50,8 @@ public class Patient_Signup extends AppCompatActivity {
 
         back = findViewById(R.id.back);
         enter = findViewById(R.id.enter);
-        load = findViewById(R.id.load);
         cameraB = findViewById(R.id.cameraB);
         enterName = findViewById(R.id.editText);
-        loadedText = findViewById(R.id.textView);
         imageView = findViewById(R.id.imageView);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -69,13 +65,6 @@ public class Patient_Signup extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 enterData();
-            }
-        });
-
-        load.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadData();
             }
         });
 
@@ -107,7 +96,7 @@ public class Patient_Signup extends AppCompatActivity {
                 Log.e("ReadWriteFile", "Unable to read the TextFile.txt file.");
             }
         }
-        return val;
+        return val + 1;
     }
 
     private void takePhoto() {
@@ -115,36 +104,7 @@ public class Patient_Signup extends AppCompatActivity {
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
-    public void loadData(){
-        String textFromFile = "";
-        // Gets the file from the primary external storage space of the
-        // current application.
-        File testFile = new File(this.getExternalFilesDir(null), "TextFile.txt");
-        if (testFile != null) {
-            // Reads the data from the file
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(testFile));
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    textFromFile += line.toString();
-                    textFromFile += "\n";
-                }
-                reader.close();
-            } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TestFile.txt file.");
-            }
-        }
-        loadedText.setText(textFromFile);
-
-        String photoPath = this.getExternalFilesDir(null) + "/TestImage.jpg";
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
-    }
-
-    public void enterData(){
+    private void enterData(){
         String name = enterName.getText().toString();
         try {
             // Creates a file in the primary external storage space of the
