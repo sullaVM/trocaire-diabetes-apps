@@ -6,13 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".Patient_Login">
 
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scroll"
+        android:layout_width="350dp"
+        android:layout_height="540dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+        </LinearLayout>
+    </ScrollView>
+
+
     <Button
         android:id="@+id/back"
         android:layout_width="99dp"
         android:layout_height="75dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="296dp"
-        android:layout_marginRight="296dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="168dp"
+        android:layout_marginRight="168dp"
         android:text="Back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
