@@ -149,7 +149,7 @@ public class Patient_Input_Password extends AppCompatActivity {
     }
 
     void checkPassword(int tag){
-        File testFile = new File(this.getExternalFilesDir(null), "TextFile.txt");
+        File testFile = new File(this.getFilesDir(), "TextFile.txt");
         if (testFile != null) {
             BufferedReader reader = null;
             try {

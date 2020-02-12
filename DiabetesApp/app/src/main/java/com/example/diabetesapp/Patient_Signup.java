@@ -196,7 +196,7 @@ public class Patient_Signup extends AppCompatActivity {
     private int findNumber(){
         int val = 0;
         String[] text;
-        File testFile = new File(this.getExternalFilesDir(null), "TextFile.txt");
+        File testFile = new File(this.getFilesDir(), "TextFile.txt");
         if (testFile != null) {
             BufferedReader reader = null;
             try {
@@ -225,7 +225,7 @@ public class Patient_Signup extends AppCompatActivity {
             // Creates a file in the primary external storage space of the
             // current application.
             // If the file does not exist, it is created.
-            File textFile = new File(this.getExternalFilesDir(null), "TextFile.txt");
+            File textFile = new File(this.getFilesDir(), "TextFile.txt");
             if (!textFile.exists())
                 textFile.createNewFile();
 
@@ -244,7 +244,7 @@ public class Patient_Signup extends AppCompatActivity {
                     null,
                     null);
 
-            File photoFile = new File(this.getExternalFilesDir(null), "Image" + currentNumber + ".jpg");
+            File photoFile = new File(this.getFilesDir(), "Image" + currentNumber + ".jpg");
             if (!textFile.exists())
                 textFile.createNewFile();
             try {

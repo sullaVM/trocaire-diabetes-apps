@@ -71,7 +71,7 @@ public class Patient_Login extends AppCompatActivity {
     }
 
     private Bitmap getImage(int val){
-        String photoPath = this.getExternalFilesDir(null) + "/Image" + val + ".jpg";
+        String photoPath = this.getFilesDir() + "/Image" + val + ".jpg";
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         return BitmapFactory.decodeFile(photoPath, options);
@@ -80,7 +80,7 @@ public class Patient_Login extends AppCompatActivity {
     private int findNumber(){
         int val = 1;
         String[] text;
-        File testFile = new File(this.getExternalFilesDir(null), "TextFile.txt");
+        File testFile = new File(this.getFilesDir(), "TextFile.txt");
         if (testFile != null) {
             BufferedReader reader = null;
             try {

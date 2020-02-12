@@ -40,7 +40,7 @@ public class Patient_Data_Enter extends AppCompatActivity {
 
     private void showData(int tag){
         String printData = "";
-        File testFile = new File(this.getExternalFilesDir(null), "TextFile.txt");
+        File testFile = new File(this.getFilesDir(), "TextFile.txt");
         if (testFile != null) {
             BufferedReader reader = null;
             try {
