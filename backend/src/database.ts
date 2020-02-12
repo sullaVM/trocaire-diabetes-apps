@@ -18,10 +18,29 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const createUser = async (
   request: requests.ICreateUser
 ): Promise<responses.ICreateUser> => {
-  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password) 
+  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password)
   VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${request.mobileNumber}','${request.photoUrl}','${request.password}');`;
 
   const result = await new Promise<responses.ICreateUser>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
+export const createDoctor = async (
+  request: requests.ICreateDoctor
+): Promise<responses.ICreateDoctor> => {
+  const query = `INSERT INTO Doctors (FirstName, LastName, LicenseNo, ClinicID, Email, UserName,Password)
+  VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.clinicID}','${request.email}','${request.username}','${request.password}');`;
+
+  const result = await new Promise<responses.ICreateDoctor>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);

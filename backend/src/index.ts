@@ -49,6 +49,43 @@ router.get('/createUser', (request, response) => {
     });
 });
 
+router.get('/createDoctor', (request, response) => {
+  const createDoctorRequest: requests.ICreateDoctor = {
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    licenseNumber: request.body.licenseNumber,
+    clinicID: request.body.clinicID,
+    email: request.body.email,
+    username: request.body.username,
+    password: request.body.password,
+  };
+
+  const createDoctorResponse: Promise<responses.ICreateDoctor> = db.createDoctor(
+    createDoctorRequest
+  );
+
+  createDoctorResponse
+    .then(result => {
+      if (result.success) {
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+        });
+      } else {
+        response.status(500).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(500).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
 app.use('/api', router);
 app.disable('etag');
 
