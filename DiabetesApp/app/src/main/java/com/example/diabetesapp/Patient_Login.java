@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.graphics.Bitmap;
 
 import java.io.BufferedReader;
@@ -36,14 +37,14 @@ public class Patient_Login extends AppCompatActivity {
 
         currentNumber = findNumber();
 
-        LinearLayout linearlayout = findViewById(R.id.buttonLayout);
-        linearlayout.setOrientation(LinearLayout.VERTICAL);
+        TableLayout tablelayout = findViewById(R.id.buttonLayout);
+        tablelayout.setOrientation(LinearLayout.VERTICAL);
 
         for(int i = 0; i<currentNumber; i++)
         {
             LinearLayout linear1 = new LinearLayout(this);
             linear1.setOrientation(LinearLayout.HORIZONTAL);
-            linearlayout.addView(linear1);
+            tablelayout.addView(linear1);
 
             ImageButton b = new ImageButton(this);
             b.setImageBitmap(getImage(i));
@@ -64,7 +65,7 @@ public class Patient_Login extends AppCompatActivity {
     }
 
     private void nextScreen(int tag){
-        Intent intent = new Intent(this, Patient_Data_Enter.class);
+        Intent intent = new Intent(this, Patient_Input_Password.class);
         intent.putExtra("tag", tag);
         startActivity(intent);
     }

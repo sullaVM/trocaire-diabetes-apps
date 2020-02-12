@@ -46,7 +46,7 @@ public class Patient_Data_Enter extends AppCompatActivity {
             try {
                 reader = new BufferedReader(new FileReader(testFile));
                 String line;
-                for(int i = 0; i < tag; i++) {
+                for(int i = 1; i < tag; i++) {
                     line = reader.readLine();
                 }
                 line = reader.readLine();

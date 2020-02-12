@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
+        <TableLayout
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,7 +23,7 @@
             android:orientation="horizontal"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
-        </LinearLayout>
+        </TableLayout>
     </ScrollView>
 
 
