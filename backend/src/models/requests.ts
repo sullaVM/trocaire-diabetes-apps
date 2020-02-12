@@ -1,11 +1,23 @@
+/**
+ * User requests
+ */
+
 export interface ICreateUser {
   doctorID: number;
   firstName: string;
   lastName: string;
   mobileNumber: number;
-  photoUrl: string;
+  photoDataUrl: string;
   password: string;
 }
+
+export interface IGetUserProfile {
+  userID: number;
+}
+
+/**
+ * Doctor requests
+ */
 
 export interface ICreateDoctor {
   firstName: string;

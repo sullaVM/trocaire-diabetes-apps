@@ -19,7 +19,7 @@ export const createUser = async (
   request: requests.ICreateUser
 ): Promise<responses.ICreateUser> => {
   const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password)
-  VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${request.mobileNumber}','${request.photoUrl}','${request.password}');`;
+  VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${request.mobileNumber}','${request.photoDataUrl}','${request.password}');`;
 
   const result = await new Promise<responses.ICreateUser>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -27,7 +27,36 @@ export const createUser = async (
         console.error(error);
         resolve({ success: false });
       }
-      resolve({ success: true });
+      resolve({ userID: results.insertId, success: true });
+    });
+  });
+
+  return result;
+};
+
+export const getUserProfile = async (
+  request: requests.IGetUserProfile
+): Promise<responses.IGetUserProfile> => {
+  const query = `SELECT * FROM Patients WHERE PatientID='${request.userID}';`;
+
+  const result = await new Promise<responses.IGetUserProfile>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (!results[0]) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          doctorID: results[0].DoctorID,
+          firstName: results[0].FirstName,
+          lastName: results[0].LastName,
+          mobileNumber: results[0].MobileNumber,
+          photoDataUrl: results[0].PhotoLink,
+        });
+      }
     });
   });
 
@@ -46,7 +75,7 @@ export const createDoctor = async (
         console.error(error);
         resolve({ success: false });
       }
-      resolve({ success: true });
+      resolve({ doctorID: results.insertId, success: true });
     });
   });
 

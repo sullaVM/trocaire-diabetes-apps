@@ -19,7 +19,7 @@ router.get('/createUser', (request, response) => {
     firstName: request.body.firstName,
     lastName: request.body.lastName,
     mobileNumber: request.body.mobileNumber,
-    photoUrl: request.body.photoUrl,
+    photoDataUrl: request.body.photoDataUrl,
     password: request.body.password,
   };
 
@@ -33,16 +33,50 @@ router.get('/createUser', (request, response) => {
         response.status(200).send({
           success: 'true',
           message: 'Request successful',
+          result: result.userID,
         });
       } else {
-        response.status(500).send({
+        response.status(200).send({
           success: 'false',
           message: 'Request unsuccessful',
         });
       }
     })
     .catch(error => {
-      response.status(500).send({
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
+router.get('/getUserProfile', (request, response) => {
+  const getUserProfileRequest: requests.IGetUserProfile = {
+    userID: request.body.userID,
+  };
+
+  const getUserProfileResponse: Promise<responses.IGetUserProfile> = db.getUserProfile(
+    getUserProfileRequest
+  );
+
+  getUserProfileResponse
+    .then(result => {
+      if (result.success) {
+        delete result.success;
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+          result,
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
         success: 'false',
         message: 'Request unsuccessful' + error,
       });
@@ -70,16 +104,17 @@ router.get('/createDoctor', (request, response) => {
         response.status(200).send({
           success: 'true',
           message: 'Request successful',
+          result: result.doctorID,
         });
       } else {
-        response.status(500).send({
+        response.status(200).send({
           success: 'false',
           message: 'Request unsuccessful',
         });
       }
     })
     .catch(error => {
-      response.status(500).send({
+      response.status(200).send({
         success: 'false',
         message: 'Request unsuccessful' + error,
       });
