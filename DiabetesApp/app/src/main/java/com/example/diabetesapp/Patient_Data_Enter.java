@@ -3,25 +3,38 @@ package com.example.diabetesapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 
 public class Patient_Data_Enter extends AppCompatActivity {
 
     Button back;
     TextView data;
 
+    ImageView picture;
+    ImageView numbers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient__data__enter);
+
+        picture = findViewById(R.id.camera);
+        numbers = findViewById(R.id.numbers);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -31,11 +44,28 @@ public class Patient_Data_Enter extends AppCompatActivity {
             }
         });
 
-        data = findViewById(R.id.textView);
+        picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                back();
+            }
+        });
 
         Intent intent = getIntent();
         int tag = intent.getIntExtra("tag", 1);
-        showData(tag);
+        //showData(tag);
+    }
+
+    private void takePhoto(){
+        Intent intent = new Intent(this, Patient_Data_Enter_Camera.class);
+        startActivity(intent);
     }
 
     private void showData(int tag){

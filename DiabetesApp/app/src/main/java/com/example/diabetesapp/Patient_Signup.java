@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -56,6 +57,8 @@ public class Patient_Signup extends AppCompatActivity {
 
     Bitmap photo;
     int currentNumber;
+
+    int clinic = 1;
 
     String password = "";
 
@@ -193,6 +196,22 @@ public class Patient_Signup extends AppCompatActivity {
         currentNumber = findNumber();
     }
 
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch(view.getId()) {
+            case R.id.clinic1:
+                if (checked)
+                    clinic = 1;
+                    break;
+            case R.id.clinic2:
+                if (checked)
+                    clinic = 2;
+                    break;
+        }
+    }
+
+
     private int findNumber(){
         int val = 0;
         String[] text;
@@ -232,7 +251,7 @@ public class Patient_Signup extends AppCompatActivity {
             // Adds a line to the file
             BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true /*append*/));
 
-            writer.write(currentNumber + " " + name + " " + password + "\n");
+            writer.write(currentNumber + " " + name + " " + password + " " + clinic + "\n");
             writer.close();
 
             // Refresh the data so it can seen when the device is plugged in a
