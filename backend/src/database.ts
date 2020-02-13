@@ -152,7 +152,7 @@ export const createDoctor = async (
   request: requests.ICreateDoctor
 ): Promise<responses.ICreateDoctor> => {
   const query = `INSERT INTO Doctors (FirstName, LastName, LicenseNo, ClinicID, Email, UserName,Password)
-  VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.clinicID}','${request.email}','${request.username}','${request.password}');`;
+  VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.clinicID}','${request.email}','${request.userName}','${request.password}');`;
 
   const result = await new Promise<responses.ICreateDoctor>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -161,6 +161,87 @@ export const createDoctor = async (
         resolve({ success: false });
       }
       resolve({ doctorID: results.insertId, success: true });
+    });
+  });
+
+  return result;
+};
+
+export const getDoctorProfile = async (
+  request: requests.IGetDoctorProfile
+): Promise<responses.IGetDoctorProfile> => {
+  const query = `SELECT * FROM Doctors WHERE DoctorID='${request.doctorID}';`;
+
+  const result = await new Promise<responses.IGetDoctorProfile>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (results.length < 1) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          doctorID: results[0].DoctorID,
+          firstName: results[0].FirstName,
+          lastName: results[0].LastName,
+          licenseNumber: results[0].LicenseNo,
+          clinicID: results[0].ClinicID,
+          email: results[0].Email,
+          userName: results[0].UserName,
+        });
+      }
+    });
+  });
+
+  return result;
+};
+
+export const listDoctorsPatients = async (
+  request: requests.IListDoctorsPatients
+): Promise<responses.IListDoctorsPatients> => {
+  const query = `SELECT PatientID FROM Patients WHERE DoctorID='${request.doctorID}';`;
+
+  const result = await new Promise<responses.IListDoctorsPatients>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (results.length === 0) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          patientIDs: results,
+        });
+      }
+    });
+  });
+
+  return result;
+};
+
+export const getAllClinics = async (
+  request: requests.IGetAllClinics
+): Promise<responses.IGetAllClinics> => {
+  const query = `SELECT * FROM Clinics;`;
+
+  const result = await new Promise<responses.IGetAllClinics>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (results.length < 1) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          clinics: results,
+        });
+      }
     });
   });
 

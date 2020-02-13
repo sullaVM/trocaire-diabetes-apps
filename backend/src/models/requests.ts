@@ -48,10 +48,21 @@ export interface ICreateDoctor {
   licenseNumber: number;
   clinicID: number;
   email: string;
-  username: string;
+  userName: string;
   password: string;
 }
 
+export interface IListDoctorsPatients {
+  doctorID: number;
+}
+
+export interface IGetDoctorProfile {
+  doctorID: number;
+}
+
+export interface IGetAllClinics {}
+
+// Other
 export interface ICreateClinic {
   clinicID: number;
   clinicName: string;

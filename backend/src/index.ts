@@ -194,7 +194,7 @@ router.get('/createDoctor', (request, response) => {
     licenseNumber: request.body.licenseNumber,
     clinicID: request.body.clinicID,
     email: request.body.email,
-    username: request.body.username,
+    userName: request.body.username,
     password: request.body.password,
   };
 
@@ -209,6 +209,105 @@ router.get('/createDoctor', (request, response) => {
           success: 'true',
           message: 'Request successful',
           result: result.doctorID,
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
+router.get('/getDoctorsPatients', (request, response) => {
+  const getDoctorsPatientsRequest: requests.IListDoctorsPatients = {
+    doctorID: request.body.doctorID,
+  };
+
+  const getDoctorsPatientsResponse: Promise<responses.IListDoctorsPatients> = db.listDoctorsPatients(
+    getDoctorsPatientsRequest
+  );
+
+  getDoctorsPatientsResponse
+    .then(result => {
+      if (result.success) {
+        delete result.success;
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+          result,
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
+router.get('/getDoctorProfile', (request, response) => {
+  const getDoctorProfileRequest: requests.IGetDoctorProfile = {
+    doctorID: request.body.doctorID,
+  };
+
+  const getDoctorsProfileResponse: Promise<responses.IGetDoctorProfile> = db.getDoctorProfile(
+    getDoctorProfileRequest
+  );
+
+  getDoctorsProfileResponse
+    .then(result => {
+      if (result.success) {
+        delete result.success;
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+          result,
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
+router.get('/getAllClinics', (request, response) => {
+  const getAllClinicsRequest: requests.IGetAllClinics = {
+    doctorID: request.body.doctorID,
+  };
+
+  const getAllClinicsResponse: Promise<responses.IGetAllClinics> = db.getAllClinics(
+    getAllClinicsRequest
+  );
+
+  getAllClinicsResponse
+    .then(result => {
+      if (result.success) {
+        delete result.success;
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+          result,
         });
       } else {
         response.status(200).send({

@@ -29,10 +29,31 @@ export interface IStoreBSL {
 }
 
 /**
- * Doctor requests
+ * Doctor responses
  */
 
 export interface ICreateDoctor {
   success: boolean;
   doctorID?: number;
+}
+
+export interface IListDoctorsPatients {
+  success: boolean;
+  patientIDs?: number;
+}
+
+export interface IGetDoctorProfile {
+  success: boolean;
+  doctorID?: number;
+  firstName?: string;
+  lastName?: string;
+  licenseNumber?: number;
+  clinicID?: number;
+  email?: string;
+  userName?: string;
+}
+
+export interface IGetAllClinics {
+  success: boolean;
+  clinics?: string;
 }
