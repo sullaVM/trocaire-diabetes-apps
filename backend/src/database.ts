@@ -237,9 +237,16 @@ export const getAllClinics = async (
       if (results.length < 1) {
         resolve({ success: false });
       } else {
+        const clinics: { clinicID: number; clinicName: string }[] = [];
+        for (const clinic of results) {
+          clinics.push({
+            clinicID: clinic.ClinicID,
+            clinicName: clinic.ClinicName,
+          });
+        }
         resolve({
           success: true,
-          clinics: results,
+          clinics,
         });
       }
     });
