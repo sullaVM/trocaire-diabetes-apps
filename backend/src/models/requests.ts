@@ -1,8 +1,8 @@
 /**
- * User requests
+ * Patient requests
  */
 
-export interface ICreateUser {
+export interface ICreatePatient {
   doctorID: number;
   firstName: string;
   lastName: string;
@@ -11,8 +11,21 @@ export interface ICreateUser {
   password: string;
 }
 
-export interface IGetUserProfile {
-  userID: number;
+export interface IGetPatientProfile {
+  patientID: number;
+}
+
+export interface IStoreRBP {
+  time: string;
+  patientID: number;
+  systole: number;
+  diastole: number;
+}
+
+export interface IStoreBSL {
+  time: string;
+  patientID: number;
+  BSLmgDL: number;
 }
 
 /**

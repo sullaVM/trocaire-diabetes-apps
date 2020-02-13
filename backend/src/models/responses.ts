@@ -2,18 +2,26 @@
  * User responses
  */
 
-export interface ICreateUser {
+export interface ICreatePatient {
   success: boolean;
-  userID?: number;
+  patientID?: number;
 }
 
-export interface IGetUserProfile {
+export interface IGetPatientProfile {
   success: boolean;
   doctorID?: number;
   firstName?: string;
   lastName?: string;
   mobileNumber?: number;
   photoDataUrl?: string;
+}
+
+export interface IStoreRBP {
+  success: boolean;
+}
+
+export interface IStoreBSL {
+  success: boolean;
 }
 
 /**

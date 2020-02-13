@@ -15,31 +15,31 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
   db.connect();
 });
 
-export const createUser = async (
-  request: requests.ICreateUser
-): Promise<responses.ICreateUser> => {
+export const createPatient = async (
+  request: requests.ICreatePatient
+): Promise<responses.ICreatePatient> => {
   const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password)
   VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${request.mobileNumber}','${request.photoDataUrl}','${request.password}');`;
 
-  const result = await new Promise<responses.ICreateUser>(resolve => {
+  const result = await new Promise<responses.ICreatePatient>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
         resolve({ success: false });
       }
-      resolve({ userID: results.insertId, success: true });
+      resolve({ patientID: results.insertId, success: true });
     });
   });
 
   return result;
 };
 
-export const getUserProfile = async (
-  request: requests.IGetUserProfile
-): Promise<responses.IGetUserProfile> => {
-  const query = `SELECT * FROM Patients WHERE PatientID='${request.userID}';`;
+export const getPatientProfile = async (
+  request: requests.IGetPatientProfile
+): Promise<responses.IGetPatientProfile> => {
+  const query = `SELECT * FROM Patients WHERE PatientID='${request.patientID}';`;
 
-  const result = await new Promise<responses.IGetUserProfile>(resolve => {
+  const result = await new Promise<responses.IGetPatientProfile>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -57,6 +57,44 @@ export const getUserProfile = async (
           photoDataUrl: results[0].PhotoLink,
         });
       }
+    });
+  });
+
+  return result;
+};
+
+export const storeRBP = async (
+  request: requests.IStoreRBP
+): Promise<responses.IStoreRBP> => {
+  const query = `INSERT INTO RBP (TimeTaken, PatientID, Systole, Diastole)
+  VALUES ('${request.time}','${request.patientID}','${request.systole}','${request.diastole}');`;
+
+  const result = await new Promise<responses.IStoreRBP>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
+export const storeBSL = async (
+  request: requests.IStoreBSL
+): Promise<responses.IStoreBSL> => {
+  const query = `INSERT INTO BSL (TimeTaken, PatientID, BSLmgDL)
+  VALUES ('${request.time}','${request.patientID}','${request.BSLmgDL}')`;
+
+  const result = await new Promise<responses.IStoreBSL>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
     });
   });
 
