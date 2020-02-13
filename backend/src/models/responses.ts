@@ -7,6 +7,10 @@ export interface ICreatePatient {
   patientID?: number;
 }
 
+export interface IUpdatePatient {
+  success: boolean;
+}
+
 export interface IGetPatientProfile {
   success: boolean;
   doctorID?: number;

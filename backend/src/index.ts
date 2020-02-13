@@ -50,6 +50,44 @@ router.get('/createPatient', (request, response) => {
     });
 });
 
+router.get('/updatePatient', (request, response) => {
+  console.log(JSON.stringify(request.body));
+  const updatePatientRequest: requests.IUpdatePatient = {
+    patientID: request.body.patientID,
+    doctorID: request.body.doctorID,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    mobileNumber: request.body.mobileNumber,
+    photoDataUrl: request.body.photoDataUrl,
+    password: request.body.password,
+  };
+
+  const updatePatientResponse: Promise<responses.IUpdatePatient> = db.updatePatient(
+    updatePatientRequest
+  );
+
+  updatePatientResponse
+    .then(result => {
+      if (result.success) {
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
 router.get('/getPatientProfile', (request, response) => {
   const getPatientProfileRequest: requests.IGetPatientProfile = {
     patientID: request.body.patientID,
