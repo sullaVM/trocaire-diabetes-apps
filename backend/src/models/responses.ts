@@ -55,5 +55,5 @@ export interface IGetDoctorProfile {
 
 export interface IGetAllClinics {
   success: boolean;
-  clinics?: string;
+  clinics?: { clinicID: number; clinicName: string }[];
 }
