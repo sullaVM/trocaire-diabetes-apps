@@ -51,7 +51,6 @@ router.get('/createPatient', (request, response) => {
 });
 
 router.get('/updatePatient', (request, response) => {
-  console.log(JSON.stringify(request.body));
   const updatePatientRequest: requests.IUpdatePatient = {
     patientID: request.body.patientID,
     doctorID: request.body.doctorID,

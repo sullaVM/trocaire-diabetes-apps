@@ -97,9 +97,6 @@ export const updatePatient = async (
   }
   WHERE PatientID='${request.patientID}';`;
 
-  console.log(JSON.stringify(request));
-  console.log(query);
-
   const result = await new Promise<responses.IUpdatePatient>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
