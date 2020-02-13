@@ -16,7 +16,9 @@
         <activity android:name=".Patient_Data_Enter" />
         <activity android:name=".Patient_Login" />
         <activity android:name=".Patient_Signup" />
-        <activity android:name=".Doctor_Login" />
+        <activity android:name=".Doctor_Login"
+                    android:parentActivityName=".MainActivity"
+                    android:label="@string/title_activity_doctor_login"/>
         <activity android:name=".Doctor_Signup" />
         <activity
             android:name=".ui.login.Patient_Login"

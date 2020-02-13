@@ -8,20 +8,17 @@ import android.view.View;
 import android.widget.Button;
 
 public class Doctor_Login extends AppCompatActivity {
-
-    Button back;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor__login);
 
-        back = findViewById(R.id.back);
+        Button back = findViewById(R.id.buttonBack);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                back();
-            }
+           public void onClick(View view) {
+               back();
+           }
         });
     }
 
