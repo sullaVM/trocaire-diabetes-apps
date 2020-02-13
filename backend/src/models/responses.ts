@@ -48,3 +48,8 @@ export interface IGetDoctorProfile {
   email?: string;
   userName?: string;
 }
+
+export interface IGetAllClinics {
+  success: boolean;
+  clinics?: string;
+}

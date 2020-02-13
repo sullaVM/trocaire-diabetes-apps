@@ -50,6 +50,8 @@ export interface IGetDoctorProfile {
   doctorID: number;
 }
 
+export interface IGetAllClinics {}
+
 // Other
 export interface ICreateClinic {
   clinicID: number;

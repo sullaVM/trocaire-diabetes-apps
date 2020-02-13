@@ -120,7 +120,7 @@ export const createDoctor = async (
   return result;
 };
 
-export const getDoctorsProfile = async (
+export const getDoctorProfile = async (
   request: requests.IGetDoctorProfile
 ): Promise<responses.IGetDoctorProfile> => {
   const query = `SELECT * FROM Doctors WHERE DoctorID='${request.doctorID}';`;
@@ -140,7 +140,7 @@ export const getDoctorsProfile = async (
           firstName: results[0].FirstName,
           lastName: results[0].LastName,
           licenseNumber: results[0].LicenseNo,
-          clinicID: results[0].LicenseNo,
+          clinicID: results[0].ClinicID,
           email: results[0].Email,
           userName: results[0].UserName,
         });
@@ -168,6 +168,31 @@ export const listDoctorsPatients = async (
         resolve({
           success: true,
           patientIDs: results,
+        });
+      }
+    });
+  });
+
+  return result;
+};
+
+export const getAllClinics = async (
+  request: requests.IGetAllClinics
+): Promise<responses.IGetAllClinics> => {
+  const query = `SELECT * FROM Clinics;`;
+
+  const result = await new Promise<responses.IGetAllClinics>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (results.length < 1) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          clinics: results,
         });
       }
     });
