@@ -157,7 +157,7 @@ router.get('/createDoctor', (request, response) => {
     licenseNumber: request.body.licenseNumber,
     clinicID: request.body.clinicID,
     email: request.body.email,
-    username: request.body.username,
+    userName: request.body.username,
     password: request.body.password,
   };
 
@@ -198,6 +198,39 @@ router.get('/getDoctorsPatients', (request, response) => {
   );
 
   getDoctorsPatientsResponse
+    .then(result => {
+      if (result.success) {
+        delete result.success;
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+          result,
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
+router.get('/getDoctorsProfile', (request, response) => {
+  const getDoctorsProfileRequest: requests.IGetDoctorProfile = {
+    doctorID: request.body.doctorID,
+  };
+
+  const getDoctorsProfileResponse: Promise<responses.IGetDoctorProfile> = db.getDoctorsProfile(
+    getDoctorsProfileRequest
+  );
+
+  getDoctorsProfileResponse
     .then(result => {
       if (result.success) {
         delete result.success;
