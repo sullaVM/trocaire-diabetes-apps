@@ -188,6 +188,39 @@ router.get('/createDoctor', (request, response) => {
     });
 });
 
+router.get('/getDoctorsPatients', (request, response) => {
+  const getDoctorsPatientsRequest: requests.IListDoctorsPatients = {
+    doctorID: request.body.doctorID,
+  };
+
+  const getDoctorsPatientsResponse: Promise<responses.IListDoctorsPatients> = db.listDoctorsPatients(
+    getDoctorsPatientsRequest
+  );
+
+  getDoctorsPatientsResponse
+    .then(result => {
+      if (result.success) {
+        delete result.success;
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+          result,
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
 app.use('/api', router);
 app.disable('etag');
 

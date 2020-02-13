@@ -119,3 +119,28 @@ export const createDoctor = async (
 
   return result;
 };
+
+export const listDoctorsPatients = async (
+  request: requests.IListDoctorsPatients
+): Promise<responses.IListDoctorsPatients> => {
+  const query = `SELECT PatientID FROM Patients WHERE DoctorID='${request.doctorID}';`;
+
+  const result = await new Promise<responses.IListDoctorsPatients>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (results.length === 0) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          patientIDs: results,
+        });
+      }
+    });
+  });
+
+  return result;
+};

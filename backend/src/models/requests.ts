@@ -42,6 +42,11 @@ export interface ICreateDoctor {
   password: string;
 }
 
+export interface IListDoctorsPatients {
+  doctorID: number;
+}
+
+// Other
 export interface ICreateClinic {
   clinicID: number;
   clinicName: string;
