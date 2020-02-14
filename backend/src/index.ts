@@ -5,7 +5,7 @@ import * as db from './database';
 import * as requests from './models/requests';
 import * as responses from './models/responses';
 
-const apiPort = 8080;
+const apiPort = 8081;
 const app = express();
 const router = express.Router();
 
