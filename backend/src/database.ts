@@ -63,6 +63,53 @@ export const getPatientProfile = async (
   return result;
 };
 
+export const updatePatient = async (
+  request: requests.IUpdatePatient
+): Promise<responses.IUpdatePatient> => {
+  let updateCount = 0;
+
+  const query = `UPDATE Patients 
+  SET
+  ${
+    request.doctorID
+      ? `${updateCount++ ? ',' : ''}DoctorID='${request.doctorID}'`
+      : ''
+  }
+  ${
+    request.firstName
+      ? `${updateCount++ ? ',' : ''}FirstName='${request.firstName}'`
+      : ''
+  }
+  ${
+    request.lastName
+      ? `${updateCount++ ? ',' : ''}LastName='${request.lastName}'`
+      : ''
+  }
+  ${
+    request.mobileNumber
+      ? `${updateCount++ ? ',' : ''}MobileNumber='${request.mobileNumber}'`
+      : ''
+  }
+  ${
+    request.photoDataUrl
+      ? `${updateCount++ ? ',' : ''}PhotoLink='${request.photoDataUrl}'`
+      : ''
+  }
+  WHERE PatientID='${request.patientID}';`;
+
+  const result = await new Promise<responses.IUpdatePatient>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
 export const storeRBP = async (
   request: requests.IStoreRBP
 ): Promise<responses.IStoreRBP> => {
@@ -190,9 +237,16 @@ export const getAllClinics = async (
       if (results.length < 1) {
         resolve({ success: false });
       } else {
+        const clinics: { clinicID: number; clinicName: string }[] = [];
+        for (const clinic of results) {
+          clinics.push({
+            clinicID: clinic.ClinicID,
+            clinicName: clinic.ClinicName,
+          });
+        }
         resolve({
           success: true,
-          clinics: results,
+          clinics,
         });
       }
     });

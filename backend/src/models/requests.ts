@@ -11,6 +11,16 @@ export interface ICreatePatient {
   password: string;
 }
 
+export interface IUpdatePatient {
+  patientID: number;
+  doctorID?: number;
+  firstName?: string;
+  lastName?: string;
+  mobileNumber?: number;
+  photoDataUrl?: string;
+  password?: string;
+}
+
 export interface IGetPatientProfile {
   patientID: number;
 }

@@ -7,6 +7,10 @@ export interface ICreatePatient {
   patientID?: number;
 }
 
+export interface IUpdatePatient {
+  success: boolean;
+}
+
 export interface IGetPatientProfile {
   success: boolean;
   doctorID?: number;
@@ -51,5 +55,5 @@ export interface IGetDoctorProfile {
 
 export interface IGetAllClinics {
   success: boolean;
-  clinics?: string;
+  clinics?: { clinicID: number; clinicName: string }[];
 }
