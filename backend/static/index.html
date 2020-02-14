@@ -11,14 +11,27 @@
 </head>
 
 <body>
-  <form action="/createDoctor" method="post">
-    <input type="text" name="firstName" required>
-    <input type="text" name="lastName" required>
-    <input type="text" name="licenseNumber" required>
-    <input type="text" name="clinicID" required>
-    <input type="text" name="email" required>
-    <input type="text" name="username" required>
-    <input type="text" name="password" required>
+  <form action="/api/createDoctor" method="post">
+    <label for="male">First Name:</label>
+    <input type="text" name="firstName" required><br>
+
+    <label for="male">Last Name:</label>
+    <input type="text" name="lastName" required><br>
+
+    <label for="male">License Number:</label>
+    <input type="text" name="licenseNumber" required><br>
+
+    <label for="male">Clinic ID:</label>
+    <input type="text" name="clinicID" required><br>
+
+    <label for="male">Email Address:</label>
+    <input type="text" name="email" required><br>
+
+    <label for="male">Username:</label>
+    <input type="text" name="username" required><br>
+
+    <label for="male">Password:</label>
+    <input type="text" name="password" required><br>
 
     <input type="submit" value="Submit">
   </form>

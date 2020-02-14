@@ -12,6 +12,7 @@ const router = express.Router();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
+app.use(express.static('static'));
 
 router.get('/createPatient', (request, response) => {
   const createPatientRequest: requests.ICreatePatient = {
@@ -187,7 +188,7 @@ router.get('/storeBSL', (request, response) => {
     });
 });
 
-router.get('/createDoctor', (request, response) => {
+router.post('/createDoctor', (request, response) => {
   const createDoctorRequest: requests.ICreateDoctor = {
     firstName: request.body.firstName,
     lastName: request.body.lastName,
