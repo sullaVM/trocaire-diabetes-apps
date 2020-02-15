@@ -26,4 +26,9 @@ public class Doctor_Login extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    public void signIn(View view) {
+        Intent intent = new Intent(this, Doctor_Dashboard.class);
+        startActivity(intent);
+    }
 }
