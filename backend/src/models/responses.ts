@@ -28,6 +28,12 @@ export interface IStoreBSL {
   success: boolean;
 }
 
+export interface IGetGraphingData {
+  success: boolean;
+  RBP?: { time: string; systole: number; diastole: number }[];
+  BSL?: { time: string; BSLmgDL: number }[];
+}
+
 /**
  * Doctor responses
  */

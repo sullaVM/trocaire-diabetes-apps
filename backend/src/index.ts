@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use(express.static('static'));
 
-router.get('/createPatient', (request, response) => {
+router.post('/createPatient', (request, response) => {
   const createPatientRequest: requests.ICreatePatient = {
     doctorID: request.body.doctorID,
     firstName: request.body.firstName,
@@ -51,7 +51,7 @@ router.get('/createPatient', (request, response) => {
     });
 });
 
-router.get('/updatePatient', (request, response) => {
+router.post('/updatePatient', (request, response) => {
   const updatePatientRequest: requests.IUpdatePatient = {
     patientID: request.body.patientID,
     doctorID: request.body.doctorID,
@@ -121,10 +121,10 @@ router.get('/getPatientProfile', (request, response) => {
     });
 });
 
-router.get('/storeRBP', (request, response) => {
+router.post('/storeRBP', (request, response) => {
   const storeRBPRequest: requests.IStoreRBP = {
-    time: request.body.time,
     patientID: request.body.patientID,
+    time: request.body.time,
     systole: request.body.systole,
     diastole: request.body.diastole,
   };
@@ -155,10 +155,10 @@ router.get('/storeRBP', (request, response) => {
     });
 });
 
-router.get('/storeBSL', (request, response) => {
+router.post('/storeBSL', (request, response) => {
   const storeBSLRequest: requests.IStoreBSL = {
-    time: request.body.time,
     patientID: request.body.patientID,
+    time: request.body.time,
     BSLmgDL: request.body.BSLmgDL,
   };
 
@@ -172,6 +172,41 @@ router.get('/storeBSL', (request, response) => {
         response.status(200).send({
           success: 'true',
           message: 'Request successful',
+        });
+      } else {
+        response.status(200).send({
+          success: 'false',
+          message: 'Request unsuccessful',
+        });
+      }
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: 'false',
+        message: 'Request unsuccessful' + error,
+      });
+    });
+});
+
+router.get('/getGraphingData', (request, response) => {
+  const getGraphingDataRequest: requests.IGetGraphingData = {
+    patientID: request.body.patientID,
+    intervalStart: request.body.intervalStart,
+    intervalEnd: request.body.intervalEnd,
+  };
+
+  const getGraphingDataResponse: Promise<responses.IGetGraphingData> = db.getGraphingData(
+    getGraphingDataRequest
+  );
+
+  getGraphingDataResponse
+    .then(result => {
+      if (result.success) {
+        delete result.success;
+        response.status(200).send({
+          success: 'true',
+          message: 'Request successful',
+          result,
         });
       } else {
         response.status(200).send({

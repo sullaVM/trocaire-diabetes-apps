@@ -26,16 +26,22 @@ export interface IGetPatientProfile {
 }
 
 export interface IStoreRBP {
-  time: string;
   patientID: number;
+  time: string;
   systole: number;
   diastole: number;
 }
 
 export interface IStoreBSL {
-  time: string;
   patientID: number;
+  time: string;
   BSLmgDL: number;
+}
+
+export interface IGetGraphingData {
+  patientID: number;
+  intervalStart: string;
+  intervalEnd: string;
 }
 
 /**
