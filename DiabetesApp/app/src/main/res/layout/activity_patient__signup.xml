@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#C8E6C9"
     tools:context=".Patient_Signup">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -79,82 +80,16 @@
                     android:layout_marginTop="20dp"
                     app:srcCompat="@drawable/blank_icon" />
 
-                <GridLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:columnCount="3"
-                    android:rowCount="3">
-
-                    <ImageView
-                        android:id="@+id/pass1"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass2"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass3"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass4"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass5"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass6"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass7"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass8"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-                    <ImageView
-                        android:id="@+id/pass9"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/deselect"/>
-
-                </GridLayout>
-
                 <Button
-                    android:id="@+id/reset"
-                    android:layout_width="93dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@color/colorPrimary"
-                    android:textSize="25dp"
-                    android:text="Reset" />
-
-                <Button
-                    android:id="@+id/enter"
-                    android:layout_width="93dp"
+                    android:id="@+id/next"
+                    android:layout_width="100dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="230dp"
                     android:layout_marginLeft="230dp"
                     android:layout_marginTop="20dp"
                     android:background="@color/colorPrimary"
-                    android:textSize="25dp"
-                    android:text="Enter" />
+                    android:textSize="20dp"
+                    android:text="Next" />
 
             </LinearLayout>
         </ScrollView>

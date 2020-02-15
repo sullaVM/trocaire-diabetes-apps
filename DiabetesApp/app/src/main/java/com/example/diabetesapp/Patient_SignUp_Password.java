@@ -5,45 +5,83 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 
-import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.File;
-import java.io.FileReader;
-import java.util.List;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import android.media.MediaScannerConnection;
 
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 
+import java.util.List;
 
-public class Patient_Input_Password extends AppCompatActivity {
-
-    Button enter;
+public class Patient_SignUp_Password extends AppCompatActivity {
 
     PatternLockView mPatternLockView;
 
-    String password = "";
+    Button enter;
+
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__input__password);
+        setContentView(R.layout.activity_patient__sign_up__password);
 
         mPatternLockView = findViewById(R.id.pattern_lock_view);
         mPatternLockView.addPatternLockListener(mPatternLockViewListener);
 
-        enter = findViewById(R.id.enter);
 
+        enter = findViewById(R.id.enter);
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                int tag = intent.getIntExtra("tag", 1);
-                checkPassword(tag);
+                enterData(intent);
             }
         });
+    }
+
+    private void enterData(Intent intent) {
+        String name = intent.getStringExtra("name");
+        String clinic = intent.getStringExtra("clinic");
+        int number = intent.getIntExtra("number", 1);
+
+        try {
+            // Creates a file in the primary external storage space of the
+            // current application.
+            // If the file does not exist, it is created.
+            File textFile = new File(this.getFilesDir(), "TextFile.txt");
+            if (!textFile.exists())
+                textFile.createNewFile();
+
+            // Adds a line to the file
+            BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true /*append*/));
+
+            writer.write(number + " " + name + " " + password + " " + clinic + "\n");
+            writer.close();
+
+            // Refresh the data so it can seen when the device is plugged in a
+            // computer. You may have to unplug and replug the device to see the
+            // latest changes. This is not necessary if the user should not modify
+            // the files.
+            MediaScannerConnection.scanFile(this,
+                    new String[]{textFile.toString()},
+                    null,
+                    null);
+        }
+        catch (IOException e) {
+            Log.e("ReadWriteFile", "Unable to write data.");
+        }
+
+        intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private PatternLockViewListener mPatternLockViewListener = new PatternLockViewListener() {
@@ -70,35 +108,4 @@ public class Patient_Input_Password extends AppCompatActivity {
             Log.d(getClass().getName(), "Pattern has been cleared");
         }
     };
-
-    void checkPassword(int tag){
-        File testFile = new File(this.getFilesDir(), "TextFile.txt");
-        if (testFile != null) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(testFile));
-                String line;
-                for(int i = 1; i < tag; i++) {
-                    line = reader.readLine();
-                }
-                line = reader.readLine();
-                String[] info = line.split(" ");
-                String realPassword = info[3];
-
-                if(realPassword.equals(password)){
-                    Intent intent = new Intent(this, Patient_Data_Enter.class);
-                    intent.putExtra("tag", tag);
-                    startActivity(intent);
-                }
-                else{
-                    Intent intent = new Intent(this, Patient_Login.class);
-                    startActivity(intent);
-                }
-
-            } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TestFile.txt file.");
-            }
-        }
-    }
-
 }

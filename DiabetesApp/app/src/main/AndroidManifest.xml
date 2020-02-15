@@ -11,14 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Patient_Data_Enter_Camera"></activity>
+        <activity android:name=".Patient_Data_Enter_Manual"></activity>
+        <activity android:name=".Patient_SignUp_Password" />
+        <activity android:name=".Patient_Data_Enter_Camera" />
         <activity android:name=".Patient_Input_Password" />
         <activity android:name=".Patient_Data_Enter" />
         <activity android:name=".Patient_Login" />
         <activity android:name=".Patient_Signup" />
-        <activity android:name=".Doctor_Login"
-                    android:parentActivityName=".MainActivity"
-                    android:label="@string/title_activity_doctor_login"/>
+        <activity
+            android:name=".Doctor_Login"
+            android:label="@string/title_activity_doctor_login"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".Doctor_Signup" />
         <activity
             android:name=".ui.login.Patient_Login"
