@@ -148,6 +148,56 @@ export const storeBSL = async (
   return result;
 };
 
+export const getGraphingData = async (
+  request: requests.IGetGraphingData
+): Promise<responses.IGetGraphingData> => {
+  const BSLQuery = `SELECT TimeTaken, BSLmgDL FROM BSL WHERE
+  PatientID='${request.patientID}' AND
+  TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
+  ORDER BY TimeTaken ASC;`;
+
+  const RBPQuery = `SELECT TimeTaken, Systole, Diastole FROM RBP WHERE
+  PatientID='${request.patientID}' AND
+  TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
+  ORDER BY TimeTaken ASC;`;
+
+  const result = await new Promise<responses.IGetGraphingData>(resolve => {
+    db.query(BSLQuery, (BSLError, BSLResults, BSLfields) => {
+      if (BSLError) {
+        console.error(BSLError);
+        resolve({ success: false });
+      }
+      db.query(RBPQuery, (RBPError, RBPResults, RBPfields) => {
+        if (RBPError) {
+          console.error(RBPError);
+          resolve({ success: false });
+        }
+        const RBP: { time: string; systole: number; diastole: number }[] = [];
+        const BSL: { time: string; BSLmgDL: number }[] = [];
+
+        for (const entry of BSLResults) {
+          BSL.push({
+            time: entry.TimeTaken,
+            BSLmgDL: entry.BSLmgDL,
+          });
+        }
+
+        for (const entry of RBPResults) {
+          RBP.push({
+            time: entry.TimeTaken,
+            systole: entry.Systole,
+            diastole: entry.Diastole,
+          });
+        }
+
+        resolve({ success: true, RBP, BSL });
+      });
+    });
+  });
+
+  return result;
+};
+
 export const createDoctor = async (
   request: requests.ICreateDoctor
 ): Promise<responses.ICreateDoctor> => {
