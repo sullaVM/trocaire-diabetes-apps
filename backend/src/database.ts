@@ -18,8 +18,12 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const createPatient = async (
   request: requests.ICreatePatient
 ): Promise<responses.ICreatePatient> => {
-  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password)
-  VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${request.mobileNumber}','${request.photoDataUrl}','${request.password}');`;
+  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password, BslUnit)
+  VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${
+    request.mobileNumber
+  }','${request.photoDataUrl}','${request.password}','${
+    request.bslUnit === 'mgDL' ? 1 : 0
+  }');`;
 
   const result = await new Promise<responses.ICreatePatient>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -55,6 +59,7 @@ export const getPatientProfile = async (
           lastName: results[0].LastName,
           mobileNumber: results[0].MobileNumber,
           photoDataUrl: results[0].PhotoLink,
+          bslUnit: results[0].BslUnit === 1 ? 'mgDL' : 'mmolL',
         });
       }
     });
@@ -95,6 +100,13 @@ export const updatePatient = async (
       ? `${updateCount++ ? ',' : ''}PhotoLink='${request.photoDataUrl}'`
       : ''
   }
+  ${
+    request.bslUnit
+      ? `${updateCount++ ? ',' : ''}BslUnit='${
+          request.bslUnit === 'mgDL' ? 1 : 0
+        }'`
+      : ''
+  }
   WHERE PatientID='${request.patientID}';`;
 
   const result = await new Promise<responses.IUpdatePatient>(resolve => {
@@ -132,9 +144,14 @@ export const storeRBP = async (
 export const storeBSL = async (
   request: requests.IStoreBSL
 ): Promise<responses.IStoreBSL> => {
-  // TODO:: change all of BSLmgDL to MmolL
+
+  const mmolL =
+    request.unit && request.unit === 'mgDL'
+      ? request.value / 18
+      : request.value;
+
   const query = `INSERT INTO BSL (TimeTaken, PatientID, MmolL)
-  VALUES ('${request.time}','${request.patientID}','${request.BSLmgDL}')`;
+  VALUES ('${request.time}','${request.patientID}','${mmolL}')`;
 
   const result = await new Promise<responses.IStoreBSL>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -181,7 +198,7 @@ export const storeWeight = async (
 export const getGraphingData = async (
   request: requests.IGetGraphingData
 ): Promise<responses.IGetGraphingData> => {
-  const BSLQuery = `SELECT TimeTaken, BSLmgDL FROM BSL WHERE
+  const BSLQuery = `SELECT TimeTaken, MmolL FROM BSL WHERE
   PatientID='${request.patientID}' AND
   TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
   ORDER BY TimeTaken ASC;`;
@@ -203,12 +220,15 @@ export const getGraphingData = async (
           resolve({ success: false });
         }
         const RBP: { time: string; systole: number; diastole: number }[] = [];
-        const BSL: { time: string; BSLmgDL: number }[] = [];
+        const BSL: { time: string; value: number }[] = [];
 
         for (const entry of BSLResults) {
           BSL.push({
             time: entry.TimeTaken,
-            BSLmgDL: entry.BSLmgDL,
+            value:
+              request.bslUnit && request.bslUnit === 'mgDL'
+                ? entry.MmolL * 18
+                : entry.MmolL,
           });
         }
 

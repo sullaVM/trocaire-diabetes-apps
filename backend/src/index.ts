@@ -22,6 +22,7 @@ router.post('/createPatient', (request, response) => {
     mobileNumber: request.body.mobileNumber,
     photoDataUrl: request.body.photoDataUrl,
     password: request.body.password,
+    bslUnit: request.body.bslUnit,
   };
 
   const createPatientResponse: Promise<responses.ICreatePatient> = db.createPatient(
@@ -49,6 +50,7 @@ router.post('/updatePatient', (request, response) => {
     mobileNumber: request.body.mobileNumber,
     photoDataUrl: request.body.photoDataUrl,
     password: request.body.password,
+    bslUnit: request.body.bslUnit,
   };
 
   const updatePatientResponse: Promise<responses.IUpdatePatient> = db.updatePatient(
@@ -116,7 +118,8 @@ router.post('/storeBSL', (request, response) => {
   const storeBSLRequest: requests.IStoreBSL = {
     patientID: request.body.patientID,
     time: request.body.time,
-    BSLmgDL: request.body.BSLmgDL,
+    value: request.body.value,
+    unit: request.body.unit,
   };
 
   const storeBSLResponse: Promise<responses.IStoreBSL> = db.storeBSL(
@@ -163,6 +166,7 @@ router.get('/getGraphingData', (request, response) => {
     patientID: request.body.patientID,
     intervalStart: request.body.intervalStart,
     intervalEnd: request.body.intervalEnd,
+    bslUnit: request.body.bslUnit,
   };
 
   const getGraphingDataResponse: Promise<responses.IGetGraphingData> = db.getGraphingData(

@@ -9,6 +9,7 @@ export interface ICreatePatient {
   mobileNumber: number;
   photoDataUrl: string;
   password: string;
+  bslUnit: string;
 }
 
 export interface IUpdatePatient {
@@ -19,6 +20,7 @@ export interface IUpdatePatient {
   mobileNumber?: number;
   photoDataUrl?: string;
   password?: string;
+  bslUnit?: string;
 }
 
 export interface IGetPatientProfile {
@@ -35,7 +37,14 @@ export interface IStoreRBP {
 export interface IStoreBSL {
   patientID: number;
   time: string;
-  BSLmgDL: number;
+  value: number;
+  unit?: string;
+}
+
+export interface IStoreWeight {
+  patientID: number;
+  time: string;
+  weightKG: number;
 }
 
 export interface IStoreWeight {
@@ -48,6 +57,7 @@ export interface IGetGraphingData {
   patientID: number;
   intervalStart: string;
   intervalEnd: string;
+  bslUnit?: string;
 }
 
 /**

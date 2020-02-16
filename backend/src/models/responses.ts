@@ -18,6 +18,7 @@ export interface IGetPatientProfile {
   lastName?: string;
   mobileNumber?: number;
   photoDataUrl?: string;
+  bslUnit?: string;
 }
 
 export interface IStoreRBP {
@@ -35,7 +36,7 @@ export interface IStoreWeight {
 export interface IGetGraphingData {
   success: boolean;
   RBP?: { time: string; systole: number; diastole: number }[];
-  BSL?: { time: string; BSLmgDL: number }[];
+  BSL?: { time: string; value: number }[];
 }
 
 /**
