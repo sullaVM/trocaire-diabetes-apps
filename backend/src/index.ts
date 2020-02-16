@@ -135,6 +135,29 @@ router.post('/storeBSL', (request, response) => {
     });
 });
 
+router.post('/storeWeight', (request, response) => {
+  const storeWeightRequest: requests.IStoreWeight = {
+    patientID: request.body.patientID,
+    time: request.body.time,
+    weightKG: request.body.weightKG,
+  };
+
+  const storeWeightResponse: Promise<responses.IStoreWeight> = db.storeWeight(
+    storeWeightRequest
+  );
+
+  storeWeightResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
 router.get('/getGraphingData', (request, response) => {
   const getGraphingDataRequest: requests.IGetGraphingData = {
     patientID: request.body.patientID,
@@ -174,6 +197,34 @@ router.post('/createDoctor', (request, response) => {
   );
 
   createDoctorResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
+router.post('/updateDoctor', (request, response) => {
+  const updateDoctorRequest: requests.IUpdateDoctor = {
+    doctorID: request.body.doctorID,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    licenseNumber: request.body.licenseNumber,
+    clinicID: request.body.clinicID,
+    email: request.body.email,
+    userName: request.body.username,
+    password: request.body.password,
+  };
+
+  const updateDoctorResponse: Promise<responses.IUpdateDoctor> = db.updateDoctor(
+    updateDoctorRequest
+  );
+
+  updateDoctorResponse
     .then(result => {
       response.status(200).send(result);
     })
