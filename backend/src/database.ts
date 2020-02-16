@@ -259,7 +259,7 @@ export const listDoctorsPatients = async (
         console.error(error);
         resolve({ success: false });
       }
-      if (results.length === 0) {
+      if (results.length < 1) {
         resolve({ success: false });
       } else {
         resolve({
@@ -267,6 +267,68 @@ export const listDoctorsPatients = async (
           patientIDs: results,
         });
       }
+    });
+  });
+
+  return result;
+};
+export interface IUpdateDoctor {
+  doctorID?: number;
+  firstName?: string;
+  lastName?: string;
+  licenseNumber?: number;
+  clinicID?: number;
+  email?: string;
+  userName?: string;
+  password?: string;
+}
+export const updateDoctor = async (
+  request: requests.IUpdateDoctor
+): Promise<responses.IUpdateDoctor> => {
+  let updateCount = 0;
+
+  const query = `UPDATE Doctors
+  SET
+  ${
+    request.firstName
+      ? `${updateCount++ ? ',' : ''}FirstName='${request.firstName}'`
+      : ''
+  }
+  ${
+    request.lastName
+      ? `${updateCount++ ? ',' : ''}LastName='${request.lastName}'`
+      : ''
+  }
+  ${
+    request.licenseNumber
+      ? `${updateCount++ ? ',' : ''}MobileNumber='${request.licenseNumber}'`
+      : ''
+  }
+  ${
+    request.clinicID
+      ? `${updateCount++ ? ',' : ''}ClinicID='${request.clinicID}'`
+      : ''
+  }
+  ${request.email ? `${updateCount++ ? ',' : ''}Email='${request.email}'` : ''}
+  ${
+    request.userName
+      ? `${updateCount++ ? ',' : ''}UserName='${request.userName}'`
+      : ''
+  }
+  ${
+    request.password
+      ? `${updateCount++ ? ',' : ''}Password='${request.password}'`
+      : ''
+  }
+  WHERE DoctorID='${request.doctorID}';`;
+
+  const result = await new Promise<responses.IUpdateDoctor>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
     });
   });
 

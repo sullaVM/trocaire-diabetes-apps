@@ -185,6 +185,34 @@ router.post('/createDoctor', (request, response) => {
     });
 });
 
+router.post('/updateDoctor', (request, response) => {
+  const updateDoctorRequest: requests.IUpdateDoctor = {
+    doctorID: request.body.doctorID,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    licenseNumber: request.body.licenseNumber,
+    clinicID: request.body.clinicID,
+    email: request.body.email,
+    userName: request.body.username,
+    password: request.body.password,
+  };
+
+  const updateDoctorResponse: Promise<responses.IUpdateDoctor> = db.updateDoctor(
+    updateDoctorRequest
+  );
+
+  updateDoctorResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
 router.get('/getDoctorsPatients', (request, response) => {
   const getDoctorsPatientsRequest: requests.IListDoctorsPatients = {
     doctorID: request.body.doctorID,

@@ -43,6 +43,10 @@ export interface ICreateDoctor {
   doctorID?: number;
 }
 
+export interface IUpdateDoctor {
+  success: boolean;
+}
+
 export interface IListDoctorsPatients {
   success: boolean;
   patientIDs?: number;
