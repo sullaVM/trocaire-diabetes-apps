@@ -16,20 +16,16 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `RBP`
+-- Table structure for table `Clinics`
 --
 
-DROP TABLE IF EXISTS `RBP`;
+DROP TABLE IF EXISTS `Clinics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `RBP` (
-  `TimeTaken` timestamp NOT NULL,
-  `PatientID` int NOT NULL,
-  `Systole` int DEFAULT NULL,
-  `Diastole` int DEFAULT NULL,
-  PRIMARY KEY (`TimeTaken`,`PatientID`),
-  KEY `FK_RBP_Patients` (`PatientID`),
-  CONSTRAINT `FK_RBP_Patients` FOREIGN KEY (`PatientID`) REFERENCES `Patients` (`PatientID`)
+CREATE TABLE `Clinics` (
+  `ClinicID` int NOT NULL,
+  `ClinicName` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ClinicID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -42,4 +38,4 @@ CREATE TABLE `RBP` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-16 13:41:18
+-- Dump completed on 2020-02-16 14:47:23

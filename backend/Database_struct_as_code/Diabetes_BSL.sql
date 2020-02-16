@@ -16,25 +16,20 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Doctors`
+-- Table structure for table `BSL`
 --
 
-DROP TABLE IF EXISTS `Doctors`;
+DROP TABLE IF EXISTS `BSL`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Doctors` (
-  `DoctorID` int NOT NULL AUTO_INCREMENT,
-  `FirstName` varchar(255) DEFAULT NULL,
-  `LastName` varchar(255) DEFAULT NULL,
-  `LicenseNo` int DEFAULT NULL,
-  `ClinicID` int DEFAULT NULL,
-  `Email` varchar(320) DEFAULT NULL,
-  `UserName` varchar(320) DEFAULT NULL,
-  `Password` char(90) DEFAULT NULL,
-  PRIMARY KEY (`DoctorID`),
-  KEY `ClinicID` (`ClinicID`),
-  CONSTRAINT `Doctors_ibfk_1` FOREIGN KEY (`ClinicID`) REFERENCES `Clinics` (`ClinicID`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `BSL` (
+  `TimeTaken` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `PatientID` int NOT NULL DEFAULT '0',
+  `MmolL` float DEFAULT NULL,
+  PRIMARY KEY (`TimeTaken`,`PatientID`),
+  KEY `BSL_fk_1` (`PatientID`),
+  CONSTRAINT `BSL_fk_1` FOREIGN KEY (`PatientID`) REFERENCES `Patients` (`PatientID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -46,4 +41,4 @@ CREATE TABLE `Doctors` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-16 13:41:17
+-- Dump completed on 2020-02-16 14:47:22

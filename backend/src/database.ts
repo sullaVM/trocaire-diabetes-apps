@@ -148,6 +148,35 @@ export const storeBSL = async (
   return result;
 };
 
+export const storeWeight = async (
+  request: requests.IStoreWeight
+): Promise<responses.IStoreWeight> => {
+  let query = '';
+  if (
+    isNaN(Date.parse(request.time)) ||
+    Date.parse(request.time) === 0 ||
+    Date.parse(request.time) == null
+  ) {
+    query = `INSERT INTO Patient_Weight (PatientID, WeightKG)
+    VALUES ('${request.patientID}','${request.weightKG}')`;
+  } else {
+    query = `INSERT INTO Patient_Weight (TimeTaken, PatientID, WeightKG)
+    VALUES ('${request.time}','${request.patientID}','${request.weightKG}')`;
+  }
+
+  const result = await new Promise<responses.IStoreWeight>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
 export const getGraphingData = async (
   request: requests.IGetGraphingData
 ): Promise<responses.IGetGraphingData> => {

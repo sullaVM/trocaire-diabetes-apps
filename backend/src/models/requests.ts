@@ -38,6 +38,12 @@ export interface IStoreBSL {
   BSLmgDL: number;
 }
 
+export interface IStoreWeight {
+  patientID: number;
+  time?: string;
+  weightKG: number;
+}
+
 export interface IGetGraphingData {
   patientID: number;
   intervalStart: string;

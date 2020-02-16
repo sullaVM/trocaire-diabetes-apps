@@ -28,6 +28,10 @@ export interface IStoreBSL {
   success: boolean;
 }
 
+export interface IStoreWeight {
+  success: boolean;
+}
+
 export interface IGetGraphingData {
   success: boolean;
   RBP?: { time: string; systole: number; diastole: number }[];
