@@ -18,4 +18,6 @@
     <string name="linear_layout_manager">Linear Layout Manager</string>
     <string name="grid_layout_manager">Grid Layout Manager</string>
     <string name="phone_number">+123 456 789 234</string>
+    <string name="patient_caps">PATIENT</string>
+    <string name="empty_state_doctor">Add a patient and they will show up here.</string>
 </resources>
