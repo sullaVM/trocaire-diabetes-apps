@@ -41,6 +41,12 @@ export interface IStoreBSL {
   unit?: string;
 }
 
+export interface IStoreWeight {
+  patientID: number;
+  time: string;
+  weightKG: number;
+}
+
 export interface IGetGraphingData {
   patientID: number;
   intervalStart: string;
@@ -62,6 +68,17 @@ export interface ICreateDoctor {
   password: string;
 }
 
+export interface IUpdateDoctor {
+  doctorID?: number;
+  firstName?: string;
+  lastName?: string;
+  licenseNumber?: number;
+  clinicID?: number;
+  email?: string;
+  userName?: string;
+  password?: string;
+}
+
 export interface IListDoctorsPatients {
   doctorID: number;
 }
@@ -70,9 +87,10 @@ export interface IGetDoctorProfile {
   doctorID: number;
 }
 
+// Clinic
 export interface IGetAllClinics {}
 
-// Other
+// TODO::
 export interface ICreateClinic {
   clinicID: number;
   clinicName: string;

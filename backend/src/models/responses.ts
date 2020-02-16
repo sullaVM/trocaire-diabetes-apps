@@ -29,6 +29,10 @@ export interface IStoreBSL {
   success: boolean;
 }
 
+export interface IStoreWeight {
+  success: boolean;
+}
+
 export interface IGetGraphingData {
   success: boolean;
   RBP?: { time: string; systole: number; diastole: number }[];
@@ -42,6 +46,10 @@ export interface IGetGraphingData {
 export interface ICreateDoctor {
   success: boolean;
   doctorID?: number;
+}
+
+export interface IUpdateDoctor {
+  success: boolean;
 }
 
 export interface IListDoctorsPatients {
