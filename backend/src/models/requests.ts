@@ -9,6 +9,7 @@ export interface ICreatePatient {
   mobileNumber: number;
   photoDataUrl: string;
   password: string;
+  bslUnit: string;
 }
 
 export interface IUpdatePatient {
@@ -19,6 +20,7 @@ export interface IUpdatePatient {
   mobileNumber?: number;
   photoDataUrl?: string;
   password?: string;
+  bslUnit?: string;
 }
 
 export interface IGetPatientProfile {
@@ -26,16 +28,36 @@ export interface IGetPatientProfile {
 }
 
 export interface IStoreRBP {
-  time: string;
   patientID: number;
+  time: string;
   systole: number;
   diastole: number;
 }
 
 export interface IStoreBSL {
-  time: string;
   patientID: number;
-  BSLmgDL: number;
+  time: string;
+  value: number;
+  unit?: string;
+}
+
+export interface IStoreWeight {
+  patientID: number;
+  time: string;
+  weightKG: number;
+}
+
+export interface IStoreWeight {
+  patientID: number;
+  time: string;
+  weightKG: number;
+}
+
+export interface IGetGraphingData {
+  patientID: number;
+  intervalStart: string;
+  intervalEnd: string;
+  bslUnit?: string;
 }
 
 /**
@@ -52,6 +74,17 @@ export interface ICreateDoctor {
   password: string;
 }
 
+export interface IUpdateDoctor {
+  doctorID?: number;
+  firstName?: string;
+  lastName?: string;
+  licenseNumber?: number;
+  clinicID?: number;
+  email?: string;
+  userName?: string;
+  password?: string;
+}
+
 export interface IListDoctorsPatients {
   doctorID: number;
 }
@@ -60,9 +93,10 @@ export interface IGetDoctorProfile {
   doctorID: number;
 }
 
+// Clinic
 export interface IGetAllClinics {}
 
-// Other
+// TODO::
 export interface ICreateClinic {
   clinicID: number;
   clinicName: string;

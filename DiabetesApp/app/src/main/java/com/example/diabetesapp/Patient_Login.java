@@ -7,11 +7,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.graphics.Bitmap;
+import android.widget.GridView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,21 +38,21 @@ public class Patient_Login extends AppCompatActivity {
 
         currentNumber = findNumber();
 
-        TableLayout tablelayout = findViewById(R.id.buttonLayout);
-        tablelayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout layout = findViewById(R.id.buttonLayout);
 
-        for(int i = 0; i<currentNumber; i++)
+        for(int i = 1; i <= currentNumber; i++)
         {
             LinearLayout linear1 = new LinearLayout(this);
             linear1.setOrientation(LinearLayout.HORIZONTAL);
-            tablelayout.addView(linear1);
+            layout.addView(linear1);
 
             ImageButton b = new ImageButton(this);
             b.setImageBitmap(getImage(i));
             b.setId(i);
             b.setTag(i);
             b.setPadding(8, 3, 8, 3);
-            b.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            b.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
             linear1.addView(b);
             b.setOnClickListener(new View.OnClickListener() {
 
@@ -95,7 +96,7 @@ public class Patient_Login extends AppCompatActivity {
                 Log.e("ReadWriteFile", "Unable to read the TextFile.txt file.");
             }
         }
-        return val + 1;
+        return val;
     }
 
     private void back(){

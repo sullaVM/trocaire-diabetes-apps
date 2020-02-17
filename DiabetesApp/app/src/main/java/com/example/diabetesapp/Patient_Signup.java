@@ -20,6 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import android.net.Uri;
 import java.util.LinkedList;
+import java.util.List;
 
 import android.media.MediaScannerConnection;
 import android.util.Log;
@@ -39,28 +40,15 @@ public class Patient_Signup extends AppCompatActivity {
 
     Button back;
     Button enter;
-    Button reset;
 
     EditText enterName;
 
     ImageView imageView;
 
-    ImageView pass1;
-    ImageView pass2;
-    ImageView pass3;
-    ImageView pass4;
-    ImageView pass5;
-    ImageView pass6;
-    ImageView pass7;
-    ImageView pass8;
-    ImageView pass9;
-
     Bitmap photo;
     int currentNumber;
 
-    int clinic = 1;
-
-    String password = "";
+    String clinic = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,21 +56,11 @@ public class Patient_Signup extends AppCompatActivity {
         setContentView(R.layout.activity_patient__signup);
 
         back = findViewById(R.id.back);
-        enter = findViewById(R.id.enter);
-        reset = findViewById(R.id.reset);
+        enter = findViewById(R.id.next);
 
         enterName = findViewById(R.id.editText);
 
         imageView = findViewById(R.id.imageView);
-        pass1 = findViewById(R.id.pass1);
-        pass2 = findViewById(R.id.pass2);
-        pass3 = findViewById(R.id.pass3);
-        pass4 = findViewById(R.id.pass4);
-        pass5 = findViewById(R.id.pass5);
-        pass6 = findViewById(R.id.pass6);
-        pass7 = findViewById(R.id.pass7);
-        pass8 = findViewById(R.id.pass8);
-        pass9 = findViewById(R.id.pass9);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,94 +83,6 @@ public class Patient_Signup extends AppCompatActivity {
             }
         });
 
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass1.setImageResource(R.drawable.deselect);
-                pass2.setImageResource(R.drawable.deselect);
-                pass3.setImageResource(R.drawable.deselect);
-                pass4.setImageResource(R.drawable.deselect);
-                pass5.setImageResource(R.drawable.deselect);
-                pass6.setImageResource(R.drawable.deselect);
-                pass7.setImageResource(R.drawable.deselect);
-                pass8.setImageResource(R.drawable.deselect);
-                pass9.setImageResource(R.drawable.deselect);
-                password = "";
-            }
-        });
-
-        pass1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass1.setImageResource(R.drawable.select);
-                password += "1";
-            }
-        });
-
-        pass2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass2.setImageResource(R.drawable.select);
-                password += "2";
-            }
-        });
-
-        pass3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass3.setImageResource(R.drawable.select);
-                password += "3";
-            }
-        });
-
-        pass4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass4.setImageResource(R.drawable.select);
-                password += "4";
-            }
-        });
-
-        pass5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass5.setImageResource(R.drawable.select);
-                password += "5";
-            }
-        });
-
-        pass6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass6.setImageResource(R.drawable.select);
-                password += "6";
-            }
-        });
-
-        pass7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass7.setImageResource(R.drawable.select);
-                password += "7";
-            }
-        });
-
-        pass8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass8.setImageResource(R.drawable.select);
-                password += "8";
-            }
-        });
-
-        pass9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pass9.setImageResource(R.drawable.select);
-                password += "9";
-            }
-        });
-
         currentNumber = findNumber();
     }
 
@@ -202,15 +92,14 @@ public class Patient_Signup extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.clinic1:
                 if (checked)
-                    clinic = 1;
+                    clinic = "Clinic1";
                     break;
             case R.id.clinic2:
                 if (checked)
-                    clinic = 2;
+                    clinic = "Clinic2";
                     break;
         }
     }
-
 
     private int findNumber(){
         int val = 0;
@@ -239,33 +128,13 @@ public class Patient_Signup extends AppCompatActivity {
     }
 
     private void enterData(){
+        Intent intent = new Intent(this, Patient_SignUp_Password.class);
         String name = enterName.getText().toString();
-        try {
-            // Creates a file in the primary external storage space of the
-            // current application.
-            // If the file does not exist, it is created.
-            File textFile = new File(this.getFilesDir(), "TextFile.txt");
-            if (!textFile.exists())
-                textFile.createNewFile();
-
-            // Adds a line to the file
-            BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true /*append*/));
-
-            writer.write(currentNumber + " " + name + " " + password + " " + clinic + "\n");
-            writer.close();
-
-            // Refresh the data so it can seen when the device is plugged in a
-            // computer. You may have to unplug and replug the device to see the
-            // latest changes. This is not necessary if the user should not modify
-            // the files.
-            MediaScannerConnection.scanFile(this,
-                    new String[]{textFile.toString()},
-                    null,
-                    null);
+        intent.putExtra("name", name);
+        intent.putExtra("clinic", clinic);
+        intent.putExtra("number", currentNumber);
 
             File photoFile = new File(this.getFilesDir(), "Image" + currentNumber + ".jpg");
-            if (!textFile.exists())
-                textFile.createNewFile();
             try {
                 FileOutputStream out = new FileOutputStream(photoFile);
                 Bitmap bitmap = photo.copy(photo.getConfig(), true);
@@ -275,10 +144,7 @@ public class Patient_Signup extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } catch (IOException e) {
-            Log.e("ReadWriteFile", "Unable to write data.");
-        }
-        currentNumber++;
+        startActivity(intent);
     }
 
     public void back(){

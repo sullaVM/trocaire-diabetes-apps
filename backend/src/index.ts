@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use(express.static('static'));
 
-router.get('/createPatient', (request, response) => {
+router.post('/createPatient', (request, response) => {
   const createPatientRequest: requests.ICreatePatient = {
     doctorID: request.body.doctorID,
     firstName: request.body.firstName,
@@ -22,6 +22,7 @@ router.get('/createPatient', (request, response) => {
     mobileNumber: request.body.mobileNumber,
     photoDataUrl: request.body.photoDataUrl,
     password: request.body.password,
+    bslUnit: request.body.bslUnit,
   };
 
   const createPatientResponse: Promise<responses.ICreatePatient> = db.createPatient(
@@ -30,28 +31,17 @@ router.get('/createPatient', (request, response) => {
 
   createPatientResponse
     .then(result => {
-      if (result.success) {
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-          result: result.patientID,
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
 
-router.get('/updatePatient', (request, response) => {
+router.post('/updatePatient', (request, response) => {
   const updatePatientRequest: requests.IUpdatePatient = {
     patientID: request.body.patientID,
     doctorID: request.body.doctorID,
@@ -60,6 +50,7 @@ router.get('/updatePatient', (request, response) => {
     mobileNumber: request.body.mobileNumber,
     photoDataUrl: request.body.photoDataUrl,
     password: request.body.password,
+    bslUnit: request.body.bslUnit,
   };
 
   const updatePatientResponse: Promise<responses.IUpdatePatient> = db.updatePatient(
@@ -68,22 +59,12 @@ router.get('/updatePatient', (request, response) => {
 
   updatePatientResponse
     .then(result => {
-      if (result.success) {
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
@@ -99,32 +80,20 @@ router.get('/getPatientProfile', (request, response) => {
 
   getPatientProfileResponse
     .then(result => {
-      if (result.success) {
-        delete result.success;
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-          result,
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
 
-router.get('/storeRBP', (request, response) => {
+router.post('/storeRBP', (request, response) => {
   const storeRBPRequest: requests.IStoreRBP = {
-    time: request.body.time,
     patientID: request.body.patientID,
+    time: request.body.time,
     systole: request.body.systole,
     diastole: request.body.diastole,
   };
@@ -135,31 +104,22 @@ router.get('/storeRBP', (request, response) => {
 
   storeRBPResponse
     .then(result => {
-      if (result.success) {
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
 
-router.get('/storeBSL', (request, response) => {
+router.post('/storeBSL', (request, response) => {
   const storeBSLRequest: requests.IStoreBSL = {
-    time: request.body.time,
     patientID: request.body.patientID,
-    BSLmgDL: request.body.BSLmgDL,
+    time: request.body.time,
+    value: request.body.value,
+    unit: request.body.unit,
   };
 
   const storeBSLResponse: Promise<responses.IStoreBSL> = db.storeBSL(
@@ -168,22 +128,59 @@ router.get('/storeBSL', (request, response) => {
 
   storeBSLResponse
     .then(result => {
-      if (result.success) {
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
+router.post('/storeWeight', (request, response) => {
+  const storeWeightRequest: requests.IStoreWeight = {
+    patientID: request.body.patientID,
+    time: request.body.time,
+    weightKG: request.body.weightKG,
+  };
+
+  const storeWeightResponse: Promise<responses.IStoreWeight> = db.storeWeight(
+    storeWeightRequest
+  );
+
+  storeWeightResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
+router.get('/getGraphingData', (request, response) => {
+  const getGraphingDataRequest: requests.IGetGraphingData = {
+    patientID: request.body.patientID,
+    intervalStart: request.body.intervalStart,
+    intervalEnd: request.body.intervalEnd,
+    bslUnit: request.body.bslUnit,
+  };
+
+  const getGraphingDataResponse: Promise<responses.IGetGraphingData> = db.getGraphingData(
+    getGraphingDataRequest
+  );
+
+  getGraphingDataResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
@@ -205,23 +202,40 @@ router.post('/createDoctor', (request, response) => {
 
   createDoctorResponse
     .then(result => {
-      if (result.success) {
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-          result: result.doctorID,
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
+router.post('/updateDoctor', (request, response) => {
+  const updateDoctorRequest: requests.IUpdateDoctor = {
+    doctorID: request.body.doctorID,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    licenseNumber: request.body.licenseNumber,
+    clinicID: request.body.clinicID,
+    email: request.body.email,
+    userName: request.body.username,
+    password: request.body.password,
+  };
+
+  const updateDoctorResponse: Promise<responses.IUpdateDoctor> = db.updateDoctor(
+    updateDoctorRequest
+  );
+
+  updateDoctorResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
@@ -237,24 +251,12 @@ router.get('/getDoctorsPatients', (request, response) => {
 
   getDoctorsPatientsResponse
     .then(result => {
-      if (result.success) {
-        delete result.success;
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-          result,
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
@@ -270,24 +272,12 @@ router.get('/getDoctorProfile', (request, response) => {
 
   getDoctorsProfileResponse
     .then(result => {
-      if (result.success) {
-        delete result.success;
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-          result,
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });
@@ -303,24 +293,12 @@ router.get('/getAllClinics', (request, response) => {
 
   getAllClinicsResponse
     .then(result => {
-      if (result.success) {
-        delete result.success;
-        response.status(200).send({
-          success: 'true',
-          message: 'Request successful',
-          result,
-        });
-      } else {
-        response.status(200).send({
-          success: 'false',
-          message: 'Request unsuccessful',
-        });
-      }
+      response.status(200).send(result);
     })
     .catch(error => {
       response.status(200).send({
-        success: 'false',
-        message: 'Request unsuccessful' + error,
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
       });
     });
 });

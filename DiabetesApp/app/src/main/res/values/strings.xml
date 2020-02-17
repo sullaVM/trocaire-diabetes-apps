@@ -12,4 +12,12 @@
     <string name="app_name_logo">korta</string>
     <string name="action_sign_in_back">CANCEL</string>
     <string name="title_activity_doctor_login">Doctor Login</string>
+    <string name="patients">Patients</string>
+    <string name="title_activity_doctor_dashboard">Doctor Dashboard</string>
+    <string name="patient">Patient</string>
+    <string name="linear_layout_manager">Linear Layout Manager</string>
+    <string name="grid_layout_manager">Grid Layout Manager</string>
+    <string name="phone_number">+123 456 789 234</string>
+    <string name="patient_caps">PATIENT</string>
+    <string name="empty_state_doctor">Add a patient and they will show up here.</string>
 </resources>

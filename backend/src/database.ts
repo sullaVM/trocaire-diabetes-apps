@@ -18,8 +18,12 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const createPatient = async (
   request: requests.ICreatePatient
 ): Promise<responses.ICreatePatient> => {
-  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password)
-  VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${request.mobileNumber}','${request.photoDataUrl}','${request.password}');`;
+  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password, BslUnit)
+  VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${
+    request.mobileNumber
+  }','${request.photoDataUrl}','${request.password}','${
+    request.bslUnit === 'mgDL' ? 1 : 0
+  }');`;
 
   const result = await new Promise<responses.ICreatePatient>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -55,6 +59,7 @@ export const getPatientProfile = async (
           lastName: results[0].LastName,
           mobileNumber: results[0].MobileNumber,
           photoDataUrl: results[0].PhotoLink,
+          bslUnit: results[0].BslUnit === 1 ? 'mgDL' : 'mmolL',
         });
       }
     });
@@ -95,6 +100,13 @@ export const updatePatient = async (
       ? `${updateCount++ ? ',' : ''}PhotoLink='${request.photoDataUrl}'`
       : ''
   }
+  ${
+    request.bslUnit
+      ? `${updateCount++ ? ',' : ''}BslUnit='${
+          request.bslUnit === 'mgDL' ? 1 : 0
+        }'`
+      : ''
+  }
   WHERE PatientID='${request.patientID}';`;
 
   const result = await new Promise<responses.IUpdatePatient>(resolve => {
@@ -132,8 +144,14 @@ export const storeRBP = async (
 export const storeBSL = async (
   request: requests.IStoreBSL
 ): Promise<responses.IStoreBSL> => {
-  const query = `INSERT INTO BSL (TimeTaken, PatientID, BSLmgDL)
-  VALUES ('${request.time}','${request.patientID}','${request.BSLmgDL}')`;
+
+  const mmolL =
+    request.unit && request.unit === 'mgDL'
+      ? request.value / 18
+      : request.value;
+
+  const query = `INSERT INTO BSL (TimeTaken, PatientID, MmolL)
+  VALUES ('${request.time}','${request.patientID}','${mmolL}')`;
 
   const result = await new Promise<responses.IStoreBSL>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -142,6 +160,88 @@ export const storeBSL = async (
         resolve({ success: false });
       }
       resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
+export const storeWeight = async (
+  request: requests.IStoreWeight
+): Promise<responses.IStoreWeight> => {
+  let query = '';
+  if (
+    isNaN(Date.parse(request.time)) ||
+    Date.parse(request.time) === 0 ||
+    Date.parse(request.time) == null
+  ) {
+    query = `INSERT INTO Patient_Weight (PatientID, WeightKG)
+    VALUES ('${request.patientID}','${request.weightKG}')`;
+  } else {
+    query = `INSERT INTO Patient_Weight (TimeTaken, PatientID, WeightKG)
+    VALUES ('${request.time}','${request.patientID}','${request.weightKG}')`;
+  }
+
+  const result = await new Promise<responses.IStoreWeight>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
+export const getGraphingData = async (
+  request: requests.IGetGraphingData
+): Promise<responses.IGetGraphingData> => {
+  const BSLQuery = `SELECT TimeTaken, MmolL FROM BSL WHERE
+  PatientID='${request.patientID}' AND
+  TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
+  ORDER BY TimeTaken ASC;`;
+
+  const RBPQuery = `SELECT TimeTaken, Systole, Diastole FROM RBP WHERE
+  PatientID='${request.patientID}' AND
+  TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
+  ORDER BY TimeTaken ASC;`;
+
+  const result = await new Promise<responses.IGetGraphingData>(resolve => {
+    db.query(BSLQuery, (BSLError, BSLResults, BSLfields) => {
+      if (BSLError) {
+        console.error(BSLError);
+        resolve({ success: false });
+      }
+      db.query(RBPQuery, (RBPError, RBPResults, RBPfields) => {
+        if (RBPError) {
+          console.error(RBPError);
+          resolve({ success: false });
+        }
+        const RBP: { time: string; systole: number; diastole: number }[] = [];
+        const BSL: { time: string; value: number }[] = [];
+
+        for (const entry of BSLResults) {
+          BSL.push({
+            time: entry.TimeTaken,
+            value:
+              request.bslUnit && request.bslUnit === 'mgDL'
+                ? entry.MmolL * 18
+                : entry.MmolL,
+          });
+        }
+
+        for (const entry of RBPResults) {
+          RBP.push({
+            time: entry.TimeTaken,
+            systole: entry.Systole,
+            diastole: entry.Diastole,
+          });
+        }
+
+        resolve({ success: true, RBP, BSL });
+      });
     });
   });
 
@@ -209,7 +309,7 @@ export const listDoctorsPatients = async (
         console.error(error);
         resolve({ success: false });
       }
-      if (results.length === 0) {
+      if (results.length < 1) {
         resolve({ success: false });
       } else {
         resolve({
@@ -217,6 +317,68 @@ export const listDoctorsPatients = async (
           patientIDs: results,
         });
       }
+    });
+  });
+
+  return result;
+};
+export interface IUpdateDoctor {
+  doctorID?: number;
+  firstName?: string;
+  lastName?: string;
+  licenseNumber?: number;
+  clinicID?: number;
+  email?: string;
+  userName?: string;
+  password?: string;
+}
+export const updateDoctor = async (
+  request: requests.IUpdateDoctor
+): Promise<responses.IUpdateDoctor> => {
+  let updateCount = 0;
+
+  const query = `UPDATE Doctors
+  SET
+  ${
+    request.firstName
+      ? `${updateCount++ ? ',' : ''}FirstName='${request.firstName}'`
+      : ''
+  }
+  ${
+    request.lastName
+      ? `${updateCount++ ? ',' : ''}LastName='${request.lastName}'`
+      : ''
+  }
+  ${
+    request.licenseNumber
+      ? `${updateCount++ ? ',' : ''}MobileNumber='${request.licenseNumber}'`
+      : ''
+  }
+  ${
+    request.clinicID
+      ? `${updateCount++ ? ',' : ''}ClinicID='${request.clinicID}'`
+      : ''
+  }
+  ${request.email ? `${updateCount++ ? ',' : ''}Email='${request.email}'` : ''}
+  ${
+    request.userName
+      ? `${updateCount++ ? ',' : ''}UserName='${request.userName}'`
+      : ''
+  }
+  ${
+    request.password
+      ? `${updateCount++ ? ',' : ''}Password='${request.password}'`
+      : ''
+  }
+  WHERE DoctorID='${request.doctorID}';`;
+
+  const result = await new Promise<responses.IUpdateDoctor>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
     });
   });
 

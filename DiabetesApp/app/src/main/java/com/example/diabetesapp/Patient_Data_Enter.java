@@ -15,11 +15,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
-
 public class Patient_Data_Enter extends AppCompatActivity {
 
     Button back;
@@ -44,10 +39,22 @@ public class Patient_Data_Enter extends AppCompatActivity {
             }
         });
 
+
         picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePhoto();
+                Intent intent = getIntent();
+                int tag = intent.getIntExtra("tag", 1);
+                takePhoto(tag);
+            }
+        });
+
+        numbers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                int tag = intent.getIntExtra("tag", 1);
+                enterData(tag);
             }
         });
 
@@ -63,8 +70,15 @@ public class Patient_Data_Enter extends AppCompatActivity {
         //showData(tag);
     }
 
-    private void takePhoto(){
+    private void enterData(int tag){
+        Intent intent = new Intent(this, Patient_Data_Enter_Manual.class);
+        intent.putExtra("tag", tag);
+        startActivity(intent);
+    }
+
+    private void takePhoto(int tag){
         Intent intent = new Intent(this, Patient_Data_Enter_Camera.class);
+        intent.putExtra("tag", tag);
         startActivity(intent);
     }
 
