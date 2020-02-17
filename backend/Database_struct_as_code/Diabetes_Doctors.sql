@@ -30,7 +30,7 @@ CREATE TABLE `Doctors` (
   `ClinicID` int DEFAULT NULL,
   `Email` varchar(320) DEFAULT NULL,
   `UserName` varchar(320) DEFAULT NULL,
-  `Password` char(90) DEFAULT NULL,
+  `Password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`DoctorID`),
   KEY `ClinicID` (`ClinicID`),
   CONSTRAINT `Doctors_ibfk_1` FOREIGN KEY (`ClinicID`) REFERENCES `Clinics` (`ClinicID`)

@@ -1,6 +1,10 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import logger from 'morgan';
+import * as dotenv from 'dotenv';
+import * as generator from 'generate-password';
+import * as nodemailer from 'nodemailer';
+import * as bcrypt from 'bcrypt';
 import * as db from './database';
 import * as requests from './models/requests';
 import * as responses from './models/responses';
@@ -8,6 +12,10 @@ import * as responses from './models/responses';
 const apiPort = 8081;
 const app = express();
 const router = express.Router();
+
+const pwEncryptSaltRounds = 10;
+
+dotenv.config();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -186,30 +194,76 @@ router.get('/getGraphingData', (request, response) => {
 });
 
 router.post('/createDoctor', (request, response) => {
-  const createDoctorRequest: requests.ICreateDoctor = {
-    firstName: request.body.firstName,
-    lastName: request.body.lastName,
-    licenseNumber: request.body.licenseNumber,
-    clinicID: request.body.clinicID,
-    email: request.body.email,
-    userName: request.body.username,
-    password: request.body.password,
+  // Generate password.
+  const generatedPass = generator.generate({
+    length: 12,
+    numbers: true,
+    lowercase: true,
+    uppercase: true,
+  });
+
+  // Send temporary password to new user (doctor).
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      type: 'OAuth2',
+      user: process.env.GMAIL_ADDRESS,
+      refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+  });
+
+  const emailBody = [
+    `Hi ${request.body.firstName}`,
+    `You have a new account with Trocaire Diabetes App. Your temporary password is: ${generatedPass}.`,
+    `from the Trocaire Team`,
+  ].join('\n\n');
+
+  const mailOptions = {
+    from: process.env.GMAIL_ADDRESS,
+    to: request.body.email,
+    subject: 'You have a new account with Trocaire Diabetes App',
+    text: emailBody,
   };
 
-  const createDoctorResponse: Promise<responses.ICreateDoctor> = db.createDoctor(
-    createDoctorRequest
-  );
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 
-  createDoctorResponse
-    .then(result => {
-      response.status(200).send(result);
-    })
-    .catch(error => {
-      response.status(200).send({
-        success: false,
-        message: 'Request unsuccessful, Error:' + error,
+  // Encrypt generated password and add entry to db.
+  bcrypt.hash(generatedPass, pwEncryptSaltRounds, (_, hash) => {
+    const createDoctorRequest: requests.ICreateDoctor = {
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      licenseNumber: request.body.licenseNumber,
+      clinicID: request.body.clinicID,
+      email: request.body.email,
+      userName: request.body.username,
+      password: hash,
+    };
+
+    const createDoctorResponse: Promise<responses.ICreateDoctor> = db.createDoctor(
+      createDoctorRequest
+    );
+
+    createDoctorResponse
+      .then(result => {
+        response.status(200).send(result);
+      })
+      .catch(error => {
+        response.status(200).send({
+          success: false,
+          message: 'Request unsuccessful, Error:' + error,
+        });
       });
-    });
+  });
 });
 
 router.post('/updateDoctor', (request, response) => {
