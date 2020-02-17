@@ -79,8 +79,8 @@ public class Patient_SignUp_Password extends AppCompatActivity {
         catch (IOException e) {
             Log.e("ReadWriteFile", "Unable to write data.");
         }
-
-        intent = new Intent(this, MainActivity.class);
+        intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

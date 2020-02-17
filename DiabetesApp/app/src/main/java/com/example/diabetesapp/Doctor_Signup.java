@@ -26,7 +26,8 @@ public class Doctor_Signup extends AppCompatActivity {
     }
 
     public void back(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }

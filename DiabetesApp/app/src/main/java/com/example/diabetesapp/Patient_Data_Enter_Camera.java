@@ -84,8 +84,7 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
         data = textView.getText().toString();
     }
     private void back(){
-        Intent intent = new Intent(this, Patient_Data_Enter.class);
-        startActivity(intent);
+        this.finish();
     }
 
     @Override

@@ -104,7 +104,8 @@ public class Patient_Data_Enter extends AppCompatActivity {
     }
 
     private void back(){
-        Intent intent = new Intent(this, Patient_Login.class);
+        Intent intent = new Intent(getApplicationContext(), Patient_Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }
