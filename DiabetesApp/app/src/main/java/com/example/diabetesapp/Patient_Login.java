@@ -55,7 +55,6 @@ public class Patient_Login extends AppCompatActivity {
 
             linear1.addView(b);
             b.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     int tag = Integer.parseInt(v.getTag().toString());
