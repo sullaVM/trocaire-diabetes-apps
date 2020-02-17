@@ -18,6 +18,7 @@ export interface IGetPatientProfile {
   lastName?: string;
   mobileNumber?: number;
   photoDataUrl?: string;
+  bslUnit?: string;
 }
 
 export interface IStoreRBP {
@@ -28,10 +29,14 @@ export interface IStoreBSL {
   success: boolean;
 }
 
+export interface IStoreWeight {
+  success: boolean;
+}
+
 export interface IGetGraphingData {
   success: boolean;
   RBP?: { time: string; systole: number; diastole: number }[];
-  BSL?: { time: string; BSLmgDL: number }[];
+  BSL?: { time: string; value: number }[];
 }
 
 /**
@@ -41,6 +46,10 @@ export interface IGetGraphingData {
 export interface ICreateDoctor {
   success: boolean;
   doctorID?: number;
+}
+
+export interface IUpdateDoctor {
+  success: boolean;
 }
 
 export interface IListDoctorsPatients {
