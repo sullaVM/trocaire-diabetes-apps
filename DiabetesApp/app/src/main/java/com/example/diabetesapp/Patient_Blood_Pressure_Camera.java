@@ -2,6 +2,8 @@ package com.example.diabetesapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Bundle;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.Manifest;
@@ -24,8 +26,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 
-public class Patient_Data_Enter_Camera extends AppCompatActivity {
-
+public class Patient_Blood_Pressure_Camera extends AppCompatActivity {
     Button back;
     Button done;
     String data;
@@ -58,7 +59,7 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__data__enter__camera);
+        setContentView(R.layout.activity_patient__blood__pressure__camera);
 
         cameraView = findViewById(R.id.surface_view);
         textView = findViewById(R.id.text_view);
@@ -83,7 +84,7 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
     private void saveData(){
         data = textView.getText().toString();
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("sugar", data);
+        resultIntent.putExtra("pressure", data);
         setResult(Patient_Data_Enter.RESULT_OK, resultIntent);
         finish();
     }
@@ -113,7 +114,7 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
                     try {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                            ActivityCompat.requestPermissions(Patient_Data_Enter_Camera.this,
+                            ActivityCompat.requestPermissions(Patient_Blood_Pressure_Camera.this,
                                     new String[]{Manifest.permission.CAMERA},
                                     RequestCameraPermissionID);
                             return;
