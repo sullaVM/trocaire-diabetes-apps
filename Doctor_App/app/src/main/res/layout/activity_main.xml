@@ -54,15 +54,35 @@
         app:layout_constraintVertical_bias="0.982"/>
 
     <Button
-                android:id="@+id/button4"
-                android:layout_width="109dp"
-                android:layout_height="109dp"
-                android:layout_marginTop="150dp"
-                android:layout_marginEnd="72dp"
-                android:layout_marginRight="72dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:text="Patient Login"
-                app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
-                app:layout_constraintStart_toStartOf="@+id/guidelineVertical" />
+        android:id="@+id/button"
+        android:layout_width="109dp"
+        android:layout_height="109dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Doctor Sign Up"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="109dp"
+        android:layout_height="109dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="Doctor Login"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="109dp"
+        android:layout_height="109dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Patient Sign Up"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"   />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

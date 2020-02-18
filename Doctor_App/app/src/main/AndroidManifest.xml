@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.diabetesapp">
+    package="com.example.doctor_app">
 
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -14,25 +14,13 @@
         <activity android:name=".Patient_Data_Enter_Manual"></activity>
         <activity android:name="com.example.doctor_app.Patient_SignUp_Password" />
         <activity android:name="com.example.doctor_app.Doctor_Dashboard"
-                    android:label="@string/title_activity_doctor_dashboard"
-                    android:parentActivityName="com.example.doctor_app.Doctor_Login"></activity>
-        <activity android:name=".Patient_Data_Enter_Camera" />
-        <activity android:name=".Patient_Input_Password" />
-        <activity android:name=".Patient_Data_Enter" />
-        <activity android:name=".Patient_Login" />
+            android:label="@string/title_activity_doctor_dashboard"
+            android:parentActivityName="com.example.doctor_app.Doctor_Login"></activity>
         <activity android:name="com.example.doctor_app.Patient_Signup" />
         <activity android:name="com.example.doctor_app.Doctor_Login"
-                    android:label="@string/title_activity_doctor_login"
-                    android:parentActivityName=".MainActivity" />
+            android:label="@string/title_activity_doctor_login"
+            android:parentActivityName=".MainActivity" />
         <activity android:name="com.example.doctor_app.Doctor_Signup" />
-        <activity
-            android:name=".ui.login.Patient_Login"
-            android:label="@string/title_activity_patient__login"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.diabetesapp.MainActivity" />
-        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
