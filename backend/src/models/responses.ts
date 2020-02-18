@@ -16,6 +16,8 @@ export interface IGetPatientProfile {
   doctorID?: number;
   firstName?: string;
   lastName?: string;
+  height?: string;
+  pregnant?: string;
   mobileNumber?: number;
   photoDataUrl?: string;
   bslUnit?: string;

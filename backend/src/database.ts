@@ -18,12 +18,12 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const createPatient = async (
   request: requests.ICreatePatient
 ): Promise<responses.ICreatePatient> => {
-  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, MobileNumber, PhotoLink, Password, BslUnit)
+  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName,Height, Pregnant, MobileNumber, PhotoLink, Password, BslUnit)
   VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${
-    request.mobileNumber
-  }','${request.photoDataUrl}','${request.password}','${
-    request.bslUnit === 'mgDL' ? 1 : 0
-  }');`;
+    request.height
+  }', '${request.pregnant}', '${request.mobileNumber}','${
+    request.photoDataUrl
+  }','${request.password}','${request.bslUnit === 'mgDL' ? 1 : 0}');`;
 
   const result = await new Promise<responses.ICreatePatient>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -57,6 +57,8 @@ export const getPatientProfile = async (
           doctorID: results[0].DoctorID,
           firstName: results[0].FirstName,
           lastName: results[0].LastName,
+          height: results[0].Height,
+          pregnant: results[0].Pregnant,
           mobileNumber: results[0].MobileNumber,
           photoDataUrl: results[0].PhotoLink,
           bslUnit: results[0].BslUnit === 1 ? 'mgDL' : 'mmolL',
@@ -88,6 +90,16 @@ export const updatePatient = async (
   ${
     request.lastName
       ? `${updateCount++ ? ',' : ''}LastName='${request.lastName}'`
+      : ''
+  }
+  ${
+    request.height
+      ? `${updateCount++ ? ',' : ''}Height='${request.height}'`
+      : ''
+  }
+  ${
+    request.pregnant
+      ? `${updateCount++ ? ',' : ''}Pregnant='${request.pregnant}'`
       : ''
   }
   ${
@@ -144,7 +156,6 @@ export const storeRBP = async (
 export const storeBSL = async (
   request: requests.IStoreBSL
 ): Promise<responses.IStoreBSL> => {
-
   const mmolL =
     request.unit && request.unit === 'mgDL'
       ? request.value / 18
@@ -169,18 +180,8 @@ export const storeBSL = async (
 export const storeWeight = async (
   request: requests.IStoreWeight
 ): Promise<responses.IStoreWeight> => {
-  let query = '';
-  if (
-    isNaN(Date.parse(request.time)) ||
-    Date.parse(request.time) === 0 ||
-    Date.parse(request.time) == null
-  ) {
-    query = `INSERT INTO Patient_Weight (PatientID, WeightKG)
-    VALUES ('${request.patientID}','${request.weightKG}')`;
-  } else {
-    query = `INSERT INTO Patient_Weight (TimeTaken, PatientID, WeightKG)
-    VALUES ('${request.time}','${request.patientID}','${request.weightKG}')`;
-  }
+  const query = `INSERT INTO Patient_Weight (TimeTaken, PatientID, WeightKG)
+  VALUES ('${request.time}','${request.patientID}','${request.weightKG}')`;
 
   const result = await new Promise<responses.IStoreWeight>(resolve => {
     db.query(query, (error, results, fields) => {
