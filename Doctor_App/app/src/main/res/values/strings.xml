@@ -20,4 +20,12 @@
     <string name="phone_number">+123 456 789 234</string>
     <string name="patient_caps">PATIENT</string>
     <string name="empty_state_doctor">Add a patient and they will show up here.</string>
+
+    <string-array name="numbers">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+    </string-array>
 </resources>

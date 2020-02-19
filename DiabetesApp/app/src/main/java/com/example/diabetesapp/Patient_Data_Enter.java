@@ -116,12 +116,6 @@ public class Patient_Data_Enter extends AppCompatActivity {
             }
         });
         enter = findViewById(R.id.enter);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enterData();
-            }
-        });
     }
 
     private void sugar_enterData(){

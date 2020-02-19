@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import android.net.Uri;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
 
 import android.media.MediaScannerConnection;
 import android.util.Log;
@@ -33,8 +35,11 @@ import java.io.FileOutputStream;
 import android.os.Environment;
 import androidx.core.content.FileProvider;
 import android.graphics.BitmapFactory;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
-public class Patient_Signup extends AppCompatActivity {
+public class Patient_Signup extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -84,21 +89,24 @@ public class Patient_Signup extends AppCompatActivity {
         });
 
         currentNumber = findNumber();
+
+        // Spinner element
+        Spinner spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.numbers, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
-    public void onRadioButtonClicked(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        clinic = parent.getItemAtPosition(position).toString();
+    }
 
-        switch(view.getId()) {
-            case R.id.clinic1:
-                if (checked)
-                    clinic = "Clinic1";
-                    break;
-            case R.id.clinic2:
-                if (checked)
-                    clinic = "Clinic2";
-                    break;
-        }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private int findNumber(){

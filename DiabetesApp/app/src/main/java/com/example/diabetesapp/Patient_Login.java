@@ -40,10 +40,18 @@ public class Patient_Login extends AppCompatActivity {
 
         LinearLayout layout = findViewById(R.id.buttonLayout);
 
+        LinearLayout linear1 = new LinearLayout(this);
+        linear1.setOrientation(LinearLayout.HORIZONTAL);
+
         for(int i = 1; i <= currentNumber; i++)
         {
-            LinearLayout linear1 = new LinearLayout(this);
-            linear1.setOrientation(LinearLayout.HORIZONTAL);
+            if(i%4==1){
+                linear1 = new LinearLayout(this);
+                linear1.setOrientation(LinearLayout.HORIZONTAL);
+            }
+            if(linear1.getParent() != null) {
+                ((ViewGroup)linear1.getParent()).removeView(linear1); // <- fix
+            }
             layout.addView(linear1);
 
             ImageButton b = new ImageButton(this);
