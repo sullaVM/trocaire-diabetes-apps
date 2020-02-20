@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Create a Doctor Account</title>
+    <meta name="description" content="Creating an account for a doctor.">
+
+    <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+
+</head>
+
+<body>
+    <form action="/api/createDoctor" method="post">
+        <label for="male">First Name:</label>
+        <input type="text" name="firstName" required><br>
+
+        <label for="male">Last Name:</label>
+        <input type="text" name="lastName" required><br>
+
+        <label for="male">License Number:</label>
+        <input type="text" name="licenseNumber" required><br>
+
+        <label for="male">Clinic ID:</label>
+        <input type="text" name="clinicID" required><br>
+
+        <label for="male">Email Address:</label>
+        <input type="text" name="email" required><br>
+
+        <label for="male">Username:</label>
+        <input type="text" name="username" required><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <div class="quickstart-user-details-container">
+        <button disabled id="sign-in" name="signin">Sign In</button>
+        Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+    </div>
+
+    <div>Firebase auth <code>currentUser</code> object value:</div>
+    <pre><code id="quickstart-account-details">null</code></pre>
+
+
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+</body>
+
+<script type="text/javascript" src="/script.js"></script>
+
+</html>

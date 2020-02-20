@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "trocaire-diabete-1581953003031",
+  "private_key_id": "cc7cd8499cb88077feb08bc3b7ab018bfc7283c2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC/rcadStz4oKiu\nJhu8elFbOA5K2n29Sg8TwUoOHVGhCWznud2a1Nc1HPgQ2A95N/kPV1S2x0gWBR3S\nimCDjzLqjsWOz5UwcTNSJtG/eg5yjAZtUUZBTP5lG8Mzf+WzDRcJahAs+bnX+Nyf\n/dTF7pSyZ8gtqJOmii9meaB7y0na8ywZX+zLpi0r52a2+xTBIcIoIr/46BEDESwp\ntOyj1u9rAzUN5Bn6lSQdIvODOhD3fgFY3q6MdW4Kjq4UsB0SgvmROlFcxu6OlMBc\nttL6i1A5K9ofAOwI7UQm4rDR3MqQQxwZpNm4mlvSmzzcaYPlldrs1+oed/o9gg/d\nH8C5C47DAgMBAAECggEAWvp9+5mVgZMsDSC8aHz8UZotOn0zUl2tA1jqsAFdhdyF\n6wUO+JcOoMCjw8bxrT0Sg6QVav3yqrT5/z076yXUan2iqpK/wrLwQ412X/ZslhT9\nVfTOLl9/nfkL8U1C9vX/GbJUhCxx999AxNXDoMEJphZZbsaFcnZDYlXXhPqsDvYq\ntApvKvA00T95eHh21brdymF02fQhejDe6pYQYFe5de8bau0f/NlohR26m4A9D8gK\nZ2eZV7SJlUikUC+qgUUua04kXDlNqBGLsEftqXJA4WOCuQ3mYhHhhtXBC3Ssxlxq\ntpV8x8asdxJTzUDMc+a/drN25IdIE0cWYvBQ1ZtMRQKBgQDyaQJioRPy/9HqqBXs\nvOnbJFSO2Ohc3MUBTqtu0FOU4aHigrLpDcc6zjaI7X1Xg4db1WLdhR3luV4HsVaQ\n3VUjINqhs6PzHeZeoNDvrqW67h/VeERM5D27qG0Y6rg1P27GAKrJxrBDHV34iprh\n3c4tPUkMOqa1QP/aWK1b69JwLwKBgQDKbK/DB/UuHa3sWI1kLLYeUSjJotgtNQnQ\nVzIr8uR4jr/iSw+nycEoAK09D1eEnyYA20RGlrfdKvLOb4ex1blq3yAs7nrCDP8E\n7qI6JHKwQLYS05vVraKtbXEjT0oCrVGAqokUqZ/UMnHo5wIiHgHLU2bGSXQ105v9\n2+x6/39xrQKBgQDKxCGVpI0OTwQk13J3ctHeV3ZPgopi2twDKu3lJGc1esKxuIe0\nv6ytuL4PLTASGtgHbedjyixm8vX/U0xIoorLdnjKl3wFKTaAYt5CDoFcakDAi/f9\npVEp/kk7dWKeT6/1+ariWssnaJIpCq9hTOpgFwpaK1k09ejNmC1yXUDKSwKBgB5U\nwtFac+aBE/qCGk2UVYWda5srB3FerSXGqwHi11EpMp9Z1/KwTH0N/OdVUSvSHQOr\n10MsekhtkwxTseV3vNzCqjORWFuTTvMSPsSviW/XgnC3vHX8GpAaAgXkb5aPGdNJ\nuliaQhStqlvXoX4zONmamZ/EieE23/zd40Va22HRAoGBAIVnhjjmMlaKH4gmJxqZ\nlBJRdIsujyseCmDafzHqAkbeYVHtI+tPFOL+6nh9FL8/x3CIycps8srGzV18ELOh\nq5cQNbXQVOMPiWCb2IzawjBTfJdn8scM+X1ymbX+2QO5zLIU15F4nl7sud94/cH5\noKJFjfNYlDkWiU5DbzLfX4o1\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-1tznp@trocaire-diabete-1581953003031.iam.gserviceaccount.com",
+  "client_id": "109495210989565802608",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-1tznp%40trocaire-diabete-1581953003031.iam.gserviceaccount.com"
+}
