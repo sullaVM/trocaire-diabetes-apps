@@ -361,6 +361,27 @@ router.get('/getAllClinics', (request, response) => {
     });
 });
 
+router.post('/createClinic', (request, response) => {
+  const createClinicRequest: requests.ICreateClinic = {
+    clinicName: request.body.clinicName,
+  };
+
+  const createClinicResponse: Promise<responses.ICreateClinic> = db.createClinic(
+    createClinicRequest
+  );
+
+  createClinicResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
 app.use('/api', router);
 app.disable('etag');
 

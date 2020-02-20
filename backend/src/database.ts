@@ -417,3 +417,22 @@ export const getAllClinics = async (
 
   return result;
 };
+
+export const createClinic = async (
+  request: requests.ICreateClinic
+): Promise<responses.ICreateClinic> => {
+  const query = `INSERT INTO Clinics (ClinicName)
+  VALUE ('${request.clinicName}');`;
+
+  const result = await new Promise<responses.ICreateClinic>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ clinicID: results.insertId, success: true });
+    });
+  });
+
+  return result;
+};

@@ -96,7 +96,6 @@ export interface IGetAllClinics {}
 
 // TODO::
 export interface ICreateClinic {
-  clinicID: number;
   clinicName: string;
 }
 

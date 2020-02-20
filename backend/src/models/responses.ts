@@ -74,3 +74,8 @@ export interface IGetAllClinics {
   success: boolean;
   clinics?: { clinicID: number; clinicName: string }[];
 }
+
+export interface ICreateClinic {
+  success: boolean;
+  clinicID?: number;
+}
