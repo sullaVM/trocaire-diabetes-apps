@@ -70,6 +70,15 @@ export interface IGetDoctorProfile {
   userName?: string;
 }
 
+export interface IGetAllDoctorsAtClinic {
+  success: boolean;
+  doctors?: {
+    doctorID: number;
+    firstName: string;
+    lastName: string;
+  }[];
+}
+
 export interface IGetAllClinics {
   success: boolean;
   clinics?: { clinicID: number; clinicName: string }[];

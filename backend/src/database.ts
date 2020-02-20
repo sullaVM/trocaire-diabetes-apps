@@ -386,6 +386,44 @@ export const updateDoctor = async (
   return result;
 };
 
+export const getAllDoctorsAtClinic = async (
+  request: requests.IGetAllDoctorsAtClinic
+): Promise<responses.IGetAllDoctorsAtClinic> => {
+  const query = `SELECT DoctorID, FirstName, LastName FROM Doctors WHERE ClinicID='${request.clinicID}';`;
+  const result = await new Promise<responses.IGetAllDoctorsAtClinic>(
+    resolve => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          console.error(error);
+          resolve({ success: false });
+        }
+        if (results.length < 1) {
+          resolve({ success: false });
+        } else {
+          const doctors: {
+            doctorID: number;
+            firstName: string;
+            lastName: string;
+          }[] = [];
+          for (const doctor of results) {
+            doctors.push({
+              doctorID: doctor.DoctorID,
+              firstName: doctor.FirstName,
+              lastName: doctor.LastName,
+            });
+          }
+          resolve({
+            success: true,
+            doctors,
+          });
+        }
+      });
+    }
+  );
+
+  return result;
+};
+
 export const getAllClinics = async (
   request: requests.IGetAllClinics
 ): Promise<responses.IGetAllClinics> => {
