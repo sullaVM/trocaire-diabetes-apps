@@ -6,8 +6,6 @@ export interface ICreatePatient {
   doctorID: number;
   firstName: string;
   lastName: string;
-  height: string;
-  pregnant: number;
   mobileNumber: number;
   photoDataUrl: string;
   password: string;
@@ -19,8 +17,6 @@ export interface IUpdatePatient {
   doctorID?: number;
   firstName?: string;
   lastName?: string;
-  height?: string;
-  pregnant?: number;
   mobileNumber?: number;
   photoDataUrl?: string;
   password?: string;
@@ -51,6 +47,12 @@ export interface IStoreWeight {
   weightKG: number;
 }
 
+export interface IStoreWeight {
+  patientID: number;
+  time: string;
+  weightKG: number;
+}
+
 export interface IGetGraphingData {
   patientID: number;
   intervalStart: string;
@@ -73,7 +75,7 @@ export interface ICreateDoctor {
 }
 
 export interface IUpdateDoctor {
-  doctorID: number;
+  doctorID?: number;
   firstName?: string;
   lastName?: string;
   licenseNumber?: number;
@@ -99,5 +101,3 @@ export interface ICreateClinic {
   clinicID: number;
   clinicName: string;
 }
-
-export interface IGetAllDoctors {}
