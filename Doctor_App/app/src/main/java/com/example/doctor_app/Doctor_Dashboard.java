@@ -2,11 +2,20 @@ package com.example.doctor_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import static android.media.ThumbnailUtils.extractThumbnail;
 
 public class Doctor_Dashboard extends AppCompatActivity {
     
@@ -28,6 +37,7 @@ public class Doctor_Dashboard extends AppCompatActivity {
 
             ListView listView = findViewById(R.id.listViewPatients);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(messageClickedHandler);
         }
     }
 
@@ -40,4 +50,15 @@ public class Doctor_Dashboard extends AppCompatActivity {
             patientDataset.add(patient);
         }
     }
+
+    private AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView parent, View v, int position, long id) {
+            Patient patient = new Patient(patientDataset.get(position).patientName,
+                    patientDataset.get(position).patientImage);
+
+            Intent intent = new Intent(getApplicationContext(), Info.class);
+            intent.putExtra("info", patient);
+            startActivity(intent);
+        }
+    };
 }
