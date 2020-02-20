@@ -22,6 +22,7 @@
     <string name="empty_state_doctor">Add a patient and they will show up here.</string>
     <string name="chart_line">Last Five Days</string>
     <string name="name">Name</string>
+    <string name="action_delete">DELETE</string>
 
     <string-array name="numbers">
         <item>One</item>

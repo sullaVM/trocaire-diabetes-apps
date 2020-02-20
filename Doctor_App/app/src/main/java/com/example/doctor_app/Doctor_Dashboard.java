@@ -41,6 +41,12 @@ public class Doctor_Dashboard extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getPatients();
+    }
+
     private void getPatients() {
         patientDataset = new ArrayList<>();
         for (int i = 0; i < datasetSize; i++) {

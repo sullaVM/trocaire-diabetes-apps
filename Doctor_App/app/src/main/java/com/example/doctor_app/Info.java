@@ -2,8 +2,10 @@ package com.example.doctor_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -15,7 +17,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Info extends AppCompatActivity {
@@ -85,5 +89,19 @@ public class Info extends AppCompatActivity {
 
         lineChart.notifyDataSetChanged();
         lineChart.invalidate();
+    }
+
+    public void delete(View view) {
+        MaterialAlertDialogBuilder dialogDelete = new MaterialAlertDialogBuilder(this);
+        dialogDelete.setTitle("Delete patient?");
+        dialogDelete.setMessage("This will delete the current patient.");
+        dialogDelete.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Perform deletion;
+                finish();
+            }
+        });
+        dialogDelete.setNegativeButton("CANCEL",null);
+        dialogDelete.show();
     }
 }
