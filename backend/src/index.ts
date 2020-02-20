@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import * as db from './database';
 import * as requests from './models/requests';
 import * as responses from './models/responses';
+import * as admin from 'firebase-admin';
 
 const apiPort = 8081;
 const app = express();
@@ -17,10 +18,43 @@ const pwEncryptSaltRounds = 10;
 
 dotenv.config();
 
+// Firebase initialisation
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use(express.static('static'));
+
+// Firebase user creation
+// ====== DO NOT UNCOMMENT. =======
+// admin.auth().createUser({
+//   email: 'admin@test.com',
+//   emailVerified: false,
+//   password: 'admintest',
+//   displayName: 'Admin Test',
+//   disabled: false
+// })
+//   .then(function (userRecord) {
+//     // See the UserRecord reference doc for the contents of userRecord.
+//     console.log('Successfully created new user:', userRecord.uid);
+//   })
+//   .catch(function (error) {
+//     console.log('Error creating new user:', error);
+//   });
+
+// admin.auth().getUserByEmail('admin@test.com').then((user) => {
+//   return admin.auth().setCustomUserClaims(user.uid, {
+//     admin: true
+//   });
+// })
+//   .catch((error) => {
+//     console.log("Error giving admin access: ", error);
+//   });
+// ====== END =======
+// End of Firebase user creation
 
 router.post('/createPatient', (request, response) => {
   const createPatientRequest: requests.ICreatePatient = {
