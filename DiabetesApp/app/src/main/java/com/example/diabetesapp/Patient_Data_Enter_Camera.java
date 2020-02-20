@@ -82,10 +82,6 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
 
     private void saveData(){
         data = textView.getText().toString();
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("sugar", data);
-        setResult(Patient_Data_Enter.RESULT_OK, resultIntent);
-        finish();
     }
     private void back(){
         this.finish();

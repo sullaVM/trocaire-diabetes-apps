@@ -13,6 +13,7 @@ public class Patient_Data_Enter_Manual extends AppCompatActivity {
 
     Button enter;
     Button back;
+
     EditText data;
 
     @Override
@@ -45,9 +46,5 @@ public class Patient_Data_Enter_Manual extends AppCompatActivity {
 
     private void enterData(){
         String value = data.getText().toString();
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("sugar", value);
-        setResult(Patient_Data_Enter.RESULT_OK, resultIntent);
-        finish();
     }
 }

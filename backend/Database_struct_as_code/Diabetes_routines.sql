@@ -16,28 +16,8 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Patients`
+-- Dumping events for database 'Diabetes'
 --
-
-DROP TABLE IF EXISTS `Patients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Patients` (
-  `PatientID` int NOT NULL AUTO_INCREMENT,
-  `DoctorID` int DEFAULT NULL,
-  `FirstName` varchar(255) DEFAULT NULL,
-  `LastName` varchar(255) DEFAULT NULL,
-  `Height` varchar(255) DEFAULT NULL,
-  `Pregnant` tinyint(1) DEFAULT '0',
-  `MobileNumber` bigint DEFAULT NULL,
-  `PhotoLink` varchar(255) DEFAULT NULL,
-  `Password` char(90) DEFAULT NULL,
-  `BslUnit` tinyint NOT NULL DEFAULT '0',
-  PRIMARY KEY (`PatientID`),
-  KEY `FK_Patients_1` (`DoctorID`),
-  CONSTRAINT `FK_Patients_1` FOREIGN KEY (`DoctorID`) REFERENCES `Doctors` (`DoctorID`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -48,4 +28,4 @@ CREATE TABLE `Patients` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-18 12:55:24
+-- Dump completed on 2020-02-16 14:47:28
