@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ImageView;
 
@@ -18,18 +19,39 @@ import java.io.FileReader;
 public class Patient_Data_Enter extends AppCompatActivity {
 
     Button back;
-    TextView data;
+    Button enter;
 
-    ImageView picture;
-    ImageView numbers;
+    TextView sugar;
+    TextView pressure;
+
+    ImageView sugar_picture;
+    ImageView sugar_numbers;
+
+    ImageView pressure_picture;
+    ImageView pressure_numbers;
+
+    EditText height;
+    EditText weight;
+
+    ImageView check;
+    ImageView cross;
+
+    boolean pregnant;
+    String sugar_data;
+    String pressure_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient__data__enter);
 
-        picture = findViewById(R.id.camera);
-        numbers = findViewById(R.id.numbers);
+        pregnant = false;
+
+        sugar = findViewById(R.id.sugar);
+        pressure = findViewById(R.id.pressure);
+
+        height = findViewById(R.id.addHeight);
+        weight = findViewById(R.id.addWeight);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -39,22 +61,51 @@ public class Patient_Data_Enter extends AppCompatActivity {
             }
         });
 
+        sugar_picture = findViewById(R.id.camera);
+        sugar_numbers = findViewById(R.id.numbers);
 
-        picture.setOnClickListener(new View.OnClickListener() {
+        sugar_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = getIntent();
-                int tag = intent.getIntExtra("tag", 1);
-                takePhoto(tag);
+                sugar_takePhoto();
+            }
+        });
+        sugar_numbers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sugar_enterData();
             }
         });
 
-        numbers.setOnClickListener(new View.OnClickListener() {
+        pressure_picture = findViewById(R.id.camera2);
+        pressure_numbers = findViewById(R.id.numbers2);
+
+        pressure_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = getIntent();
-                int tag = intent.getIntExtra("tag", 1);
-                enterData(tag);
+                pressure_takePhoto();
+            }
+        });
+        pressure_numbers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pressure_enterData();
+            }
+        });
+
+        check = findViewById(R.id.check);
+        cross = findViewById(R.id.cross);
+
+        check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pregnant = true;
+            }
+        });
+        cross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pregnant = false;
             }
         });
 
@@ -64,22 +115,51 @@ public class Patient_Data_Enter extends AppCompatActivity {
                 back();
             }
         });
-
-        Intent intent = getIntent();
-        int tag = intent.getIntExtra("tag", 1);
-        //showData(tag);
+        enter = findViewById(R.id.enter);
     }
 
-    private void enterData(int tag){
+    private void sugar_enterData(){
         Intent intent = new Intent(this, Patient_Data_Enter_Manual.class);
-        intent.putExtra("tag", tag);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
-    private void takePhoto(int tag){
+    private void sugar_takePhoto(){
         Intent intent = new Intent(this, Patient_Data_Enter_Camera.class);
-        intent.putExtra("tag", tag);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
+    }
+
+    private void pressure_enterData(){
+        Intent intent = new Intent(this, Patient_Blood_Pressure_Manual.class);
+        startActivityForResult(intent, 0);
+    }
+
+    private void pressure_takePhoto(){
+        Intent intent = new Intent(this, Patient_Blood_Pressure_Camera.class);
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (0) : {
+                if (resultCode == Patient_Data_Enter.RESULT_OK) {
+                    pressure_data = data.getStringExtra("pressure");
+                    sugar_data = data.getStringExtra("sugar");
+                    if (sugar_data != null) sugar.setText(sugar_data);
+                    if (pressure_data != null) pressure.setText(pressure_data);
+                }
+            }
+                break;
+        }
+    }
+
+    private void enterData(){
+        String h = height.getText().toString();
+        String w = weight.getText().toString();
+        String sugar = sugar_data;
+        String pressure = pressure_data;
+        boolean p = pregnant;
     }
 
     private void showData(int tag){
@@ -100,7 +180,7 @@ public class Patient_Data_Enter extends AppCompatActivity {
                 Log.e("ReadWriteFile", "Unable to read the TestFile.txt file.");
             }
         }
-        data.setText(printData);
+        //data.setText(printData);
     }
 
     private void back(){
