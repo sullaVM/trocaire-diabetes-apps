@@ -180,7 +180,7 @@ export const storeBSL = async (
 export const storeWeight = async (
   request: requests.IStoreWeight
 ): Promise<responses.IStoreWeight> => {
-  const query = `INSERT INTO Patient_Weight (TimeTaken, PatientID, WeightKG)
+  const query = `INSERT INTO Weight (TimeTaken, PatientID, WeightKG)
   VALUES ('${request.time}','${request.patientID}','${request.weightKG}')`;
 
   const result = await new Promise<responses.IStoreWeight>(resolve => {
@@ -209,6 +209,11 @@ export const getGraphingData = async (
   TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
   ORDER BY TimeTaken ASC;`;
 
+  const WeightQuery = `SELECT TimeTaken, WeightKG FROM Weight WHERE
+  PatientID='${request.patientID}' AND
+  TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
+  ORDER BY TimeTaken ASC;`;
+
   const result = await new Promise<responses.IGetGraphingData>(resolve => {
     db.query(BSLQuery, (BSLError, BSLResults, BSLfields) => {
       if (BSLError) {
@@ -220,28 +225,42 @@ export const getGraphingData = async (
           console.error(RBPError);
           resolve({ success: false });
         }
-        const RBP: { time: string; systole: number; diastole: number }[] = [];
-        const BSL: { time: string; value: number }[] = [];
+        db.query(WeightQuery, (WeightError, WeightResults, Weightfields) => {
+          if (RBPError) {
+            console.error(RBPError);
+            resolve({ success: false });
+          }
+          const RBP: { time: string; systole: number; diastole: number }[] = [];
+          const BSL: { time: string; value: number }[] = [];
+          const Weight: { time: string; value: number }[] = [];
 
-        for (const entry of BSLResults) {
-          BSL.push({
-            time: entry.TimeTaken,
-            value:
-              request.bslUnit && request.bslUnit === 'mgDL'
-                ? entry.MmolL * 18
-                : entry.MmolL,
-          });
-        }
+          for (const entry of BSLResults) {
+            BSL.push({
+              time: entry.TimeTaken,
+              value:
+                request.bslUnit && request.bslUnit === 'mgDL'
+                  ? entry.MmolL * 18
+                  : entry.MmolL,
+            });
+          }
 
-        for (const entry of RBPResults) {
-          RBP.push({
-            time: entry.TimeTaken,
-            systole: entry.Systole,
-            diastole: entry.Diastole,
-          });
-        }
+          for (const entry of RBPResults) {
+            RBP.push({
+              time: entry.TimeTaken,
+              systole: entry.Systole,
+              diastole: entry.Diastole,
+            });
+          }
 
-        resolve({ success: true, RBP, BSL });
+          for (const entry of WeightResults) {
+            Weight.push({
+              time: entry.TimeTaken,
+              value: entry.WeightKG,
+            });
+          }
+
+          resolve({ success: true, RBP, BSL });
+        });
       });
     });
   });

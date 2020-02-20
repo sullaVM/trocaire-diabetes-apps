@@ -39,6 +39,7 @@ export interface IGetGraphingData {
   success: boolean;
   RBP?: { time: string; systole: number; diastole: number }[];
   BSL?: { time: string; value: number }[];
+  Weight?: { time: string; value: number }[];
 }
 
 /**
