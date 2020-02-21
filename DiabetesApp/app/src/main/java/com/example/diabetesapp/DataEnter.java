@@ -1,22 +1,21 @@
 package com.example.diabetesapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-public class Patient_Data_Enter extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DataEnter extends AppCompatActivity {
 
     Button back;
     Button enter;
@@ -118,43 +117,43 @@ public class Patient_Data_Enter extends AppCompatActivity {
         enter = findViewById(R.id.enter);
     }
 
-    private void sugar_enterData(){
-        Intent intent = new Intent(this, Patient_Data_Enter_Manual.class);
+    private void sugar_enterData() {
+        Intent intent = new Intent(this, DataEnterManual.class);
         startActivityForResult(intent, 0);
     }
 
-    private void sugar_takePhoto(){
-        Intent intent = new Intent(this, Patient_Data_Enter_Camera.class);
+    private void sugar_takePhoto() {
+        Intent intent = new Intent(this, DataEnterCamera.class);
         startActivityForResult(intent, 0);
     }
 
-    private void pressure_enterData(){
-        Intent intent = new Intent(this, Patient_Blood_Pressure_Manual.class);
+    private void pressure_enterData() {
+        Intent intent = new Intent(this, BloodPressureManual.class);
         startActivityForResult(intent, 0);
     }
 
-    private void pressure_takePhoto(){
-        Intent intent = new Intent(this, Patient_Blood_Pressure_Camera.class);
+    private void pressure_takePhoto() {
+        Intent intent = new Intent(this, BloodPressureCamera.class);
         startActivityForResult(intent, 0);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case (0) : {
-                if (resultCode == Patient_Data_Enter.RESULT_OK) {
+        switch (requestCode) {
+            case (0): {
+                if (resultCode == DataEnter.RESULT_OK) {
                     pressure_data = data.getStringExtra("pressure");
                     sugar_data = data.getStringExtra("sugar");
                     if (sugar_data != null) sugar.setText(sugar_data);
                     if (pressure_data != null) pressure.setText(pressure_data);
                 }
             }
-                break;
+            break;
         }
     }
 
-    private void enterData(){
+    private void enterData() {
         String h = height.getText().toString();
         String w = weight.getText().toString();
         String sugar = sugar_data;
@@ -162,7 +161,7 @@ public class Patient_Data_Enter extends AppCompatActivity {
         boolean p = pregnant;
     }
 
-    private void showData(int tag){
+    private void showData(int tag) {
         String printData = "";
         File testFile = new File(this.getFilesDir(), "TextFile.txt");
         if (testFile != null) {
@@ -170,7 +169,7 @@ public class Patient_Data_Enter extends AppCompatActivity {
             try {
                 reader = new BufferedReader(new FileReader(testFile));
                 String line;
-                for(int i = 1; i < tag; i++) {
+                for (int i = 1; i < tag; i++) {
                     line = reader.readLine();
                 }
                 line = reader.readLine();
@@ -183,8 +182,8 @@ public class Patient_Data_Enter extends AppCompatActivity {
         //data.setText(printData);
     }
 
-    private void back(){
-        Intent intent = new Intent(getApplicationContext(), Patient_Login.class);
+    private void back() {
+        Intent intent = new Intent(getApplicationContext(), Login.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

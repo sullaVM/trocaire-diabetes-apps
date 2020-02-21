@@ -1,15 +1,14 @@
 package com.example.diabetesapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class Patient_Data_Enter_Manual extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class BloodPressureManual extends AppCompatActivity {
 
     Button enter;
     Button back;
@@ -18,7 +17,7 @@ public class Patient_Data_Enter_Manual extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__data__enter__manual);
+        setContentView(R.layout.activity_patient__blood__pressure__manual);
 
         enter = findViewById(R.id.enter);
         data = findViewById(R.id.enterData);
@@ -39,15 +38,15 @@ public class Patient_Data_Enter_Manual extends AppCompatActivity {
         });
     }
 
-    public void back(){
+    public void back() {
         this.finish();
     }
 
-    private void enterData(){
+    private void enterData() {
         String value = data.getText().toString();
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("sugar", value);
-        setResult(Patient_Data_Enter.RESULT_OK, resultIntent);
+        resultIntent.putExtra("pressure", value);
+        setResult(DataEnter.RESULT_OK, resultIntent);
         finish();
     }
 }

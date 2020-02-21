@@ -1,10 +1,10 @@
 package com.example.diabetesapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-public class Patient_Data_Submit extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DataSubmit extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

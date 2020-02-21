@@ -1,21 +1,16 @@
 package com.example.diabetesapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -24,16 +19,19 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 
-public class Patient_Data_Enter_Camera extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+public class DataEnterCamera extends AppCompatActivity {
+
+    final int RequestCameraPermissionID = 1001;
     Button back;
     Button done;
     String data;
-
     SurfaceView cameraView;
     TextView textView;
     CameraSource cameraSource;
-    final int RequestCameraPermissionID = 1001;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -80,19 +78,20 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
 
     }
 
-    private void saveData(){
+    private void saveData() {
         data = textView.getText().toString();
         Intent resultIntent = new Intent();
         resultIntent.putExtra("sugar", data);
-        setResult(Patient_Data_Enter.RESULT_OK, resultIntent);
+        setResult(DataEnter.RESULT_OK, resultIntent);
         finish();
     }
-    private void back(){
+
+    private void back() {
         this.finish();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
@@ -113,7 +112,7 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
                     try {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                            ActivityCompat.requestPermissions(Patient_Data_Enter_Camera.this,
+                            ActivityCompat.requestPermissions(DataEnterCamera.this,
                                     new String[]{Manifest.permission.CAMERA},
                                     RequestCameraPermissionID);
                             return;
@@ -145,14 +144,12 @@ public class Patient_Data_Enter_Camera extends AppCompatActivity {
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
 
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
-                    if(items.size() != 0)
-                    {
+                    if (items.size() != 0) {
                         textView.post(new Runnable() {
                             @Override
                             public void run() {
                                 StringBuilder stringBuilder = new StringBuilder();
-                                for(int i =0;i<items.size();++i)
-                                {
+                                for (int i = 0; i < items.size(); ++i) {
                                     TextBlock item = items.valueAt(i);
                                     stringBuilder.append(item.getValue());
                                 }

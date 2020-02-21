@@ -1,8 +1,7 @@
 package com.example.diabetesapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,14 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.graphics.Bitmap;
-import android.widget.GridView;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-public class Patient_Login extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Login extends AppCompatActivity {
 
     Button back;
     int currentNumber;
@@ -43,14 +42,13 @@ public class Patient_Login extends AppCompatActivity {
         LinearLayout linear1 = new LinearLayout(this);
         linear1.setOrientation(LinearLayout.HORIZONTAL);
 
-        for(int i = 1; i <= currentNumber; i++)
-        {
-            if(i%4==1){
+        for (int i = 1; i <= currentNumber; i++) {
+            if (i % 4 == 1) {
                 linear1 = new LinearLayout(this);
                 linear1.setOrientation(LinearLayout.HORIZONTAL);
             }
-            if(linear1.getParent() != null) {
-                ((ViewGroup)linear1.getParent()).removeView(linear1); // <- fix
+            if (linear1.getParent() != null) {
+                ((ViewGroup) linear1.getParent()).removeView(linear1); // <- fix
             }
             layout.addView(linear1);
 
@@ -72,20 +70,20 @@ public class Patient_Login extends AppCompatActivity {
         }
     }
 
-    private void nextScreen(int tag){
-        Intent intent = new Intent(this, Patient_Input_Password.class);
+    private void nextScreen(int tag) {
+        Intent intent = new Intent(this, InputPassword.class);
         intent.putExtra("tag", tag);
         startActivity(intent);
     }
 
-    private Bitmap getImage(int val){
+    private Bitmap getImage(int val) {
         String photoPath = this.getFilesDir() + "/Image" + val + ".jpg";
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         return BitmapFactory.decodeFile(photoPath, options);
     }
 
-    private int findNumber(){
+    private int findNumber() {
         int val = 1;
         String[] text;
         File testFile = new File(this.getFilesDir(), "TextFile.txt");
@@ -106,7 +104,7 @@ public class Patient_Login extends AppCompatActivity {
         return val;
     }
 
-    private void back(){
+    private void back() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
