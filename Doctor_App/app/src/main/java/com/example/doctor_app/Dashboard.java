@@ -3,37 +3,30 @@ package com.example.doctor_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import android.os.Bundle;
-import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import static android.media.ThumbnailUtils.extractThumbnail;
-
-public class Doctor_Dashboard extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity {
     
-    private static int datasetSize = 50;
-    protected ArrayList<Patient> patientDataset;
+    private static int dataSetSize = 50;
+    protected ArrayList<Patient> patientDataSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_doctor__dashboard);
+        setContentView(R.layout.activity_dashboard);
 
         getPatients();
 
-        if(patientDataset.size() == 0) {
-            setContentView(R.layout.doctor_dashboard_empty_state);
+        if(patientDataSet.size() == 0) {
+            setContentView(R.layout.dashboard_empty_state);
         } else {
-            Doctor_Dashboard_Array_Adapter adapter = new Doctor_Dashboard_Array_Adapter(this,
-                    R.layout.doctor_dashboard_list_item, patientDataset);
+            DashboardArrayAdapter adapter = new DashboardArrayAdapter(this,
+                    R.layout.dashboard_list_item, patientDataSet);
 
             ListView listView = findViewById(R.id.listViewPatients);
             listView.setAdapter(adapter);
@@ -47,20 +40,25 @@ public class Doctor_Dashboard extends AppCompatActivity {
         getPatients();
     }
 
+    public void addPatient(View view) {
+        Intent intent = new Intent(getApplicationContext(), PatientSignUpDetails.class);
+        startActivity(intent);
+    }
+
     private void getPatients() {
-        patientDataset = new ArrayList<>();
-        for (int i = 0; i < datasetSize; i++) {
+        patientDataSet = new ArrayList<>();
+        for (int i = 0; i < dataSetSize; i++) {
             String patientName = "Patient " + i;
             int patientImage = R.drawable.blank_icon;
             Patient patient = new Patient(patientName, patientImage);
-            patientDataset.add(patient);
+            patientDataSet.add(patient);
         }
     }
 
     private AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView parent, View v, int position, long id) {
-            Patient patient = new Patient(patientDataset.get(position).patientName,
-                    patientDataset.get(position).patientImage);
+            Patient patient = new Patient(patientDataSet.get(position).patientName,
+                    patientDataSet.get(position).patientImage);
 
             Intent intent = new Intent(getApplicationContext(), Info.class);
             intent.putExtra("info", patient);

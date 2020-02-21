@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -18,9 +20,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class Info extends AppCompatActivity {
 
@@ -97,7 +96,7 @@ public class Info extends AppCompatActivity {
         dialogDelete.setMessage("This will delete the current patient.");
         dialogDelete.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // Perform deletion;
+                // Perform deletion
                 finish();
             }
         });

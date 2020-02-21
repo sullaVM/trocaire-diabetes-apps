@@ -7,43 +7,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import android.net.Uri;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ArrayList;
 
-import android.media.MediaScannerConnection;
 import android.util.Log;
 import android.provider.MediaStore;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
-import android.content.Context;
-import android.content.ContextWrapper;
+
 import java.io.FileOutputStream;
-import android.os.Environment;
-import androidx.core.content.FileProvider;
-import android.graphics.BitmapFactory;
+
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
-public class Patient_Signup extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class PatientSignUpDetails extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    Button back;
     Button enter;
 
     EditText enterName;
@@ -58,21 +41,13 @@ public class Patient_Signup extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__signup);
+        setContentView(R.layout.activity_add_patient);
 
-        back = findViewById(R.id.back);
         enter = findViewById(R.id.next);
 
         enterName = findViewById(R.id.editText);
 
         imageView = findViewById(R.id.imageView);
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                back();
-            }
-        });
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +111,7 @@ public class Patient_Signup extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void enterData(){
-        Intent intent = new Intent(this, Patient_SignUp_Password.class);
+        Intent intent = new Intent(this, PatientSignUpPass.class);
         String name = enterName.getText().toString();
         intent.putExtra("name", name);
         intent.putExtra("clinic", clinic);
@@ -152,12 +127,6 @@ public class Patient_Signup extends AppCompatActivity implements AdapterView.OnI
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        startActivity(intent);
-    }
-
-    public void back(){
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

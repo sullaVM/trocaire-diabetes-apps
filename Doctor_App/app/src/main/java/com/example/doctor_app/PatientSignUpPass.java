@@ -21,7 +21,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 
 import java.util.List;
 
-public class Patient_SignUp_Password extends AppCompatActivity {
+public class PatientSignUpPass extends AppCompatActivity {
 
     PatternLockView mPatternLockView;
 
@@ -32,11 +32,10 @@ public class Patient_SignUp_Password extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__sign_up__password);
+        setContentView(R.layout.activity_add_patient_pass);
 
         mPatternLockView = findViewById(R.id.pattern_lock_view);
         mPatternLockView.addPatternLockListener(mPatternLockViewListener);
-
 
         enter = findViewById(R.id.enter);
         enter.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +78,7 @@ public class Patient_SignUp_Password extends AppCompatActivity {
         catch (IOException e) {
             Log.e("ReadWriteFile", "Unable to write data.");
         }
-        intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
