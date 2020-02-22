@@ -11,19 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Patient_Data_Submit"></activity>
-        <activity android:name=".Patient_Blood_Pressure_Camera" />
-        <activity android:name=".Patient_Blood_Pressure_Manual" />
-        <activity android:name=".Patient_Data_Enter_Manual" />
+        <activity android:name=".DataSubmit"></activity>
+        <activity android:name=".BloodPressureCamera" />
+        <activity android:name=".BloodPressureManual" />
+        <activity android:name=".DataEnterManual" />
         <activity android:name="com.example.doctor_app.Patient_SignUp_Password" />
         <activity
             android:name="com.example.doctor_app.Doctor_Dashboard"
             android:label="@string/title_activity_doctor_dashboard"
             android:parentActivityName="com.example.doctor_app.Doctor_Login" />
-        <activity android:name=".Patient_Data_Enter_Camera" />
-        <activity android:name=".Patient_Input_Password" />
-        <activity android:name=".Patient_Data_Enter" />
-        <activity android:name=".Patient_Login" />
+        <activity android:name=".DataEnterCamera" />
+        <activity android:name=".InputPassword" />
+        <activity android:name=".DataEnter" />
+        <activity android:name=".Login" />
         <activity android:name="com.example.doctor_app.Patient_Signup" />
         <activity
             android:name="com.example.doctor_app.Doctor_Login"

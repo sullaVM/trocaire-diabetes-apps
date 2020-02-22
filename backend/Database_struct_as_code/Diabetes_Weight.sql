@@ -28,7 +28,7 @@ CREATE TABLE `Weight` (
   `WeightKG` decimal(5,2) DEFAULT NULL,
   PRIMARY KEY (`TimeTaken`,`PatientID`),
   KEY `Weight_fk_1` (`PatientID`),
-  CONSTRAINT `Weight_fk_1` FOREIGN KEY (`PatientID`) REFERENCES `Patients` (`PatientID`)
+  CONSTRAINT `Weight_fk_1` FOREIGN KEY (`PatientID`) REFERENCES `Patients` (`PatientID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -41,4 +41,4 @@ CREATE TABLE `Weight` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-18 12:55:25
+-- Dump completed on 2020-02-20 14:57:37

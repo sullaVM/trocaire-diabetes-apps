@@ -2,7 +2,7 @@
     <string name="app_name">Diabetes App</string>
     <string name="title_activity_patient__login">Sign in</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_password">Pass</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">SIGN IN</string>
     <string name="welcome">"Welcome !"</string>
@@ -20,6 +20,20 @@
     <string name="phone_number">+123 456 789 234</string>
     <string name="patient_caps">PATIENT</string>
     <string name="empty_state_doctor">Add a patient and they will show up here.</string>
+    <string name="chart_line">Last Five Days</string>
+    <string name="name">Name</string>
+    <string name="action_sign_in_forgot">FORGOT PASS</string>
+    <string name="okay">OKAY</string>
+    <string name="cancel">CANCEL</string>
+    <string name="prompt_name">Name</string>
+    <string name="clinic">Clinic</string>
+    <string name="photo">Photo</string>
+    <string name="add_patient">Add Patient</string>
+    <string name="next">Next</string>
+    <string name="set_password">Set Pass</string>
+    <string name="delete">DELETE</string>
+    <string name="submit">Submit</string>
+    <string name="add_details">Add Details</string>
 
     <string-array name="numbers">
         <item>One</item>

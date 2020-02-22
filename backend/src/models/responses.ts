@@ -39,6 +39,7 @@ export interface IGetGraphingData {
   success: boolean;
   RBP?: { time: string; systole: number; diastole: number }[];
   BSL?: { time: string; value: number }[];
+  Weight?: { time: string; value: number }[];
 }
 
 /**
@@ -68,6 +69,15 @@ export interface IGetDoctorProfile {
   clinicID?: number;
   email?: string;
   userName?: string;
+}
+
+export interface IGetAllDoctorsAtClinic {
+  success: boolean;
+  doctors?: {
+    doctorID: number;
+    firstName: string;
+    lastName: string;
+  }[];
 }
 
 export interface IGetAllClinics {

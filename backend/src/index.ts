@@ -350,6 +350,27 @@ router.get('/getDoctorProfile', (request, response) => {
     });
 });
 
+router.get('/getAllDoctorsAtClinic', (request, response) => {
+  const getAllDoctorsAtClinicRequest: requests.IGetAllDoctorsAtClinic = {
+    clinicID: request.body.clinicID,
+  };
+
+  const getAllDoctorsAtClinicResponse: Promise<responses.IGetAllDoctorsAtClinic> = db.getAllDoctorsAtClinic(
+    getAllDoctorsAtClinicRequest
+  );
+
+  getAllDoctorsAtClinicResponse
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+});
+
 router.get('/getAllClinics', (request, response) => {
   const getAllClinicsRequest: requests.IGetAllClinics = {
     doctorID: request.body.doctorID,

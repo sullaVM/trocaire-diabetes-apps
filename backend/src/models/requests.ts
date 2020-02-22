@@ -91,12 +91,13 @@ export interface IGetDoctorProfile {
   doctorID: number;
 }
 
+export interface IGetAllDoctorsAtClinic {
+  clinicID: number;
+}
+
 // Clinic
 export interface IGetAllClinics {}
 
-// TODO::
 export interface ICreateClinic {
   clinicName: string;
 }
-
-export interface IGetAllDoctors {}

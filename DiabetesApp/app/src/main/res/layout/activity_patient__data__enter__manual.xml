@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#C8E6C9"
-    tools:context=".Patient_Data_Enter_Manual">
+    tools:context=".DataEnterManual">
 
     <EditText
         android:id="@+id/enterData"
