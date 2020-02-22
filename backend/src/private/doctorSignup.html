@@ -31,11 +31,11 @@
         <label for="male">Username:</label>
         <input type="text" name="username" required><br>
 
-        <input type="submit" value="Submit">
+        <input disabled type="submit" id="doctor-sign-up" value="Submit">
     </form>
 
     <div class="quickstart-user-details-container">
-        <button disabled id="sign-in" name="signin">Sign In</button>
+        <button id="sign-out" name="signout">Sign Out</button>
         Firebase sign-in status: <span id="sign-in-status">Unknown</span>
     </div>
 
@@ -45,6 +45,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </body>
 
 <script type="text/javascript" src="/script.js"></script>

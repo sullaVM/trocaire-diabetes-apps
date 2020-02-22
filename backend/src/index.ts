@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
-import express from 'express';
+import cookieParser from 'cookie-parser';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import logger from 'morgan';
 import * as dotenv from 'dotenv';
 import * as generator from 'generate-password';
@@ -9,52 +10,26 @@ import * as db from './database';
 import * as requests from './models/requests';
 import * as responses from './models/responses';
 import * as admin from 'firebase-admin';
+import * as path from 'path';
 
 const apiPort = 8081;
 const app = express();
 const router = express.Router();
-
 const pwEncryptSaltRounds = 10;
 
 dotenv.config();
 
-// Firebase initialisation
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
 });
 
+const fb = admin.auth();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(logger('dev'));
-app.use(express.static('static'));
-
-// Firebase user creation
-// ====== DO NOT UNCOMMENT. =======
-// admin.auth().createUser({
-//   email: 'admin@test.com',
-//   emailVerified: false,
-//   password: 'admintest',
-//   displayName: 'Admin Test',
-//   disabled: false
-// })
-//   .then(function (userRecord) {
-//     // See the UserRecord reference doc for the contents of userRecord.
-//     console.log('Successfully created new user:', userRecord.uid);
-//   })
-//   .catch(function (error) {
-//     console.log('Error creating new user:', error);
-//   });
-
-// admin.auth().getUserByEmail('admin@test.com').then((user) => {
-//   return admin.auth().setCustomUserClaims(user.uid, {
-//     admin: true
-//   });
-// })
-//   .catch((error) => {
-//     console.log("Error giving admin access: ", error);
-//   });
-// ====== END =======
-// End of Firebase user creation
+app.use(express.static('src/public'));
 
 router.post('/createPatient', (request, response) => {
   const createPatientRequest: requests.ICreatePatient = {
@@ -231,6 +206,7 @@ router.get('/getGraphingData', (request, response) => {
     });
 });
 
+// TODO(sulla): Block non-signed-in user from using this request.
 router.post('/createDoctor', (request, response) => {
   // Generate password.
   const generatedPass = generator.generate({
@@ -416,7 +392,89 @@ router.post('/createClinic', (request, response) => {
     });
 });
 
+const login = (request: Request, response: Response) => {
+  response.sendFile(path.join(__dirname + '/../src/private/login.html'));
+};
+
+const dashboard = (request: Request, response: Response) => {
+  response.sendFile(path.join(__dirname + '/../src/private/dashboard.html'));
+};
+
+const doctorSignup = (request: Request, response: Response) => {
+  response.sendFile(path.join(__dirname + '/../src/private/doctorSignup.html'));
+};
+
+const isAdminLoggedIn = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const sessionCookie = request.cookies.session || '';
+
+  fb.verifySessionCookie(sessionCookie, true)
+    .catch(error => {
+      return response.redirect('/login');
+    })
+    .then(decodedClaims => {
+      return next();
+    });
+};
+
+app.post('/sessionLogin', async (request: Request, response: Response) => {
+  const idToken = request.body.idToken.toString();
+
+  fb.verifyIdToken(idToken).then(decodedIdToken => {
+    if (new Date().getTime() / 1000 - decodedIdToken.auth_time < 5 * 60) {
+      return fb.createSessionCookie(idToken, { expiresIn });
+    }
+    response.status(401).send('Recent sign in required!');
+  });
+
+  // Set session expiration to 24 hours.
+  const expiresIn = 60 * 60 * 24 * 1000;
+
+  // Create the session cookie.
+  fb.createSessionCookie(idToken, { expiresIn }).then(
+    sessionCookie => {
+      const options = {
+        maxAge: expiresIn,
+        httpOnly: true,
+        secure: false /* set to false when testing locally */,
+      };
+      response.cookie('session', sessionCookie, options);
+      response.end(JSON.stringify({ status: 'success' }));
+    },
+    error => {
+      response.status(401).send('UNAUTHORIZED REQUEST!');
+    }
+  );
+});
+
+app.get('/sessionLogout', (request: Request, response: Response) => {
+  const sessionCookie = request.cookies.session || '';
+  response.clearCookie('session');
+
+  fb.verifySessionCookie(sessionCookie)
+    .then(decodedClaims => {
+      return fb.revokeRefreshTokens(decodedClaims.sub);
+    })
+    .then(() => {
+      response.redirect('/login');
+    })
+    .catch(error => {
+      response.redirect('/login');
+    });
+});
+
 app.use('/api', router);
 app.disable('etag');
+
+const routes = (app: Express) => {
+  app.get('/', isAdminLoggedIn, dashboard);
+  app.get('/doctorSignup', isAdminLoggedIn, doctorSignup);
+  app.get('/login', login);
+};
+
+routes(app);
 
 app.listen(apiPort, () => console.log(`LISTENING ON PORT ${apiPort}/api`));
