@@ -12,10 +12,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-function signIn() {
+async function signIn() {
   if (firebase.auth().currentUser) {
     firebase.auth().signOut();
-    document.location.assign('/sessionLogout');
+    await axios.get('/sessionLogout');
   } else {
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
@@ -29,42 +29,35 @@ function signIn() {
     }
 
     // Sign in with email and password.
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-
-        if (errorCode === 'auth/wrong-password') {
-          alert('Wrong password.');
-        } else {
-          alert(errorMessage);
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      const startSession = async user => {
+        if (user) {
+          const idToken = await user.getIdToken();
+          await axios.post('/sessionLogin', {
+            idToken: idToken,
+          });
+          window.location.assign('/');
         }
-        console.log(error);
-      })
-      .then(() => {
-        firebase.auth().onAuthStateChanged(async function(user) {
-          if (user) {
-            // Session login
-            const idToken = await user.getIdToken();
-            await axios.post('/sessionLogin', {
-              idToken: idToken,
-            });
-            window.location.assign('/');
-          }
-        });
-      });
+      };
+      firebase.auth().onAuthStateChanged(startSession);
+    } catch (error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+
+      if (errorCode === 'auth/wrong-password') {
+        alert('Wrong password.');
+      } else {
+        alert(errorMessage);
+      }
+    }
   }
 }
 
-function signOut() {
-  if (firebase.auth().currentUser) {
-    firebase.auth().signOut();
-    document.location.assign('/sessionLogout');
-  } else {
-    window.location.assign('/');
-  }
+async function signOut() {
+  firebase.auth().signOut();
+  await axios.get('/sessionLogout');
+  window.location.assign('/');
 }
 
 function initApp() {
