@@ -1,4 +1,4 @@
-export interface FirebaseUser {
+export interface IFirebaseUser {
   email: Required<string>;
   temporaryPassword: Required<string>;
   isAdmin: Required<boolean>;

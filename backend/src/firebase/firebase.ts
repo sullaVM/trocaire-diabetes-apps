@@ -1,5 +1,5 @@
 import { initializeApp, credential, auth } from 'firebase-admin';
-import { FirebaseUser } from './types';
+import { IFirebaseUser } from './types';
 
 export const initFirebase = () => {
   initializeApp({
@@ -7,7 +7,7 @@ export const initFirebase = () => {
   });
 };
 
-export const createNewUser = async (user: FirebaseUser): Promise<boolean> => {
+export const createNewUser = async (user: IFirebaseUser): Promise<boolean> => {
   try {
     const userRecord = await auth().createUser({
       email: user.email,
