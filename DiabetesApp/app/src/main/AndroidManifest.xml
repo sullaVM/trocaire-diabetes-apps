@@ -12,32 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DataSubmit"></activity>
-        <activity android:name=".BloodPressureCamera" />
-        <activity android:name=".BloodPressureManual" />
-        <activity android:name=".DataEnterManual" />
-        <activity android:name="com.example.doctor_app.Patient_SignUp_Password" />
-        <activity
-            android:name="com.example.doctor_app.Doctor_Dashboard"
-            android:label="@string/title_activity_doctor_dashboard"
-            android:parentActivityName="com.example.doctor_app.Doctor_Login" />
-        <activity android:name=".DataEnterCamera" />
-        <activity android:name=".InputPassword" />
-        <activity android:name=".DataEnter" />
-        <activity android:name=".Login" />
-        <activity android:name="com.example.doctor_app.Patient_Signup" />
-        <activity
-            android:name="com.example.doctor_app.Doctor_Login"
-            android:label="@string/title_activity_doctor_login"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name="com.example.doctor_app.Doctor_Signup" />
-        <activity
-            android:name=".ui.login.Patient_Login"
-            android:label="@string/title_activity_patient__login"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.diabetesapp.MainActivity" />
-        </activity>
+        <activity android:name=".Camera" />
+        <activity android:name=".Manual" />
+        <activity android:name=".InputPassword"/>
+        <activity android:name=".DataEnter"/>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

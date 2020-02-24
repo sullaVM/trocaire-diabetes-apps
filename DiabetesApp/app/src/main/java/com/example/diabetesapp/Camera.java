@@ -23,7 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-public class BloodPressureCamera extends AppCompatActivity {
+public class Camera extends AppCompatActivity {
+
     final int RequestCameraPermissionID = 1001;
     Button back;
     Button done;
@@ -55,7 +56,7 @@ public class BloodPressureCamera extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__blood__pressure__camera);
+        setContentView(R.layout.activity_camera);
 
         cameraView = findViewById(R.id.surface_view);
         textView = findViewById(R.id.text_view);
@@ -64,7 +65,9 @@ public class BloodPressureCamera extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveData();
+                Intent intent = getIntent();
+                String type = intent.getStringExtra("type");
+                saveData(type);
             }
         });
         back = findViewById(R.id.back);
@@ -77,10 +80,10 @@ public class BloodPressureCamera extends AppCompatActivity {
 
     }
 
-    private void saveData() {
+    private void saveData(String type) {
         data = textView.getText().toString();
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("pressure", data);
+        resultIntent.putExtra(type, data);
         setResult(DataEnter.RESULT_OK, resultIntent);
         finish();
     }
@@ -111,7 +114,7 @@ public class BloodPressureCamera extends AppCompatActivity {
                     try {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                            ActivityCompat.requestPermissions(BloodPressureCamera.this,
+                            ActivityCompat.requestPermissions(Camera.this,
                                     new String[]{Manifest.permission.CAMERA},
                                     RequestCameraPermissionID);
                             return;

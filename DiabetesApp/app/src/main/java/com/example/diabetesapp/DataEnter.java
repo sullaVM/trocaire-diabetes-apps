@@ -32,19 +32,13 @@ public class DataEnter extends AppCompatActivity {
     EditText height;
     EditText weight;
 
-    ImageView check;
-    ImageView cross;
-
-    boolean pregnant;
     String sugar_data;
     String pressure_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__data__enter);
-
-        pregnant = false;
+        setContentView(R.layout.activity_data__enter);
 
         sugar = findViewById(R.id.sugar);
         pressure = findViewById(R.id.pressure);
@@ -62,94 +56,70 @@ public class DataEnter extends AppCompatActivity {
 
         sugar_picture = findViewById(R.id.camera);
         sugar_numbers = findViewById(R.id.numbers);
+        pressure_picture = findViewById(R.id.camera2);
+        pressure_numbers = findViewById(R.id.numbers2);
 
         sugar_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sugar_takePhoto();
+                takePhoto("sugar");
             }
         });
         sugar_numbers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sugar_enterData();
+                manual("sugar");
             }
         });
-
-        pressure_picture = findViewById(R.id.camera2);
-        pressure_numbers = findViewById(R.id.numbers2);
-
         pressure_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pressure_takePhoto();
+                takePhoto("pressure");
             }
         });
         pressure_numbers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pressure_enterData();
+                manual("pressure");
             }
         });
 
-        check = findViewById(R.id.check);
-        cross = findViewById(R.id.cross);
-
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pregnant = true;
-            }
-        });
-        cross.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pregnant = false;
-            }
-        });
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                back();
-            }
-        });
         enter = findViewById(R.id.enter);
+        enter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enterData();
+            }
+        });
     }
 
-    private void sugar_enterData() {
-        Intent intent = new Intent(this, DataEnterManual.class);
+    private void manual(String type) {
+        Intent intent = new Intent(this, Manual.class);
+        intent.putExtra("type", type);
         startActivityForResult(intent, 0);
     }
 
-    private void sugar_takePhoto() {
-        Intent intent = new Intent(this, DataEnterCamera.class);
-        startActivityForResult(intent, 0);
-    }
-
-    private void pressure_enterData() {
-        Intent intent = new Intent(this, BloodPressureManual.class);
-        startActivityForResult(intent, 0);
-    }
-
-    private void pressure_takePhoto() {
-        Intent intent = new Intent(this, BloodPressureCamera.class);
+    private void takePhoto(String type) {
+        Intent intent = new Intent(this, Camera.class);
+        intent.putExtra("type", type);
         startActivityForResult(intent, 0);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case (0): {
-                if (resultCode == DataEnter.RESULT_OK) {
-                    pressure_data = data.getStringExtra("pressure");
+            if (resultCode == DataEnter.RESULT_OK) {
+                switch (requestCode) {
+                case (0): {
                     sugar_data = data.getStringExtra("sugar");
                     if (sugar_data != null) sugar.setText(sugar_data);
-                    if (pressure_data != null) pressure.setText(pressure_data);
                 }
+                case (1): {
+                    pressure_data = data.getStringExtra("pressure");
+                    if (pressure_data != null) pressure.setText(pressure_data);
+                    }
+                break;
             }
-            break;
         }
     }
 
@@ -158,32 +128,10 @@ public class DataEnter extends AppCompatActivity {
         String w = weight.getText().toString();
         String sugar = sugar_data;
         String pressure = pressure_data;
-        boolean p = pregnant;
-    }
-
-    private void showData(int tag) {
-        String printData = "";
-        File testFile = new File(this.getFilesDir(), "TextFile.txt");
-        if (testFile != null) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(testFile));
-                String line;
-                for (int i = 1; i < tag; i++) {
-                    line = reader.readLine();
-                }
-                line = reader.readLine();
-                String[] info = line.split(" ");
-                printData = "First Name: " + info[1] + "\nLast Name: " + info[2];
-            } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TestFile.txt file.");
-            }
-        }
-        //data.setText(printData);
     }
 
     private void back() {
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

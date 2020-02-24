@@ -53,7 +53,7 @@ public class InputPassword extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__input__password);
+        setContentView(R.layout.activity_input__password);
 
         mPatternLockView = findViewById(R.id.pattern_lock_view);
         mPatternLockView.addPatternLockListener(mPatternLockViewListener);
@@ -71,6 +71,7 @@ public class InputPassword extends AppCompatActivity {
     }
 
     void checkPassword(int tag) {
+        /*
         File testFile = new File(this.getFilesDir(), "TextFile.txt");
         if (testFile != null) {
             BufferedReader reader = null;
@@ -84,19 +85,20 @@ public class InputPassword extends AppCompatActivity {
                 String[] info = line.split(" ");
                 String realPassword = info[3];
 
-                if (realPassword.equals(password)) {
+         */
+                //if (realPassword.equals(password)) {
                     Intent intent = new Intent(this, DataEnter.class);
                     intent.putExtra("tag", tag);
                     startActivity(intent);
-                } else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
+                /*} else {
+                    //Intent intent = new Intent(this, MainActivity.class);
+                    //startActivity(intent);
                 }
-
             } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TestFile.txt file.");
+                Log.e("ReadWriteFile", "Unable to read the TextFile.txt file.");
             }
         }
+        */
     }
 
 }

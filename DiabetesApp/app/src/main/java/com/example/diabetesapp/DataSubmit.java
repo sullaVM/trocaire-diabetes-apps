@@ -9,6 +9,6 @@ public class DataSubmit extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__data__submit);
+        setContentView(R.layout.activity_data__submit);
     }
 }

@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class DataEnterManual extends AppCompatActivity {
+public class Manual extends AppCompatActivity {
 
     Button enter;
     Button back;
@@ -17,7 +17,7 @@ public class DataEnterManual extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__data__enter__manual);
+        setContentView(R.layout.activity_manual);
 
         enter = findViewById(R.id.enter);
         data = findViewById(R.id.enterData);
@@ -26,7 +26,9 @@ public class DataEnterManual extends AppCompatActivity {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                enterData();
+                Intent intent = getIntent();
+                String type = intent.getStringExtra("type");
+                enterData(type);
             }
         });
 
@@ -42,10 +44,10 @@ public class DataEnterManual extends AppCompatActivity {
         this.finish();
     }
 
-    private void enterData() {
+    private void enterData(String type) {
         String value = data.getText().toString();
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("sugar", value);
+        resultIntent.putExtra(type, value);
         setResult(DataEnter.RESULT_OK, resultIntent);
         finish();
     }
