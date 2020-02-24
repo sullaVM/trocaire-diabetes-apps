@@ -11,6 +11,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import com.google.android.gms.vision.Frame;
 
 public class Camera extends AppCompatActivity {
 
@@ -32,6 +36,8 @@ public class Camera extends AppCompatActivity {
     SurfaceView cameraView;
     TextView textView;
     CameraSource cameraSource;
+    Bitmap bitmap;
+    ImageView imageView;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -58,7 +64,7 @@ public class Camera extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        cameraView = findViewById(R.id.surface_view);
+        //cameraView = findViewById(R.id.surface_view);
         textView = findViewById(R.id.text_view);
 
         done = findViewById(R.id.done);
@@ -67,9 +73,16 @@ public class Camera extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = getIntent();
                 String type = intent.getStringExtra("type");
-                saveData(type);
-            }
-        });
+                saveData(type); } });
+
+        String photoPath = this.getFilesDir() + "/Image.jpg";
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        bitmap = BitmapFactory.decodeFile(photoPath, options);
+
+        imageView = findViewById(R.id.imageView);
+        imageView.setImageBitmap(bitmap);
+
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,10 +91,31 @@ public class Camera extends AppCompatActivity {
             }
         });
 
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        if (!textRecognizer.isOperational()) {
+            Log.w("MainActivity", "Detector dependencies are not yet available");
+        } else {
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+
+            SparseArray<TextBlock> items = textRecognizer.detect(frame);
+
+            StringBuilder sb = new StringBuilder();
+
+            if(items.size()!=1)
+            for (int i = 0; i < items.size()-1; i++) {
+                TextBlock myItems = items.valueAt(i);
+                sb.append(myItems.getValue());
+                sb.append("\n");
+            }
+            TextBlock myItems = items.valueAt(items.size()-1);
+            sb.append(myItems.getValue());
+            data = sb.toString();
+            textView.setText(data);
+        }
+
     }
 
     private void saveData(String type) {
-        data = textView.getText().toString();
         Intent resultIntent = new Intent();
         resultIntent.putExtra(type, data);
         setResult(DataEnter.RESULT_OK, resultIntent);
@@ -91,16 +125,12 @@ public class Camera extends AppCompatActivity {
     private void back() {
         this.finish();
     }
+    /*
 
     @Override
     public void onResume() {
         super.onResume();
-
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-        if (!textRecognizer.isOperational()) {
-            Log.w("MainActivity", "Detector dependencies are not yet available");
-        } else {
-
             cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
@@ -162,5 +192,6 @@ public class Camera extends AppCompatActivity {
                 }
             });
         }
+
+     */
     }
-}
