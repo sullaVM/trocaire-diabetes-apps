@@ -24,7 +24,7 @@ export const createNewUser = async (user: FirebaseUser): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    console.log('Error creating a Firebase user: ', error);
+    console.log('Create Firebase user error: ', error);
     return false;
   }
 };
@@ -39,12 +39,11 @@ export const createNewCookie = async (
     const age = now / 1000 - decodedIdToken.auth_time;
 
     if (age < 5 * 60) {
-      const cookie = await auth().createSessionCookie(idToken, { expiresIn });
-      return cookie;
+      return await auth().createSessionCookie(idToken, { expiresIn });
     }
     return null;
   } catch (error) {
-    console.log('Error: ', error);
+    console.log('Create cookie error: ', error);
     return null;
   }
 };
@@ -52,10 +51,9 @@ export const createNewCookie = async (
 export const revokeToken = async (cookie: string): Promise<void> => {
   try {
     const decodedClaims = await auth().verifySessionCookie(cookie);
-    return auth().revokeRefreshTokens(decodedClaims.sub);
+    await auth().revokeRefreshTokens(decodedClaims.sub);
   } catch (error) {
-    console.log('Error: ', error);
-    return void 0;
+    console.log('Revoke token error: ', error);
   }
 };
 
@@ -73,7 +71,7 @@ export const isAdmin = async (cookie: string): Promise<boolean> => {
     }
     return false;
   } catch (error) {
-    console.log('Error: ', error);
+    console.log('Admin check error: ', error);
     return false;
   }
 };
@@ -92,7 +90,7 @@ export const isDoctor = async (cookie: string): Promise<boolean> => {
     }
     return false;
   } catch (error) {
-    console.log('Error: ', error);
+    console.log('Doctor check error: ', error);
     return false;
   }
 };

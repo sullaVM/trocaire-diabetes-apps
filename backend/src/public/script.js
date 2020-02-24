@@ -57,7 +57,7 @@ async function signIn() {
 async function signOut() {
   firebase.auth().signOut();
   await axios.get('/sessionLogout');
-  window.location.assign('/');
+  window.location.assign('/login');
 }
 
 function initApp() {
