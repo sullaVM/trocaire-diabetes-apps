@@ -11,6 +11,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -22,8 +25,10 @@ import java.io.IOException;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import com.google.android.gms.vision.Frame;
 
-public class BloodPressureCamera extends AppCompatActivity {
+public class Camera extends AppCompatActivity {
+
     final int RequestCameraPermissionID = 1001;
     Button back;
     Button done;
@@ -31,6 +36,8 @@ public class BloodPressureCamera extends AppCompatActivity {
     SurfaceView cameraView;
     TextView textView;
     CameraSource cameraSource;
+    Bitmap bitmap;
+    ImageView imageView;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -55,18 +62,27 @@ public class BloodPressureCamera extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient__blood__pressure__camera);
+        setContentView(R.layout.activity_camera);
 
-        cameraView = findViewById(R.id.surface_view);
+        //cameraView = findViewById(R.id.surface_view);
         textView = findViewById(R.id.text_view);
 
         done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveData();
-            }
-        });
+                Intent intent = getIntent();
+                String type = intent.getStringExtra("type");
+                saveData(type); } });
+
+        String photoPath = this.getFilesDir() + "/Image.jpg";
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        bitmap = BitmapFactory.decodeFile(photoPath, options);
+
+        imageView = findViewById(R.id.imageView);
+        imageView.setImageBitmap(bitmap);
+
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,12 +91,33 @@ public class BloodPressureCamera extends AppCompatActivity {
             }
         });
 
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        if (!textRecognizer.isOperational()) {
+            Log.w("MainActivity", "Detector dependencies are not yet available");
+        } else {
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+
+            SparseArray<TextBlock> items = textRecognizer.detect(frame);
+
+            StringBuilder sb = new StringBuilder();
+
+            if(items.size()!=1)
+            for (int i = 0; i < items.size()-1; i++) {
+                TextBlock myItems = items.valueAt(i);
+                sb.append(myItems.getValue());
+                sb.append("\n");
+            }
+            TextBlock myItems = items.valueAt(items.size()-1);
+            sb.append(myItems.getValue());
+            data = sb.toString();
+            textView.setText(data);
+        }
+
     }
 
-    private void saveData() {
-        data = textView.getText().toString();
+    private void saveData(String type) {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("pressure", data);
+        resultIntent.putExtra(type, data);
         setResult(DataEnter.RESULT_OK, resultIntent);
         finish();
     }
@@ -88,16 +125,12 @@ public class BloodPressureCamera extends AppCompatActivity {
     private void back() {
         this.finish();
     }
+    /*
 
     @Override
     public void onResume() {
         super.onResume();
-
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-        if (!textRecognizer.isOperational()) {
-            Log.w("MainActivity", "Detector dependencies are not yet available");
-        } else {
-
             cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
@@ -111,7 +144,7 @@ public class BloodPressureCamera extends AppCompatActivity {
                     try {
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                            ActivityCompat.requestPermissions(BloodPressureCamera.this,
+                            ActivityCompat.requestPermissions(Camera.this,
                                     new String[]{Manifest.permission.CAMERA},
                                     RequestCameraPermissionID);
                             return;
@@ -159,5 +192,6 @@ public class BloodPressureCamera extends AppCompatActivity {
                 }
             });
         }
+
+     */
     }
-}

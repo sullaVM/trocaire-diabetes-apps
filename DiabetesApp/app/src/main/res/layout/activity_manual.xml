@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C8E6C9"
-    tools:context=".DataEnterManual">
+    tools:context=".Manual">
 
     <EditText
         android:id="@+id/enterData"
@@ -16,7 +15,7 @@
         android:layout_marginTop="204dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Enter"
+        android:text=""
         android:textSize="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

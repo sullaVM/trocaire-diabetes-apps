@@ -118,9 +118,10 @@ const sessionLogout = async (request: Request, response: Response) => {
 app.use('/api', router);
 app.disable('etag');
 
+// tslint:disable-next-line: no-shadowed-variable
 const initRoutes = (app: Express) => {
   app.get('/login', login);
-  app.post('/sessionLogin', sessionLogin);
+  app.get('/sessionLogin', sessionLogin);
   app.get('/sessionLogout', sessionLogout);
 
   app.get('/', isAdminLoggedIn, dashboard);
@@ -128,6 +129,7 @@ const initRoutes = (app: Express) => {
   app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
 };
 
+// tslint:disable-next-line: no-shadowed-variable
 const initApi = (router: Router) => {
   router.post('/createDoctor', isAdminLoggedIn, createDoctor);
   router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
@@ -142,9 +144,9 @@ const initApi = (router: Router) => {
   router.get('/getAllClinics', isDoctorLoggedIn, getAllClinics);
 
   // TODO(sulla): Check if patient and doctore are logged in.
-  router.post('/storeRBP', storeRBP);
-  router.post('/storeBSL', storeBSL);
-  router.post('/storeWeight', storeWeight);
+  router.get('/storeRBP', storeRBP);
+  router.get('/storeBSL', storeBSL);
+  router.get('/storeWeight', storeWeight);
 };
 
 initRoutes(app);
