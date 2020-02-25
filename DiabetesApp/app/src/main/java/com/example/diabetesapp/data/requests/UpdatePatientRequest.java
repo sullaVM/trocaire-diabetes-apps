@@ -2,7 +2,9 @@ package com.example.diabetesapp.data.requests;
 
 import androidx.annotation.Nullable;
 
-public class UpdatePatientRequest {
+import com.example.diabetesapp.data.responses.UpdatePatientResponse;
+
+public class UpdatePatientRequest extends PatientRequest<UpdatePatientResponse> {
     private Integer patientID;
     @Nullable
     private Integer doctorID;
@@ -20,5 +22,26 @@ public class UpdatePatientRequest {
     private String password;
     @Nullable
     private String bslUnit;
-    public final String requestRoute = "updatePatient";
+
+    public UpdatePatientRequest(Integer patientID, @Nullable Integer doctorID, @Nullable String firstName, @Nullable String lastName, @Nullable String height, @Nullable Integer mobileNumber, @Nullable String photoDataUrl, @Nullable String password, @Nullable String bslUnit) {
+        this.patientID = patientID;
+        this.doctorID = doctorID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.height = height;
+        this.mobileNumber = mobileNumber;
+        this.photoDataUrl = photoDataUrl;
+        this.password = password;
+        this.bslUnit = bslUnit;
+    }
+
+    @Override
+    public String requestRoute() {
+        return "updatePatient";
+    }
+
+    @Override
+    public Class responseClass() {
+        return UpdatePatientResponse.class;
+    }
 }

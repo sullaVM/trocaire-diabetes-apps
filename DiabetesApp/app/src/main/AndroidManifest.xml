@@ -3,6 +3,7 @@
     package="com.example.diabetesapp">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DataSubmit"></activity>
+        <activity android:name=".DataSubmit"/>
         <activity android:name=".Camera" />
         <activity android:name=".Manual" />
         <activity android:name=".InputPassword"/>

@@ -2,28 +2,27 @@ package com.example.diabetesapp.data.responses;
 
 import androidx.annotation.Nullable;
 
-public class GetGraphingDataResponse {
-    private Boolean success;
+public class GetGraphingDataResponse extends PatientResponse{
     @Nullable
-    private RBPRecord[] RBP;
+    public RBPRecord[] RBP;
     @Nullable
-    private BSLRecord[] BSL;
+    public BSLRecord[] BSL;
     @Nullable
-    private WeightRecord[] Weight;
+    public WeightRecord[] Weight;
 }
 
 class RBPRecord {
-    private String time;
-    private Float systole;
-    private Float diastole;
+    public String time;
+    public Float systole;
+    public Float diastole;
 }
 
 class BSLRecord {
-    private String time;
-    private Float value;
+    public String time;
+    public Float value;
 }
 
 class WeightRecord {
-    private String time;
-    private Float value;
+    public String time;
+    public Float value;
 }

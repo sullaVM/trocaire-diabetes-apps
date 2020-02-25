@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import android.util.DisplayMetrics;
 
 public class MainActivity extends AppCompatActivity {
     int currentNumber;
@@ -59,6 +57,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        /*StoreWeightRequest storeWeightRequest = new StoreWeightRequest(1, "2020-02-16 14:02:31", 10f);
+        storeWeightRequest.makeRequest(getApplicationContext(), new Response.Listener<StoreWeightResponse>() {
+            @Override
+            public void onResponse(StoreWeightResponse response) {
+                Log.e("Test", "Test result: "+String.valueOf(response.success));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("TestFail", "It Failed"+error.getMessage());
+            }
+        });
+        */
     }
 
     private void nextScreen(int tag) {

@@ -2,22 +2,21 @@ package com.example.diabetesapp.data.responses;
 
 import androidx.annotation.Nullable;
 
-public class GetPatientProfileResponse {
-    private Boolean success;
+public class GetPatientProfileResponse extends PatientResponse {
     @Nullable
-    private Integer doctorID;
+    public Integer doctorID;
     @Nullable
-    private String firstName;
+    public String firstName;
     @Nullable
-    private String lastName;
+    public String lastName;
     @Nullable
-    private String height;
+    public String height;
     @Nullable
-    private Integer mobileNumber;
+    public Integer mobileNumber;
     @Nullable
-    private String photoDataUrl;
+    public String photoDataUrl;
     @Nullable
-    private String password;
+    public String password;
     @Nullable
-    private String bslUnit;
+    public String bslUnit;
 }
