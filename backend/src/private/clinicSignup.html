@@ -12,8 +12,12 @@
 </head>
 
 <body>
-    <a href="/doctorSignup">Create an new doctor account</a><br>
-    <a href="/clinicSignup">Register na new clinic</a>
+    <form action="/api/createClinic" method="post">
+        <label for="male">Clinic Name:</label>
+        <input type="text" name="clinicName" required><br>
+
+        <input disabled type="submit" id="add-clinic" value="Submit">
+    </form>
 
     <div class="quickstart-user-details-container">
         <button id="sign-out" name="signout">Sign Out</button>

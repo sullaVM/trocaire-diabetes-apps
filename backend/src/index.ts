@@ -60,6 +60,10 @@ const doctorSignup = (_request: Request, response: Response) => {
   response.sendFile(join(__dirname + '/../src/private/doctorSignup.html'));
 };
 
+const clinicSignup = (_request: Request, response: Response) => {
+  response.sendFile(join(__dirname + '/../src/private/clinicSignup.html'));
+};
+
 const isAdminLoggedIn = async (
   request: Request,
   response: Response,
@@ -121,15 +125,16 @@ const initRoutes = (app: Express) => {
 
   app.get('/', isAdminLoggedIn, dashboard);
   app.get('/doctorSignup', isAdminLoggedIn, doctorSignup);
-  app.get('/createClinic', isAdminLoggedIn, createClinic);
+  app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
 };
 
 const initApi = (router: Router) => {
   router.post('/createDoctor', isAdminLoggedIn, createDoctor);
   router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
+  router.post('/createClinic', isAdminLoggedIn, createClinic);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
-  router.get('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
+  router.get('/getPatientProfile', getPatientProfile);
   router.get('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.get('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.get('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);

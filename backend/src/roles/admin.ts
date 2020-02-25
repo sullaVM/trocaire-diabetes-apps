@@ -10,6 +10,15 @@ import { FirebaseUser } from '../firebase/types';
 
 const pwEncryptSaltRounds = 10;
 
+export const generatePassword = async (): Promise<string> => {
+  const generatedPass = generate({
+    length: 12,
+    numbers: true,
+    lowercase: true,
+    uppercase: true,
+  });
+};
+
 export const createDoctor = async (request: Request, response: Response) => {
   const firstName = request.body.firstName;
   const lastName = request.body.lastName;
