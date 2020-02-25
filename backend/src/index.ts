@@ -114,6 +114,7 @@ const sessionLogout = async (request: Request, response: Response) => {
 app.use('/api', router);
 app.disable('etag');
 
+// tslint:disable-next-line: no-shadowed-variable
 const initRoutes = (app: Express) => {
   app.get('/login', login);
   app.post('/sessionLogin', sessionLogin);
@@ -124,6 +125,7 @@ const initRoutes = (app: Express) => {
   app.get('/createClinic', isAdminLoggedIn, createClinic);
 };
 
+// tslint:disable-next-line: no-shadowed-variable
 const initApi = (router: Router) => {
   router.post('/createDoctor', isAdminLoggedIn, createDoctor);
   router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
