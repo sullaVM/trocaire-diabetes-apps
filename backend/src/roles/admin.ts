@@ -6,7 +6,7 @@ import { createNewUser } from '../firebase/firebase';
 
 import * as db from '../database';
 import * as requests from '../models/requests';
-import { FirebaseUser } from '../firebase/types';
+import { IFirebaseUser } from '../firebase/types';
 
 const pwEncryptSaltRounds = 10;
 
@@ -56,17 +56,17 @@ export const createDoctor = async (request: Request, response: Response) => {
   // Encrypt generated password and add entry to db.
   hash(generatedPass, pwEncryptSaltRounds, (_, hash) => {
     const createDoctorRequest: requests.ICreateDoctor = {
-      firstName: firstName,
-      lastName: lastName,
-      licenseNumber: licenseNumber,
-      clinicID: clinicID,
-      email: email,
+      firstName,
+      lastName,
+      licenseNumber,
+      clinicID,
+      email,
       userName: username,
       password: hash,
     };
 
-    const user: FirebaseUser = {
-      email: email,
+    const user: IFirebaseUser = {
+      email,
       temporaryPassword: generatedPass,
       isAdmin: false,
       isDoctor: true,
