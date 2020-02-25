@@ -8,6 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.Bitmap;
+import java.io.FileOutputStream;
+
+import android.provider.MediaStore;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +20,10 @@ import java.io.FileReader;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DataEnter extends AppCompatActivity {
+
+    static final int REQUEST_SUGAR = 0;
+    static final int REQUEST_PRESSURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 2;
 
     Button back;
     Button enter;
@@ -34,6 +42,8 @@ public class DataEnter extends AppCompatActivity {
 
     String sugar_data;
     String pressure_data;
+
+    public static Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +72,23 @@ public class DataEnter extends AppCompatActivity {
         sugar_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePhoto("sugar");
+                takePhoto("sugar", 0);
             }
         });
         sugar_numbers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                manual("sugar");
+                manual("sugar", 0);
             }
         });
         pressure_picture.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                takePhoto("pressure");
-            }
+            public void onClick(View view) { takePhoto("pressure", 1); }
         });
         pressure_numbers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                manual("pressure");
+                manual("pressure", 1);
             }
         });
 
@@ -93,16 +101,17 @@ public class DataEnter extends AppCompatActivity {
         });
     }
 
-    private void manual(String type) {
+    private void manual(String type, int code) {
         Intent intent = new Intent(this, Manual.class);
         intent.putExtra("type", type);
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, code);
     }
 
-    private void takePhoto(String type) {
-        Intent intent = new Intent(this, Camera.class);
-        intent.putExtra("type", type);
-        startActivityForResult(intent, 0);
+    private void takePhoto(String type, int code) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.putExtra("type", type);
+        takePictureIntent.putExtra("code", code);
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
@@ -117,7 +126,27 @@ public class DataEnter extends AppCompatActivity {
                 case (1): {
                     pressure_data = data.getStringExtra("pressure");
                     if (pressure_data != null) pressure.setText(pressure_data);
-                    }
+                }
+                case (REQUEST_IMAGE_CAPTURE): {
+                    String type = data.getStringExtra("type");
+                    int code = data.getIntExtra("code", 1);
+                        Bundle extras = data.getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        bitmap = imageBitmap;
+                        File photoFile = new File(this.getFilesDir(), "Image.jpg");
+                        try {
+                            FileOutputStream out = new FileOutputStream(photoFile);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                            out.flush();
+                            out.close();
+
+                            Intent intent = new Intent(this, Camera.class);
+                            intent.putExtra("type", type);
+                            startActivityForResult(intent, code);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                }
                 break;
             }
         }

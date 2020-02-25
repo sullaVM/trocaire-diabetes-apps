@@ -7,6 +7,7 @@
     android:background="#C8E6C9"
     tools:context=".Camera">
 
+    <!--
     <SurfaceView
         android:id="@+id/surface_view"
 
@@ -15,6 +16,7 @@
         android:layout_marginTop="76dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        -->
 
     <TextView
         android:id="@+id/text_view"
@@ -23,22 +25,23 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="556dp"
         android:text="No Text"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textSize="40sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/surface_view" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="256dp"
-        android:layout_marginLeft="256dp"
-        android:layout_marginTop="592dp"
+        android:layout_width="105dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:layout_marginBottom="40dp"
         android:text="Done"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/back"
@@ -50,5 +53,16 @@
         android:text="Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="160dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/blank_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

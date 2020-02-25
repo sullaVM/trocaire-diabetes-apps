@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "630337403399",
+    "firebase_url": "https://trocaire-diabete-1581953003031.firebaseio.com",
+    "project_id": "trocaire-diabete-1581953003031",
+    "storage_bucket": "trocaire-diabete-1581953003031.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630337403399:android:3a6191eff6837c74c1c8a2",
+        "android_client_info": {
+          "package_name": "com.example.doctor_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630337403399-7lg4ge67coumtiia0edjl7hb0avtm8ku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.doctor_app",
+            "certificate_hash": "f8d82ec81bab33b318134e998f179693dc193e69"
+          }
+        },
+        {
+          "client_id": "630337403399-ct35cog1ovta8583rm9u7cbgo36impbt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcmwMHIwU2IoEXyK-bZf9PpovBrFAt8Ik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630337403399-ct35cog1ovta8583rm9u7cbgo36impbt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
