@@ -117,7 +117,7 @@ app.disable('etag');
 // tslint:disable-next-line: no-shadowed-variable
 const initRoutes = (app: Express) => {
   app.get('/login', login);
-  app.get('/sessionLogin', sessionLogin);
+  app.post('/sessionLogin', sessionLogin);
   app.get('/sessionLogout', sessionLogout);
 
   app.get('/', isAdminLoggedIn, dashboard);
