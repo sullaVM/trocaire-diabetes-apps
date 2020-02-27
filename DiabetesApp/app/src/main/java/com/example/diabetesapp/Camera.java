@@ -64,17 +64,21 @@ public class Camera extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        //cameraView = findViewById(R.id.surface_view);
+        cameraView = findViewById(R.id.surface_view);
         textView = findViewById(R.id.text_view);
 
         done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = getIntent();
-                String type = intent.getStringExtra("type");
-                saveData(type); } });
+                //Intent intent = getIntent();
+                //String type = intent.getStringExtra("type");
+                //saveData(type);
+                takeImage();
+            }
+        });
 
+        /*
         String photoPath = this.getFilesDir() + "/Image.jpg";
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -82,6 +86,8 @@ public class Camera extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(bitmap);
+
+         */
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -91,9 +97,10 @@ public class Camera extends AppCompatActivity {
             }
         });
 
+        /*
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
-            Log.w("MainActivity", "Detector dependencies are not yet available");
+            Log.w("Camera", "Detector dependencies are not yet available");
         } else {
             Frame frame = new Frame.Builder().setBitmap(bitmap).build();
 
@@ -101,17 +108,19 @@ public class Camera extends AppCompatActivity {
 
             StringBuilder sb = new StringBuilder();
 
-            if(items.size()!=1)
-            for (int i = 0; i < items.size()-1; i++) {
-                TextBlock myItems = items.valueAt(i);
-                sb.append(myItems.getValue());
-                sb.append("\n");
-            }
-            TextBlock myItems = items.valueAt(items.size()-1);
+            if (items.size() != 1)
+                for (int i = 0; i < items.size() - 1; i++) {
+                    TextBlock myItems = items.valueAt(i);
+                    sb.append(myItems.getValue());
+                    sb.append("\n");
+                }
+            TextBlock myItems = items.valueAt(items.size() - 1);
             sb.append(myItems.getValue());
             data = sb.toString();
             textView.setText(data);
         }
+
+         */
 
     }
 
@@ -125,73 +134,89 @@ public class Camera extends AppCompatActivity {
     private void back() {
         this.finish();
     }
-    /*
 
     @Override
     public void onResume() {
         super.onResume();
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-            cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
-                    .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(1280, 1024)
-                    .setRequestedFps(2.0f)
-                    .setAutoFocusEnabled(true)
-                    .build();
-            cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                .setRequestedPreviewSize(1280, 1024)
+                .setRequestedFps(2.0f)
+                .setAutoFocusEnabled(true)
+                .build();
+        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder surfaceHolder) {
 
-                    try {
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                try {
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                            ActivityCompat.requestPermissions(Camera.this,
-                                    new String[]{Manifest.permission.CAMERA},
-                                    RequestCameraPermissionID);
-                            return;
-                        }
-                        cameraSource.start(cameraView.getHolder());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        ActivityCompat.requestPermissions(Camera.this,
+                                new String[]{Manifest.permission.CAMERA},
+                                RequestCameraPermissionID);
+                        return;
                     }
+                    cameraSource.start(cameraView.getHolder());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            }
 
-                @Override
-                public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
-                }
+            }
 
-                @Override
-                public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                    cameraSource.stop();
-                }
-            });
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+                cameraSource.stop();
+            }
+        });
 
-            textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
-                @Override
-                public void release() {
+        textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
+            @Override
+            public void release() {
 
-                }
+            }
 
-                @Override
-                public void receiveDetections(Detector.Detections<TextBlock> detections) {
+            @Override
+            public void receiveDetections(Detector.Detections<TextBlock> detections) {
 
-                    final SparseArray<TextBlock> items = detections.getDetectedItems();
-                    if (items.size() != 0) {
-                        textView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                StringBuilder stringBuilder = new StringBuilder();
-                                for (int i = 0; i < items.size(); ++i) {
-                                    TextBlock item = items.valueAt(i);
-                                    stringBuilder.append(item.getValue());
-                                }
-                                textView.setText(stringBuilder.toString());
+                final SparseArray<TextBlock> items = detections.getDetectedItems();
+                if (items.size() != 0) {
+                    textView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            for (int i = 0; i < items.size(); ++i) {
+                                TextBlock item = items.valueAt(i);
+                                stringBuilder.append(item.getValue());
                             }
-                        });
+                            textView.setText(stringBuilder.toString());
+                        }
+                    });
+                }
+            }
+        });
+    }
+    private void takeImage() {
+            cameraSource.takePicture(null, new CameraSource.PictureCallback() {
+                //private File imageFile;
+
+                @Override
+                public void onPictureTaken(byte[] bytes) {
+                    try {
+                        // convert byte array into bitmap
+                        Bitmap loadedImage = null;
+                        Bitmap rotatedBitmap = null;
+                        loadedImage = BitmapFactory.decodeByteArray(bytes, 0,
+                                bytes.length);
+                        int thing = 0;
+                    } catch( Exception ex) {
+                    Log.w("Camera", "Detector dependencies are not yet available");
                     }
                 }
             });
         }
-
-     */
     }

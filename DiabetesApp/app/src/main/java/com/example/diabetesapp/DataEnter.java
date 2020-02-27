@@ -108,10 +108,12 @@ public class DataEnter extends AppCompatActivity {
     }
 
     private void takePhoto(String type, int code) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(this, Camera.class);
         takePictureIntent.putExtra("type", type);
         takePictureIntent.putExtra("code", code);
-        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        startActivity(takePictureIntent);
+        //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
