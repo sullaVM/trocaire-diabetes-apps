@@ -34,7 +34,13 @@ import {
 
 import { storeRBP, storeBSL, storeWeight } from './roles/patient';
 
-import { createClinic, createDoctor, updateDoctor } from './roles/admin';
+import {
+  createClinic,
+  createDoctor,
+  updateDoctor,
+  deleteDoctor,
+  addDoctorToClinic,
+} from './roles/admin';
 
 const apiPort = 8081;
 const app = express();
@@ -134,7 +140,9 @@ const initRoutes = (app: Express) => {
 const initApi = (router: Router) => {
   router.post('/createDoctor', isAdminLoggedIn, createDoctor);
   router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
+  router.post('/deleteDoctor', isAdminLoggedIn, deleteDoctor);
   router.post('/createClinic', isAdminLoggedIn, createClinic);
+  router.post('/addDoctorToClinic', isAdminLoggedIn, addDoctorToClinic);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
   router.get('/getPatientProfile', getPatientProfile);

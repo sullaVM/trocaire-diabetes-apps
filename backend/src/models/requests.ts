@@ -66,10 +66,13 @@ export interface ICreateDoctor {
   firstName: string;
   lastName: string;
   licenseNumber: number;
-  clinicID: number;
   email: string;
   userName: string;
   password: string;
+}
+
+export interface IDeleteDoctor {
+  doctorID: string;
 }
 
 export interface IUpdateDoctor {
@@ -77,7 +80,6 @@ export interface IUpdateDoctor {
   firstName?: string;
   lastName?: string;
   licenseNumber?: number;
-  clinicID?: number;
   email?: string;
   userName?: string;
   password?: string;
@@ -100,6 +102,11 @@ export interface IGetAllDoctorsAtClinic {
 }
 
 // Clinic
+export interface IAddDoctorToClinic {
+  clinicID: number;
+  doctorID: number;
+}
+
 export interface IGetAllClinics {}
 
 export interface ICreateClinic {

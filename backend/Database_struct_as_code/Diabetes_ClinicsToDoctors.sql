@@ -16,22 +16,20 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Doctors`
+-- Table structure for table `ClinicsToDoctors`
 --
 
-DROP TABLE IF EXISTS `Doctors`;
+DROP TABLE IF EXISTS `ClinicsToDoctors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Doctors` (
-  `DoctorID` int NOT NULL AUTO_INCREMENT,
-  `FirstName` varchar(255) DEFAULT NULL,
-  `LastName` varchar(255) DEFAULT NULL,
-  `LicenseNo` int DEFAULT NULL,
-  `Email` varchar(320) DEFAULT NULL,
-  `UserName` varchar(320) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`DoctorID`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `ClinicsToDoctors` (
+  `ClinicID` int NOT NULL,
+  `DoctorID` int NOT NULL,
+  PRIMARY KEY (`ClinicID`,`DoctorID`),
+  KEY `FK_ClinicsToDoctors_Doc` (`DoctorID`),
+  CONSTRAINT `FK_ClinicsToDoctors_Clin` FOREIGN KEY (`ClinicID`) REFERENCES `Clinics` (`ClinicID`),
+  CONSTRAINT `FK_ClinicsToDoctors_Doc` FOREIGN KEY (`DoctorID`) REFERENCES `Doctors` (`DoctorID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -43,4 +41,4 @@ CREATE TABLE `Doctors` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-27 20:20:15
+-- Dump completed on 2020-02-27 20:20:18

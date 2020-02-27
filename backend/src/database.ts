@@ -271,10 +271,29 @@ export const getGraphingData = async (
 export const createDoctor = async (
   request: requests.ICreateDoctor
 ): Promise<responses.ICreateDoctor> => {
-  const query = `INSERT INTO Doctors (FirstName, LastName, LicenseNo, ClinicID, Email, UserName,Password)
-  VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.clinicID}','${request.email}','${request.userName}','${request.password}');`;
+  const query = `INSERT INTO Doctors (FirstName, LastName, LicenseNo, Email, UserName,Password)
+  VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.email}','${request.userName}','${request.password}');`;
 
   const result = await new Promise<responses.ICreateDoctor>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ doctorID: results.insertId, success: true });
+    });
+  });
+
+  return result;
+};
+
+export const deleteDoctor = async (
+  request: requests.IDeleteDoctor
+): Promise<responses.IDeleteDoctor> => {
+  const query = `DELETE FROM Doctors WHERE DoctorID=
+'${request.doctorID}');`;
+
+  const result = await new Promise<responses.IDeleteDoctor>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -307,7 +326,6 @@ export const getDoctorProfile = async (
           firstName: results[0].FirstName,
           lastName: results[0].LastName,
           licenseNumber: results[0].LicenseNo,
-          clinicID: results[0].ClinicID,
           email: results[0].Email,
           userName: results[0].UserName,
         });
@@ -369,11 +387,6 @@ export const updateDoctor = async (
       ? `${updateCount++ ? ',' : ''}MobileNumber='${request.licenseNumber}'`
       : ''
   }
-  ${
-    request.clinicID
-      ? `${updateCount++ ? ',' : ''}ClinicID='${request.clinicID}'`
-      : ''
-  }
   ${request.email ? `${updateCount++ ? ',' : ''}Email='${request.email}'` : ''}
   ${
     request.userName
@@ -403,7 +416,7 @@ export const updateDoctor = async (
 export const getAllDoctorsAtClinic = async (
   request: requests.IGetAllDoctorsAtClinic
 ): Promise<responses.IGetAllDoctorsAtClinic> => {
-  const query = `SELECT DoctorID, FirstName, LastName FROM Doctors WHERE ClinicID='${request.clinicID}';`;
+  const query = `SELECT DoctorID, FROM ClinicsToDoctors WHERE ClinicID='${request.clinicID}';`;
   const result = await new Promise<responses.IGetAllDoctorsAtClinic>(
     resolve => {
       db.query(query, (error, results, fields) => {
@@ -483,6 +496,25 @@ export const createClinic = async (
         resolve({ success: false });
       }
       resolve({ clinicID: results.insertId, success: true });
+    });
+  });
+
+  return result;
+};
+
+export const addDoctorToClinic = async (
+  request: requests.IAddDoctorToClinic
+): Promise<responses.IAddDoctorToClinic> => {
+  const query = `INSERT INTO ClinicsToDoctors (ClinicID, DoctorID)
+  VALUE ('${request.clinicID}','${request.doctorID}');`;
+
+  const result = await new Promise<responses.ICreateClinic>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
     });
   });
 
