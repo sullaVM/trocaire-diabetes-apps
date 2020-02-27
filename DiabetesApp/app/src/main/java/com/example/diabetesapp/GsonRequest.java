@@ -16,7 +16,7 @@ public class GsonRequest<PatientResponse> extends JsonRequest<PatientResponse> {
     private final Class<PatientResponse> responseClass;
 
     public GsonRequest(String url, String jsonRequest, Class<PatientResponse> responseClass, Response.Listener<PatientResponse> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, url, jsonRequest, listener, errorListener);
+        super(Method.GET, url, jsonRequest, listener, errorListener);
         this.listener = listener;
         this.responseClass = responseClass;
     }

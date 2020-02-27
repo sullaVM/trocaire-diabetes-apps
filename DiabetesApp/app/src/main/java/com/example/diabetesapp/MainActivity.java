@@ -10,28 +10,35 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.diabetesapp.data.requests.GetPatientProfileRequest;
+import com.example.diabetesapp.data.responses.GetPatientProfileResponse;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-
 public class MainActivity extends AppCompatActivity {
-    int currentNumber;
+    ArrayList<Integer> mPatientIDs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        currentNumber = findNumber();
+        getPatientIDs();
 
         LinearLayout layout = findViewById(R.id.buttonLayout);
 
         LinearLayout linear1 = new LinearLayout(this);
         linear1.setOrientation(LinearLayout.HORIZONTAL);
 
-        for (int i = 1; i <= currentNumber; i++) {
+        for (int i = 0; i < mPatientIDs.size(); i++) {
             if (i % 4 == 1) {
                 linear1 = new LinearLayout(this);
                 linear1.setOrientation(LinearLayout.HORIZONTAL);
@@ -41,10 +48,43 @@ public class MainActivity extends AppCompatActivity {
             }
             layout.addView(linear1);
 
-            ImageButton b = new ImageButton(this);
-            b.setImageBitmap(getImage(i));
-            b.setId(i);
-            b.setTag(i);
+            final ImageButton b = new ImageButton(this);
+            String photoPath = this.getFilesDir() + "/Image" + mPatientIDs.get(i) + ".jpg";
+            File file = new File(photoPath);
+            if (file.exists()) {
+                b.setImageBitmap(getImage(i));
+            } else {
+                b.setImageDrawable(getResources().getDrawable(R.drawable.blank_icon));
+                requestUserPhoto(mPatientIDs.get(i), new Response.Listener<GetPatientProfileResponse>() {
+                    @Override
+                    public void onResponse(GetPatientProfileResponse response) {
+                        Log.println(Log.INFO, "GetPatientProfile", String.valueOf(response.success));
+                        if (response.success) {
+                            try {
+                                URL url = new URL(response.photoDataUrl);
+                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                connection.setDoInput(true);
+                                connection.connect();
+                                InputStream input = connection.getInputStream();
+                                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                                b.setImageBitmap(myBitmap);
+                            } catch (Exception e) {
+                                b.setImageDrawable(getResources().getDrawable(R.drawable.blank_icon));
+                            }
+                        } else {
+                            b.setImageDrawable(getResources().getDrawable(R.drawable.blank_icon));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.println(Log.INFO, "GetPatientProfile", "Request failed");
+                    }
+                });
+
+            }
+            b.setId(mPatientIDs.get(i));
+            b.setTag(mPatientIDs.get(i));
             b.setPadding(8, 3, 8, 3);
             b.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -57,20 +97,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
-        /*StoreWeightRequest storeWeightRequest = new StoreWeightRequest(1, "2020-02-16 14:02:31", 10f);
-        storeWeightRequest.makeRequest(getApplicationContext(), new Response.Listener<StoreWeightResponse>() {
-            @Override
-            public void onResponse(StoreWeightResponse response) {
-                Log.e("Test", "Test result: "+String.valueOf(response.success));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("TestFail", "It Failed"+error.getMessage());
-            }
-        });
-        */
+    private void requestUserPhoto(int patientID, Response.Listener responseListener, Response.ErrorListener errorListener) {
+        GetPatientProfileRequest patientProfileRequest = new GetPatientProfileRequest(patientID);
+        patientProfileRequest.makeRequest(this, responseListener, errorListener);
     }
 
     private void nextScreen(int tag) {
@@ -86,29 +117,7 @@ public class MainActivity extends AppCompatActivity {
         return BitmapFactory.decodeFile(photoPath, options);
     }
 
-    private int findNumber() {
-        int val = 1;
-        String[] text;
-        File testFile = new File(this.getFilesDir(), "TextFile.txt");
-        if (testFile != null) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(testFile));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    text = line.split(" ");
-                    val = Integer.parseInt(text[0]);
-                }
-                reader.close();
-            } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TextFile.txt file.");
-            }
-        }
-        return val;
-    }
-
-    private void back() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void getPatientIDs() {
+        mPatientIDs.add(1);
     }
 }
