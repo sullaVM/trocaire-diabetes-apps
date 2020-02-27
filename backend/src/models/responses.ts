@@ -55,6 +55,11 @@ export interface IUpdateDoctor {
   success: boolean;
 }
 
+export interface IGetDoctorID {
+  success: boolean;
+  doctorID?: number;
+}
+
 export interface IListDoctorsPatients {
   success: boolean;
   patientIDs?: number;
