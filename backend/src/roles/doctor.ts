@@ -133,3 +133,20 @@ export const getAllClinics = (request: Request, response: Response) => {
       });
     });
 };
+
+export const getDoctorID = (request: Request, response: Response) => {
+  const getDoctorIDRequest: requests.IGetDoctorID = {
+    email: request.body.email,
+  };
+
+  db.getDoctorID(getDoctorIDRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error: ' + error,
+      });
+    });
+};

@@ -83,6 +83,10 @@ export interface IUpdateDoctor {
   password?: string;
 }
 
+export interface IGetDoctorID {
+  email: string;
+}
+
 export interface IListDoctorsPatients {
   doctorID: number;
 }

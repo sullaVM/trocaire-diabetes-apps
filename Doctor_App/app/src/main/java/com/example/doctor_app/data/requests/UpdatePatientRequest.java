@@ -1,8 +1,8 @@
-package com.example.diabetesapp.data.requests;
+package com.example.doctor_app.data.requests;
 
 import androidx.annotation.Nullable;
 
-import com.example.diabetesapp.data.responses.UpdatePatientResponse;
+import com.example.doctor_app.data.responses.UpdatePatientResponse;
 
 public class UpdatePatientRequest extends PatientRequest<UpdatePatientResponse> {
     private Integer patientID;

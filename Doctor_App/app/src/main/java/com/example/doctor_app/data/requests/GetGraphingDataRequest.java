@@ -1,11 +1,8 @@
-package com.example.diabetesapp.data.requests;
+package com.example.doctor_app.data.requests;
 
 import androidx.annotation.Nullable;
 
-import com.android.volley.Response;
-import com.example.diabetesapp.GsonRequest;
-import com.example.diabetesapp.data.responses.GetGraphingDataResponse;
-import com.google.gson.Gson;
+import com.example.doctor_app.data.responses.GetGraphingDataResponse;
 
 public class GetGraphingDataRequest extends PatientRequest<GetGraphingDataResponse> {
     private Integer patientID;

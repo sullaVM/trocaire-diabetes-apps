@@ -332,9 +332,13 @@ export const listDoctorsPatients = async (
       if (results.length < 1) {
         resolve({ success: false });
       } else {
+        const patientIDs = [];
+        for (const entry of results) {
+          patientIDs.push(entry.PatientID);
+        }
         resolve({
           success: true,
-          patientIDs: results,
+          patientIDs,
         });
       }
     });
@@ -342,16 +346,7 @@ export const listDoctorsPatients = async (
 
   return result;
 };
-export interface IUpdateDoctor {
-  doctorID?: number;
-  firstName?: string;
-  lastName?: string;
-  licenseNumber?: number;
-  clinicID?: number;
-  email?: string;
-  userName?: string;
-  password?: string;
-}
+
 export const updateDoctor = async (
   request: requests.IUpdateDoctor
 ): Promise<responses.IUpdateDoctor> => {
@@ -488,6 +483,31 @@ export const createClinic = async (
         resolve({ success: false });
       }
       resolve({ clinicID: results.insertId, success: true });
+    });
+  });
+
+  return result;
+};
+
+export const getDoctorID = async (
+  request: requests.IGetDoctorID
+): Promise<responses.IGetDoctorID> => {
+  const query = `SELECT * FROM Doctors WHERE Email='${request.email}';`;
+
+  const result = await new Promise<responses.IGetDoctorID>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (results.length < 1) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          doctorID: results[0].DoctorID,
+        });
+      }
     });
   });
 

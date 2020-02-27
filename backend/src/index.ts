@@ -29,6 +29,7 @@ import {
   getDoctorProfile,
   getAllDoctorsAtClinic,
   getAllClinics,
+  getDoctorID,
 } from './roles/doctor';
 
 import { storeRBP, storeBSL, storeWeight } from './roles/patient';
@@ -142,8 +143,9 @@ const initApi = (router: Router) => {
   router.get('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
   router.get('/getAllDoctorsAtClinic', isDoctorLoggedIn, getAllDoctorsAtClinic);
   router.get('/getAllClinics', isDoctorLoggedIn, getAllClinics);
+  router.get('/getDoctorID', isDoctorLoggedIn, getDoctorID);
 
-  // TODO(sulla): Check if patient and doctore are logged in.
+  // TODO(sulla): Check if patient and doctor are logged in.
   router.get('/storeRBP', storeRBP);
   router.get('/storeBSL', storeBSL);
   router.get('/storeWeight', storeWeight);
