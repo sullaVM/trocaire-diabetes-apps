@@ -14,7 +14,6 @@ export const createDoctor = async (request: Request, response: Response) => {
   const firstName = request.body.firstName;
   const lastName = request.body.lastName;
   const licenseNumber = request.body.licenseNumber;
-  const clinicID = request.body.clinicID;
   const email = request.body.email;
   const username = request.body.username;
 
@@ -59,7 +58,6 @@ export const createDoctor = async (request: Request, response: Response) => {
       firstName,
       lastName,
       licenseNumber,
-      clinicID,
       email,
       userName: username,
       password: hash,
@@ -103,7 +101,6 @@ export const updateDoctor = (request: Request, response: Response) => {
     firstName: request.body.firstName,
     lastName: request.body.lastName,
     licenseNumber: request.body.licenseNumber,
-    clinicID: request.body.clinicID,
     email: request.body.email,
     userName: request.body.username,
     password: request.body.password,
@@ -121,12 +118,47 @@ export const updateDoctor = (request: Request, response: Response) => {
     });
 };
 
+export const deleteDoctor = (request: Request, response: Response) => {
+  const deleteDoctorRequest: requests.IDeleteDoctor = {
+    doctorID: request.body.doctorID,
+  };
+
+  db.deleteDoctor(deleteDoctorRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+};
+
 export const createClinic = (request: Request, response: Response) => {
   const createClinicRequest: requests.ICreateClinic = {
     clinicName: request.body.clinicName,
   };
 
   db.createClinic(createClinicRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error: ' + error,
+      });
+    });
+};
+
+export const addDoctorToClinic = (request: Request, response: Response) => {
+  const addDoctorToClinicRequest: requests.IAddDoctorToClinic = {
+    clinicID: request.body.clinicName,
+    doctorID: request.body.clinicName,
+  };
+
+  db.addDoctorToClinic(addDoctorToClinicRequest)
     .then(result => {
       response.status(200).send(result);
     })
