@@ -332,9 +332,13 @@ export const listDoctorsPatients = async (
       if (results.length < 1) {
         resolve({ success: false });
       } else {
+        const patientIDs = [];
+        for (const entry of results) {
+          patientIDs.push(entry.PatientID);
+        }
         resolve({
           success: true,
-          patientIDs: results,
+          patientIDs,
         });
       }
     });

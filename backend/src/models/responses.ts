@@ -62,7 +62,7 @@ export interface IGetDoctorID {
 
 export interface IListDoctorsPatients {
   success: boolean;
-  patientIDs?: number;
+  patientIDs?: number[];
 }
 
 export interface IGetDoctorProfile {
