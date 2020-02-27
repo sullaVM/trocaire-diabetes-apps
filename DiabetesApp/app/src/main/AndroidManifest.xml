@@ -15,7 +15,7 @@
         <activity android:name=".DataSubmit"/>
 
         <!-- TEMPORARY!!! -->
-        <activity android:name=".MainActivity" />
+        <activity android:name=".DataEnter" />
 
 
         <activity android:name=".Manual" />
@@ -23,7 +23,7 @@
         <activity android:name=".Camera"/>
 
         <!-- TEMPORARY!!! -->
-        <activity android:name=".DataEnter">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
