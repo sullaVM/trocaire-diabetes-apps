@@ -29,12 +29,12 @@ import {
   getDoctorProfile,
   getAllDoctorsAtClinic,
   getAllClinics,
+  getDoctorID,
 } from './roles/doctor';
 
 import { storeRBP, storeBSL, storeWeight } from './roles/patient';
 
 import { createClinic, createDoctor, updateDoctor } from './roles/admin';
-import { getDoctorID } from './database';
 
 const apiPort = 8081;
 const app = express();

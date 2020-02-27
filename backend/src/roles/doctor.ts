@@ -139,7 +139,7 @@ export const getDoctorID = (request: Request, response: Response) => {
     email: request.body.email,
   };
 
-  db.getAllClinics(getDoctorIDRequest)
+  db.getDoctorID(getDoctorIDRequest)
     .then(result => {
       response.status(200).send(result);
     })
