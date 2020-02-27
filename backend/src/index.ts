@@ -60,6 +60,10 @@ const doctorSignup = (_request: Request, response: Response) => {
   response.sendFile(join(__dirname + '/../src/private/doctorSignup.html'));
 };
 
+const clinicSignup = (_request: Request, response: Response) => {
+  response.sendFile(join(__dirname + '/../src/private/clinicSignup.html'));
+};
+
 const isAdminLoggedIn = async (
   request: Request,
   response: Response,
@@ -117,21 +121,22 @@ app.disable('etag');
 // tslint:disable-next-line: no-shadowed-variable
 const initRoutes = (app: Express) => {
   app.get('/login', login);
-  app.get('/sessionLogin', sessionLogin);
+  app.post('/sessionLogin', sessionLogin);
   app.get('/sessionLogout', sessionLogout);
 
   app.get('/', isAdminLoggedIn, dashboard);
   app.get('/doctorSignup', isAdminLoggedIn, doctorSignup);
-  app.get('/createClinic', isAdminLoggedIn, createClinic);
+  app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
 };
 
 // tslint:disable-next-line: no-shadowed-variable
 const initApi = (router: Router) => {
-  router.get('/createDoctor', isAdminLoggedIn, createDoctor);
-  router.get('/updateDoctor', isAdminLoggedIn, updateDoctor);
+  router.post('/createDoctor', isAdminLoggedIn, createDoctor);
+  router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
+  router.post('/createClinic', isAdminLoggedIn, createClinic);
 
-  router.get('/createPatient', isDoctorLoggedIn, createPatient);
-  router.get('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
+  router.post('/createPatient', isDoctorLoggedIn, createPatient);
+  router.get('/getPatientProfile', getPatientProfile);
   router.get('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.get('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.get('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);

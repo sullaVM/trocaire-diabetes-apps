@@ -13,12 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DataSubmit"/>
-        <activity android:name=".Camera" />
+
+        <!-- TEMPORARY!!! -->
+        <activity android:name=".MainActivity" />
+
+
         <activity android:name=".Manual" />
         <activity android:name=".InputPassword"/>
-        <activity android:name=".DataEnter"/>
+        <activity android:name=".Camera"/>
 
-        <activity android:name=".MainActivity">
+        <!-- TEMPORARY!!! -->
+        <activity android:name=".DataEnter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
