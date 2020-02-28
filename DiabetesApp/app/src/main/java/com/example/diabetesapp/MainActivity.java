@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Button;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,15 +24,52 @@ import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
 public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> mPatientIDs = new ArrayList<>();
 
+    private static final String TAG = "MainActivity";
+
+    Button temp;
+
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    Log.i(TAG, "OpenCV loaded successfully");
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
+            }
+        }
+    };
+
+    public MainActivity() {
+        Log.i(TAG, "Instantiated new " + this.getClass());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         getPatientIDs();
+
+        temp = findViewById(R.id.button2);
+        temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tempScreen();
+            }
+        });
 
         LinearLayout layout = findViewById(R.id.buttonLayout);
 
@@ -104,6 +142,12 @@ public class MainActivity extends AppCompatActivity {
         patientProfileRequest.makeRequest(this, responseListener, errorListener);
     }
 
+    //DELETE LATER
+    private void tempScreen() {
+        Intent intent = new Intent(this, DataEnter.class);
+        startActivity(intent);
+    }
+
     private void nextScreen(int tag) {
         Intent intent = new Intent(this, InputPassword.class);
         intent.putExtra("tag", tag);
@@ -119,5 +163,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void getPatientIDs() {
         mPatientIDs.add(1);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
     }
 }

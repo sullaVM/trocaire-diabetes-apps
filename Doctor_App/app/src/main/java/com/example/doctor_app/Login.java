@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,8 @@ public class Login extends AppCompatActivity {
 
     private EditText mEmailField;
     private EditText mPasswordField;
+    private MaterialButton next;
+    private ProgressBar pr;
 
     private FirebaseAuth mAuth;
 
@@ -44,9 +47,11 @@ public class Login extends AppCompatActivity {
         // Views
         mEmailField = findViewById(R.id.docEmail);
         mPasswordField = findViewById(R.id.docPassword);
+        pr = findViewById(R.id.indeterminateBar);
+        pr.setVisibility(View.INVISIBLE);
 
         // Buttons
-        MaterialButton next = findViewById(R.id.buttonNext);
+        next = findViewById(R.id.buttonNext);
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
@@ -61,12 +66,17 @@ public class Login extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         mAuth.signOut();
+        pr.setVisibility(View.INVISIBLE);
+        next.setEnabled(true);
+        updateUI(null);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mAuth.signOut();
+        pr.setVisibility(View.INVISIBLE);
+        next.setEnabled(true);
         updateUI(null);
     }
 
@@ -76,6 +86,9 @@ public class Login extends AppCompatActivity {
             return;
         }
 
+        pr.setVisibility(View.VISIBLE);
+        next.setEnabled(false);
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -84,12 +97,16 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            pr.setVisibility(View.INVISIBLE);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            pr.setVisibility(View.INVISIBLE);
+                            next.setEnabled(true);
+                            updateUI(null);
                         }
 
                     }

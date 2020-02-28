@@ -70,7 +70,7 @@ const isAdminLoggedIn = async (
   response: Response,
   next: NextFunction
 ) => {
-  const sessionCookie = request.cookies.session || '';
+  const sessionCookie = request.cookies.session || ' ';
   if (await isAdmin(sessionCookie)) {
     next();
   } else {
@@ -83,7 +83,7 @@ const isDoctorLoggedIn = async (
   response: Response,
   next: NextFunction
 ) => {
-  const sessionCookie = request.cookies.session || '';
+  const sessionCookie = request.cookies.session || ' ';
   if (await isDoctor(sessionCookie)) {
     next();
   } else {
@@ -110,7 +110,7 @@ const sessionLogin = async (request: Request, response: Response) => {
 };
 
 const sessionLogout = async (request: Request, response: Response) => {
-  const sessionCookie = request.cookies.session || '';
+  const sessionCookie = request.cookies.session || ' ';
   response.clearCookie('session');
   await revokeToken(sessionCookie);
   response.redirect('/login');
