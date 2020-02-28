@@ -154,8 +154,8 @@ export const createClinic = (request: Request, response: Response) => {
 
 export const addDoctorToClinic = (request: Request, response: Response) => {
   const addDoctorToClinicRequest: requests.IAddDoctorToClinic = {
-    clinicID: request.body.clinicName,
-    doctorID: request.body.clinicName,
+    clinicID: request.body.clinicID,
+    doctorID: request.body.doctorID,
   };
 
   db.addDoctorToClinic(addDoctorToClinicRequest)
