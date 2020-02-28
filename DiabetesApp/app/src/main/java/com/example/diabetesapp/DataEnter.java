@@ -2,6 +2,7 @@ package com.example.diabetesapp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -34,7 +35,7 @@ public class DataEnter extends AppCompatActivity {
 
     Bitmap bitmap;
 
-    Button back, enter;
+    ImageView back, enter;
 
     TextView sugar, pressure;
     EditText height, weight;

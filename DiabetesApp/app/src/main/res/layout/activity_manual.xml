@@ -20,26 +20,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageView
         android:id="@+id/enter"
         android:layout_width="144dp"
         android:layout_height="61dp"
         android:layout_marginStart="184dp"
         android:layout_marginLeft="184dp"
         android:layout_marginTop="444dp"
-        android:text="Enter"
+        android:background="@drawable/baseline_done_black_48dp"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageView
         android:id="@+id/back"
         android:layout_width="99dp"
         android:layout_height="75dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="244dp"
         android:layout_marginRight="244dp"
-        android:text="Back"
+        android:background="@drawable/baseline_keyboard_backspace_black_48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

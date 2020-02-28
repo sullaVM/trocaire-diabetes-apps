@@ -3,6 +3,7 @@ package com.example.diabetesapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -43,8 +44,7 @@ import org.opencv.core.Point;
 public class Camera extends AppCompatActivity {
 
     final int RequestCameraPermissionID = 1001;
-    Button back;
-    Button done;
+    ImageView back, done;
     String data;
     SurfaceView cameraView;
     TextView textView;
@@ -268,7 +268,9 @@ public class Camera extends AppCompatActivity {
                             //Mat newMat = new Mat(new Size(1000,1000), CvType.CV_8UC3, new Scalar(255,255,255));
                             //newMat.copyTo(firstHalf);
                             Bitmap halfOne = Bitmap.createBitmap(new_rect_w, new_rect_h, Bitmap.Config.ARGB_8888);
+                            Imgproc.cvtColor(firstHalf,firstHalf,Imgproc.COLOR_GRAY2RGB);
                             Utils.matToBitmap(firstHalf, halfOne);
+
                             Frame frame = new Frame.Builder().setBitmap(halfOne).build();
 
                             SparseArray<TextBlock> items = textRecognizer.detect(frame);

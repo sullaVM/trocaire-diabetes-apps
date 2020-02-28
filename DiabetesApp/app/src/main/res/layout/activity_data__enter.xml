@@ -7,15 +7,14 @@
     android:background="#C8E6C9"
     tools:context=".DataEnter">
 
-    <Button
+    <ImageView
         android:id="@+id/back"
-        android:layout_width="86dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="256dp"
-        android:layout_marginRight="256dp"
-        android:text="Back"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="74dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/baseline_keyboard_backspace_black_48dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
@@ -208,7 +207,7 @@
 
         </LinearLayout>
 
-            <Button
+            <ImageView
                 android:id="@+id/enter"
                 android:layout_width="99dp"
                 android:layout_height="75dp"
@@ -217,7 +216,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:text="Enter"
+                android:background="@drawable/baseline_done_black_48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -1,9 +1,11 @@
 package com.example.diabetesapp;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.EditText;
 import android.text.InputType;
 
@@ -11,8 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Manual extends AppCompatActivity {
 
-    Button enter;
-    Button back;
+    ImageView enter, back;
     EditText data;
 
     @Override
