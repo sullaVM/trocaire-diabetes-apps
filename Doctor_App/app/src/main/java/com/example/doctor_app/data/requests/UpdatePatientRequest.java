@@ -37,7 +37,7 @@ public class UpdatePatientRequest extends PatientRequest<UpdatePatientResponse> 
 
     @Override
     public String requestRoute() {
-        return "updatePatient";
+        return "api/updatePatient";
     }
 
     @Override

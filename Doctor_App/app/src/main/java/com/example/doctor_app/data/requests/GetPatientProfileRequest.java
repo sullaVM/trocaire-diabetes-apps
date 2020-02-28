@@ -12,7 +12,7 @@ public class GetPatientProfileRequest extends PatientRequest<GetPatientProfileRe
 
     @Override
     public String requestRoute() {
-        return "getPatientProfile";
+        return "api/getPatientProfile";
     }
 
     @Override

@@ -3,9 +3,15 @@ package com.example.doctor_app.data.requests;
 import com.example.doctor_app.data.responses.GetDoctorsPatientsResponse;
 
 public class GetDoctorsPatientsRequest extends DoctorRequest<GetDoctorsPatientsResponse> {
+    private Integer doctorID;
+
+    public GetDoctorsPatientsRequest(Integer doctorID) {
+        this.doctorID = doctorID;
+    }
+
     @Override
     public String requestRoute() {
-        return "getDoctorsPatients";
+        return "api/getDoctorsPatients";
     }
 
     @Override

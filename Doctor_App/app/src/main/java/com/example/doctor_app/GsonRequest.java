@@ -9,25 +9,43 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public class GsonRequest<PatientResponse> extends JsonRequest<PatientResponse> {
+public class GsonRequest<T> extends JsonRequest<T> {
     private final Gson gson = new Gson();
-    private final Response.Listener<PatientResponse> listener;
-    private final Class<PatientResponse> responseClass;
+    private final Response.Listener<T> listener;
+    private final Class<T> responseClass;
+    private String mToken;
 
-    public GsonRequest(String url, String jsonRequest, Class<PatientResponse> responseClass, Response.Listener<PatientResponse> listener, Response.ErrorListener errorListener) {
+    public GsonRequest(String url, String jsonRequest, Class<T> responseClass, Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, jsonRequest, listener, errorListener);
         this.listener = listener;
         this.responseClass = responseClass;
     }
 
+    public GsonRequest(String url, String jsonRequest, String token, Class<T> responseClass, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(Method.GET, url, jsonRequest, listener, errorListener);
+        this.listener = listener;
+        this.mToken = token;
+        this.responseClass = responseClass;
+    }
+
+    public GsonRequest(int method, String url, String jsonRequest, String token, Class<T> responseClass, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, jsonRequest, listener, errorListener);
+        this.listener = listener;
+        this.mToken = token;
+        this.responseClass = responseClass;
+    }
+
     @Override
-    protected void deliverResponse(PatientResponse response) {
+    protected void deliverResponse(T response) {
         listener.onResponse(response);
     }
 
     @Override
-    protected Response<PatientResponse> parseNetworkResponse(NetworkResponse response) {
+    protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
             String json = new String(
                     response.data,
@@ -39,6 +57,17 @@ public class GsonRequest<PatientResponse> extends JsonRequest<PatientResponse> {
             return Response.error(new ParseError(e));
         } catch (JsonSyntaxException e) {
             return Response.error(new ParseError(e));
+        }
+    }
+
+    @Override
+    public Map<String, String> getHeaders() {
+        if (mToken != null) {
+            Map<String, String> params = new HashMap();
+            params.put("Cookie", "session=" + mToken);
+            return params;
+        } else {
+            return Collections.emptyMap();
         }
     }
 }

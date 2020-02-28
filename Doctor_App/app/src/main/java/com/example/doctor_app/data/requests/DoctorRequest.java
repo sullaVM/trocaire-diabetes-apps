@@ -9,13 +9,21 @@ import com.example.doctor_app.GsonRequest;
 import com.google.gson.Gson;
 
 public abstract class DoctorRequest<DoctorResponse> {
-    public static final String API_BASE_URL = "https://swe.sullamontes.com/api/";
+    public static final String API_BASE_URL = "https://swe.sullamontes.com/";
 
     public void makeRequest(Context context, Response.Listener<DoctorResponse> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         Gson gson = new Gson();
         String jsonString = gson.toJson(this);
         GsonRequest gsonRequest = new GsonRequest(API_BASE_URL + this.requestRoute(), jsonString, this.responseClass(), listener, errorListener);
+        requestQueue.add(gsonRequest);
+    }
+
+    public void makeRequest(Context context, String token, Response.Listener<DoctorResponse> listener, Response.ErrorListener errorListener) {
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(this);
+        GsonRequest gsonRequest = new GsonRequest(API_BASE_URL + this.requestRoute(), jsonString, token, this.responseClass(), listener, errorListener);
         requestQueue.add(gsonRequest);
     }
 

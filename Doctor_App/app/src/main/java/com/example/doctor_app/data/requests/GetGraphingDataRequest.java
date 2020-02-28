@@ -20,7 +20,7 @@ public class GetGraphingDataRequest extends PatientRequest<GetGraphingDataRespon
 
     @Override
     public String requestRoute() {
-        return "getGraphingData";
+        return "api/getGraphingData";
     }
 
     @Override

@@ -34,7 +34,13 @@ import {
 
 import { storeRBP, storeBSL, storeWeight } from './roles/patient';
 
-import { createClinic, createDoctor, updateDoctor } from './roles/admin';
+import {
+  createClinic,
+  createDoctor,
+  updateDoctor,
+  deleteDoctor,
+  addDoctorToClinic,
+} from './roles/admin';
 
 const apiPort = 8081;
 const app = express();
@@ -70,7 +76,7 @@ const isAdminLoggedIn = async (
   response: Response,
   next: NextFunction
 ) => {
-  const sessionCookie = request.cookies.session || '';
+  const sessionCookie = request.cookies.session || ' ';
   if (await isAdmin(sessionCookie)) {
     next();
   } else {
@@ -83,7 +89,7 @@ const isDoctorLoggedIn = async (
   response: Response,
   next: NextFunction
 ) => {
-  const sessionCookie = request.cookies.session || '';
+  const sessionCookie = request.cookies.session || ' ';
   if (await isDoctor(sessionCookie)) {
     next();
   } else {
@@ -110,7 +116,7 @@ const sessionLogin = async (request: Request, response: Response) => {
 };
 
 const sessionLogout = async (request: Request, response: Response) => {
-  const sessionCookie = request.cookies.session || '';
+  const sessionCookie = request.cookies.session || ' ';
   response.clearCookie('session');
   await revokeToken(sessionCookie);
   response.redirect('/login');
@@ -134,7 +140,9 @@ const initRoutes = (app: Express) => {
 const initApi = (router: Router) => {
   router.post('/createDoctor', isAdminLoggedIn, createDoctor);
   router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
+  router.post('/deleteDoctor', isAdminLoggedIn, deleteDoctor);
   router.post('/createClinic', isAdminLoggedIn, createClinic);
+  router.post('/addDoctorToClinic', isAdminLoggedIn, addDoctorToClinic);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
   router.get('/getPatientProfile', getPatientProfile);

@@ -12,11 +12,11 @@
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "husky": "^4.2.3",
-    "lint-staged": "^10.0.7",
+    "lint-staged": "^10.0.8",
     "prettier": "^1.19.1",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.2"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -36,7 +36,7 @@
     "@types/express-validator": "^3.0.0",
     "@types/firebase": "^3.2.1",
     "@types/morgan": "^1.7.37",
-    "@types/mysql": "^2.15.8",
+    "@types/mysql": "^2.15.9",
     "@types/nodemailer": "^6.4.0",
     "axios": "^0.19.2",
     "bcrypt": "^3.0.8",
@@ -49,6 +49,6 @@
     "generate-password": "^1.5.1",
     "morgan": "^1.9.1",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.4.2"
+    "nodemailer": "^6.4.3"
   }
 }
