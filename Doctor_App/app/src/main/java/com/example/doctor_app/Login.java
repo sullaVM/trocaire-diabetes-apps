@@ -5,13 +5,19 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.doctor_app.data.requests.GetDoctorIDRequest;
+import com.example.doctor_app.data.requests.SessionLoginRequest;
+import com.example.doctor_app.data.responses.GetDoctorIDResponse;
+import com.example.doctor_app.data.responses.SessionLoginResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -19,8 +25,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
-
-import static com.example.doctor_app.data.requests.PatientRequest.API_BASE_URL;
 
 public class Login extends AppCompatActivity {
 
@@ -57,7 +61,6 @@ public class Login extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         mAuth.signOut();
-        updateUI(null);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Login extends AppCompatActivity {
         updateUI(null);
     }
 
-    private void signIn(String email, String password) {
+    private void signIn(final String email, String password) {
         Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
@@ -81,33 +84,59 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            mAuth.getAccessToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<GetTokenResult> task) {
-                                    GetTokenResult tokenResult = task.getResult();
-                                    String token = tokenResult.getToken();
-                                    CookieManager cookieManager = CookieManager.getInstance();
-                                    cookieManager.setCookie(API_BASE_URL, "session=" + token);
-                                }
-                            });
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
 
                     }
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(final FirebaseUser user) {
         if (user != null) {
             // Signed-in. Go to dashboard
-            Intent intent = new Intent(this, Dashboard.class);
-            startActivity(intent);
+            user.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                @Override
+                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                    final String token = task.getResult().getToken();
+                    SessionLoginRequest sessionLoginRequest = new SessionLoginRequest(token);
+                    sessionLoginRequest.makeRequest(getBaseContext(), new Response.Listener<SessionLoginResponse>() {
+                        @Override
+                        public void onResponse(SessionLoginResponse response) {
+                            GetDoctorIDRequest getDoctorIDRequest = new GetDoctorIDRequest(user.getEmail());
+                            getDoctorIDRequest.makeRequest(getBaseContext(), token, new Response.Listener<GetDoctorIDResponse>() {
+                                @Override
+                                public void onResponse(GetDoctorIDResponse response) {
+                                    if (response.success) {
+                                        Intent intent = new Intent(getBaseContext(), Dashboard.class);
+                                        intent.putExtra("tag", response.doctorID);
+                                    } else {
+                                        Log.println(Log.INFO, "GetDoctorIDRequest", "Request failed");
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    NetworkResponse response = error.networkResponse;
+                                    String message = new String(error.networkResponse.data);
+                                    Log.println(Log.INFO, "GetDoctorIDRequest", "Request failed");
+                                }
+                            });
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.println(Log.INFO, "SessionLoginRequest", "Request failed");
+                        }
+                    });
+
+
+                }
+            });
         }
         // Else, not signed-in. Stay on login page
     }

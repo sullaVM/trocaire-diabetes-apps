@@ -3,7 +3,6 @@ package com.example.doctor_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -15,6 +14,7 @@ public class Dashboard extends AppCompatActivity {
 
     private static int dataSetSize = 50;
     protected ArrayList<Patient> patientDataSet;
+    private int mDoctorID;
     private AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView parent, View v, int position, long id) {
             Patient patient = new Patient(patientDataSet.get(position).patientName,
@@ -30,6 +30,9 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        mDoctorID = getIntent().getIntExtra("tag", -1);
+
         getPatients();
 
         if (patientDataSet.size() == 0) {

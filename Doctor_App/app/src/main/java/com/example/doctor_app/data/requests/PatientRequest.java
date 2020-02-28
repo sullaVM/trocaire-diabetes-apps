@@ -9,7 +9,7 @@ import com.example.doctor_app.GsonRequest;
 import com.google.gson.Gson;
 
 public abstract class PatientRequest<PatientResponse> {
-    public static final String API_BASE_URL = "https://swe.sullamontes.com/api/";
+    public static final String API_BASE_URL = "https://swe.sullamontes.com/";
 
     public void makeRequest(Context context, Response.Listener<PatientResponse> listener, Response.ErrorListener errorListener) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
