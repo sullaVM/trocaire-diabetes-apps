@@ -12,18 +12,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DataSubmit"/>
-
-        <!-- TEMPORARY!!! -->
-        <activity android:name=".DataEnter" />
-
-
-        <activity android:name=".Manual" />
-        <activity android:name=".InputPassword"/>
-        <activity android:name=".Camera"/>
-
-        <!-- TEMPORARY!!! -->
-        <activity android:name=".MainActivity">
+        <activity android:name=".CameraSugar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".InputPressureSugar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".DataSubmit"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" /> <!-- TEMPORARY!!! -->
+        <activity android:name=".DataEnter"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Manual"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".InputPassword"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Camera"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" /> <!-- TEMPORARY!!! -->
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

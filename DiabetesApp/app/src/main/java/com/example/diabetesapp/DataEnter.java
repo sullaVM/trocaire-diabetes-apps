@@ -31,16 +31,11 @@ public class DataEnter extends AppCompatActivity {
 
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
-    static final int REQUEST_IMAGE_CAPTURE = 2;
+    static final int REQUEST_HEIGHT = 2;
+    static final int REQUEST_WEIGHT = 3;
 
-    Bitmap bitmap;
-
-    ImageView back, enter;
-
-    TextView sugar, pressure;
-    EditText height, weight;
-
-    String sugar_data, pressure_data;
+    ImageView back;
+    ImageView blood_sugar, blood_pressure, cm, kg;
 
     int mPatientID;
 
@@ -49,11 +44,7 @@ public class DataEnter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data__enter);
 
-        sugar = findViewById(R.id.sugar);
-        pressure = findViewById(R.id.pressure);
-
-        height = findViewById(R.id.addHeight);
-        weight = findViewById(R.id.addWeight);
+        mPatientID = getIntent().getIntExtra("tag", -1);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -63,100 +54,64 @@ public class DataEnter extends AppCompatActivity {
             }
         });
 
-        ImageView sugar_picture = findViewById(R.id.camera);
-        ImageView sugar_numbers = findViewById(R.id.numbers);
-        ImageView pressure_picture = findViewById(R.id.camera2);
-        ImageView pressure_numbers = findViewById(R.id.numbers2);
-
-        mPatientID = getIntent().getIntExtra("tag", -1);
-
-        sugar_picture.setOnClickListener(new View.OnClickListener() {
+        blood_sugar = findViewById(R.id.blood_sugar);
+        blood_sugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePhoto("sugar", 0);
-            }
-        });
-        sugar_numbers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                manual("sugar", 0);
-            }
-        });
-        pressure_picture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                takePhoto("pressure", 1);
-            }
-        });
-        pressure_numbers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                manual("pressure", 1);
+                goTo(REQUEST_SUGAR);
             }
         });
 
-        enter = findViewById(R.id.enter);
-        enter.setOnClickListener(new View.OnClickListener() {
+        blood_pressure = findViewById(R.id.blood_pressure);
+        blood_pressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                enterData();
+                goTo(REQUEST_PRESSURE);
+            }
+        });
+
+        cm = findViewById(R.id.cm);
+        cm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goTo(REQUEST_HEIGHT);
+            }
+        });
+
+        kg = findViewById(R.id.kg);
+        kg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goTo(REQUEST_WEIGHT);
             }
         });
     }
 
-    private void manual(String type, int code) {
-        Intent intent = new Intent(this, Manual.class);
-        intent.putExtra("type", type);
-        startActivityForResult(intent, code);
-    }
-
-    private void takePhoto(String type, int code) {
-        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Intent takePictureIntent = new Intent(this, Camera.class);
-        takePictureIntent.putExtra("type", type);
-        takePictureIntent.putExtra("code", code);
-        startActivity(takePictureIntent);
-        //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == DataEnter.RESULT_OK) {
-            switch (requestCode) {
-                case (0): {
-                    sugar_data = data.getStringExtra("sugar");
-                    if (sugar_data != null) sugar.setText(sugar_data);
-                }
-                case (1): {
-                    pressure_data = data.getStringExtra("pressure");
-                    if (pressure_data != null) pressure.setText(pressure_data);
-                }
-                case (REQUEST_IMAGE_CAPTURE): {
-                    String type = data.getStringExtra("type");
-                    int code = data.getIntExtra("code", 1);
-                    Bundle extras = data.getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    bitmap = imageBitmap;
-                    File photoFile = new File(this.getFilesDir(), "Image.jpg");
-                    try {
-                        FileOutputStream out = new FileOutputStream(photoFile);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                        out.flush();
-                        out.close();
-
-                        Intent intent = new Intent(this, Camera.class);
-                        intent.putExtra("type", type);
-                        startActivityForResult(intent, code);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-            }
+    private void goTo(int id) {
+        if (id == REQUEST_SUGAR) {
+            Intent i = new Intent(this, InputPressureSugar.class);
+            i.putExtra("tag", id);
+            i.putExtra("patientId", mPatientID);
+            startActivity(i);
+        } else if (id == REQUEST_PRESSURE) {
+            Intent i = new Intent(this, InputPressureSugar.class);
+            i.putExtra("tag", id);
+            i.putExtra("patientId", mPatientID);
+            startActivity(i);
+        } else if (id == REQUEST_HEIGHT) {
+            Intent i = new Intent(this, Manual.class);
+            i.putExtra("tag", id);
+            i.putExtra("patientId", mPatientID);
+            startActivity(i);
+        } else if (id == REQUEST_WEIGHT) {
+            Intent i = new Intent(this, Manual.class);
+            i.putExtra("tag", id);
+            i.putExtra("patientId", mPatientID);
+            startActivity(i);
         }
     }
 
+    /*
     private void enterData() {
         String timestamp = new Timestamp(System.currentTimeMillis()).toString();
         try {
@@ -209,6 +164,8 @@ public class DataEnter extends AppCompatActivity {
 
         }
     }
+
+     */
 
     private void back() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

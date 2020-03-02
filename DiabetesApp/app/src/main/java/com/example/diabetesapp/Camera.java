@@ -51,7 +51,7 @@ public class Camera extends AppCompatActivity {
     CameraSource cameraSource;
     Bitmap bitmap;
     ImageView imageView;
-    View view;
+    //View view;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -81,7 +81,7 @@ public class Camera extends AppCompatActivity {
         cameraView = findViewById(R.id.surface_view);
         textView = findViewById(R.id.text_view);
 
-        view = findViewById(R.id.myRectangleView);
+        //view = findViewById(R.id.myRectangleView);
 
         done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
@@ -216,9 +216,9 @@ public class Camera extends AppCompatActivity {
             }
         });
     }
+    
     private void takeImage() {
             cameraSource.takePicture(null, new CameraSource.PictureCallback() {
-                //private File imageFile;
 
                 @Override
                 public void onPictureTaken(byte[] bytes) {
