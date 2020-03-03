@@ -47,11 +47,7 @@ public class Camera extends AppCompatActivity {
     ImageView back, done;
     String data;
     SurfaceView cameraView;
-    TextView textView;
     CameraSource cameraSource;
-    Bitmap bitmap;
-    ImageView imageView;
-    //View view;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -79,31 +75,14 @@ public class Camera extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
 
         cameraView = findViewById(R.id.surface_view);
-        textView = findViewById(R.id.text_view);
-
-        //view = findViewById(R.id.myRectangleView);
 
         done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = getIntent();
-                //String type = intent.getStringExtra("type");
-                //saveData(type);
                 takeImage();
             }
         });
-
-        /*
-        String photoPath = this.getFilesDir() + "/Image.jpg";
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        bitmap = BitmapFactory.decodeFile(photoPath, options);
-
-        imageView = findViewById(R.id.imageView);
-        imageView.setImageBitmap(bitmap);
-
-         */
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -112,32 +91,6 @@ public class Camera extends AppCompatActivity {
                 back();
             }
         });
-
-        /*
-        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-        if (!textRecognizer.isOperational()) {
-            Log.w("Camera", "Detector dependencies are not yet available");
-        } else {
-            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-
-            SparseArray<TextBlock> items = textRecognizer.detect(frame);
-
-            StringBuilder sb = new StringBuilder();
-
-            if (items.size() != 1)
-                for (int i = 0; i < items.size() - 1; i++) {
-                    TextBlock myItems = items.valueAt(i);
-                    sb.append(myItems.getValue());
-                    sb.append("\n");
-                }
-            TextBlock myItems = items.valueAt(items.size() - 1);
-            sb.append(myItems.getValue());
-            data = sb.toString();
-            textView.setText(data);
-        }
-
-         */
-
     }
 
     private void saveData(String type) {
@@ -199,6 +152,7 @@ public class Camera extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<TextBlock> detections) {
 
+                /*
                 final SparseArray<TextBlock> items = detections.getDetectedItems();
                 if (items.size() != 0) {
                     textView.post(new Runnable() {
@@ -213,19 +167,18 @@ public class Camera extends AppCompatActivity {
                         }
                     });
                 }
+
+                 */
             }
         });
     }
-    
+
     private void takeImage() {
             cameraSource.takePicture(null, new CameraSource.PictureCallback() {
 
                 @Override
                 public void onPictureTaken(byte[] bytes) {
                     try {
-                        // convert byte array into bitmap
-                        //Bitmap loadedImage = null;
-                        //Bitmap rotatedBitmap = null;
                         Bitmap loadedImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
                         Matrix matrix = new Matrix();
@@ -256,6 +209,10 @@ public class Camera extends AppCompatActivity {
                         Point anchor = new Point(-1, -1);
                         int iterations = 2;
 
+                        Bitmap halfOne = Bitmap.createBitmap(new_rect_w, new_rect_h, Bitmap.Config.ARGB_8888);
+                        Imgproc.cvtColor(firstHalf,firstHalf,Imgproc.COLOR_GRAY2RGB);
+                        Utils.matToBitmap(firstHalf, halfOne);
+
                         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, kernelSize);
                         Imgproc.erode(firstHalf, firstHalf, kernel, anchor, iterations);
                         Imgproc.erode(firstHalf, firstHalf, kernel, anchor, iterations);
@@ -267,7 +224,7 @@ public class Camera extends AppCompatActivity {
                         } else {
                             //Mat newMat = new Mat(new Size(1000,1000), CvType.CV_8UC3, new Scalar(255,255,255));
                             //newMat.copyTo(firstHalf);
-                            Bitmap halfOne = Bitmap.createBitmap(new_rect_w, new_rect_h, Bitmap.Config.ARGB_8888);
+                            //Bitmap halfOne = Bitmap.createBitmap(new_rect_w, new_rect_h, Bitmap.Config.ARGB_8888);
                             Imgproc.cvtColor(firstHalf,firstHalf,Imgproc.COLOR_GRAY2RGB);
                             Utils.matToBitmap(firstHalf, halfOne);
 
@@ -281,9 +238,7 @@ public class Camera extends AppCompatActivity {
                                 TextBlock myItems = items.valueAt(0);
                                 sb.append(myItems.getValue());
                                 data = sb.toString();
-                                textView.setText(data);
                             }
-                            textView.setText("");
                         }
 
                         Bitmap bitmap = Bitmap.createBitmap(rect_w,rect_h, Bitmap.Config.ARGB_8888);
@@ -293,6 +248,8 @@ public class Camera extends AppCompatActivity {
                         Utils.matToBitmap(secondHalf, halfTwo);
 
                         int thing = 0;
+
+                        saveData(data);
                     } catch( Exception ex) {
                     Log.w("Camera", "Detector dependencies are not yet available");
                     }

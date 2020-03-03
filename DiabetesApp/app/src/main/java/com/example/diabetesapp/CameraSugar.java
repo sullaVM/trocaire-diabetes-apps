@@ -18,6 +18,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -38,12 +39,10 @@ import org.opencv.imgproc.Imgproc;
 
 public class CameraSugar extends AppCompatActivity {
 
-    Button back;
-    Button done;
+    ImageView back, done;
     String data;
 
     SurfaceView cameraView;
-    //TextView textView;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
 
@@ -73,14 +72,12 @@ public class CameraSugar extends AppCompatActivity {
         setContentView(R.layout.activity_camera_sugar);
 
         cameraView = findViewById(R.id.surface_view);
-        //textView = findViewById(R.id.text_view);
 
         done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takeImage();
-                //saveData();
             }
         });
         back = findViewById(R.id.back);
@@ -93,7 +90,6 @@ public class CameraSugar extends AppCompatActivity {
     }
 
     private void saveData(){
-        //String value = textView.getText().toString();
         Intent resultIntent = new Intent();
         resultIntent.putExtra("input", data);
         setResult(InputPressureSugar.RESULT_OK, resultIntent);
@@ -220,9 +216,7 @@ public class CameraSugar extends AppCompatActivity {
                             TextBlock myItems = items.valueAt(0);
                             sb.append(myItems.getValue());
                             data = sb.toString();
-                            //textView.setText(data);
                         }
-                        //textView.setText("");
                     }
 
                 } catch (Exception ex) {
