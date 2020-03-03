@@ -2,11 +2,14 @@
 {
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
-  "editor.tabSize": 4,
+  "editor.tabSize": 2,
   "editor.detectIndentation": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.tslint": true
   },
-  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
   "editor.wordWrap": "on"
 }

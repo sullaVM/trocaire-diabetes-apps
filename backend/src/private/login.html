@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
 
-    <title>Create a Doctor Account</title>
-    <meta name="description" content="Creating an account for a doctor." />
+<head>
+  <meta charset="utf-8" />
 
-    <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
-  </head>
+  <title>Trocaire Admin Login</title>
+  <meta name="description" content="Creating an account for a doctor." />
 
-  <body>
-    <input type="text" id="email" name="email" placeholder="Email" />
-    <input
-      type="password"
-      id="password"
-      name="password"
-      placeholder="Password"
-    />
-    <button id="sign-in" name="signin">Sign In</button>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<body>
+  <div class="login-wrap">
+    <div class="login-container">
+      <h1>TROICAIRE ADMIN LOGIN</h1>
+      <div class="input-wrap">
+        <input type="text" id="email" name="email" placeholder="Email" />
+      </div>
+      <div class="input-wrap">
+        <input type="password" id="password" name="password" placeholder="Password" />
+      </div>
+      <button id="sign-in" name="signin">Sign In</button>
+    </div>
+  </div>
 
-    <script type="text/javascript" src="script.js"></script>
-  </body>
+  <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script type="text/javascript" src="/script.js"></script>
+</body>
+
 </html>

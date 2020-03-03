@@ -1,57 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8" />
 
     <title>Create a Doctor Account</title>
     <meta name="description" content="Creating an account for a doctor." />
 
-    <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <body>
-    <form action="/api/createDoctor" method="post">
-      <label for="male">First Name:</label>
-      <input type="text" name="firstName" required /><br />
+    <link rel="stylesheet" href="/style.css">
+</head>
 
-      <label for="male">Last Name:</label>
-      <input type="text" name="lastName" required /><br />
+<body>
+    <div id="body-wrap">
+        <form action="/api/createDoctor" method="post">
+            <label for="male">First Name:</label>
+            <input type="text" name="firstName" required /><br />
 
-      <label for="male">License Number:</label>
-      <input type="text" name="licenseNumber" required /><br />
+            <label for="male">Last Name:</label>
+            <input type="text" name="lastName" required /><br />
 
-      <label for="male">Email Address:</label>
-      <input type="text" name="email" required /><br />
+            <label for="male">License Number:</label>
+            <input type="text" name="licenseNumber" required /><br />
 
-      <label for="male">Username:</label>
-      <input type="text" name="username" required /><br />
+            <label for="male">Email Address:</label>
+            <input type="text" name="email" required /><br />
 
-      <input disabled type="submit" id="doctor-sign-up" value="Submit" />
-    </form>
+            <label for="male">Username:</label>
+            <input type="text" name="username" required /><br />
 
-    <form action="/api/addDoctorToClinic" method="post">
-      <label for="male">clinicID:</label>
-      <input type="text" name="clinicID" required /><br />
+            <input type="submit" id="action-submit" value="Submit" />
+        </form>
 
-      <label for="male">doctorID:</label>
-      <input type="text" name="doctorID" required /><br />
+        <form action="/api/addDoctorToClinic" method="post">
+            <label for="male">Clinic ID:</label>
+            <input type="text" name="clinicID" required /><br />
 
-      <input type="submit" value="Submit" />
-    </form>
+            <label for="male">Doctor ID:</label>
+            <input type="text" name="doctorID" required /><br />
 
-    <div class="quickstart-user-details-container">
-      <button id="sign-out" name="signout">Sign Out</button>
-      Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+            <input type="submit" id="action-submit" value="Submit" />
+        </form>
+
+        <!-- Firebase Debug -->
+
+        <button id="sign-out" name="signout">Sign Out</button>
+
+        <div hidden class="quickstart-user-details-container">
+            Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+        </div>
+
+        <div hidden>Firebase auth <code>currentUser</code> object value:
+            <pre><code id="quickstart-account-details">null</code></pre>
+        </div>
     </div>
-
-    <div>Firebase auth <code>currentUser</code> object value:</div>
-    <pre><code id="quickstart-account-details">null</code></pre>
 
     <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  </body>
 
-  <script type="text/javascript" src="/script.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
+</body>
+
 </html>
