@@ -139,6 +139,8 @@ export const getDoctorID = (request: Request, response: Response) => {
     email: request.body.email,
   };
 
+  console.log(getDoctorIDRequest.email);
+
   db.getDoctorID(getDoctorIDRequest)
     .then(result => {
       response.status(200).send(result);
