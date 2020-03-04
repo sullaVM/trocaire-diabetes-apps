@@ -526,19 +526,14 @@ export const getDoctorID = async (
 ): Promise<responses.IGetDoctorID> => {
   const query = `SELECT * FROM Doctors WHERE Email='${request.email}';`;
 
-  console.log(query);
-
   const result = await new Promise<responses.IGetDoctorID>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
-        console.error(error);
         resolve({ success: false });
       }
       if (results.length < 1) {
-        console.log(results);
         resolve({ success: false });
       } else {
-        console.log(results);
         resolve({
           success: true,
           doctorID: results[0].DoctorID,
