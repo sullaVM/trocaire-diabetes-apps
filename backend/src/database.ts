@@ -533,7 +533,6 @@ export const getDoctorID = async (
         resolve({ success: false });
       }
       if (results.length < 1) {
-        console.log(results);
         resolve({ success: false });
       } else {
         resolve({

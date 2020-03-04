@@ -124,7 +124,6 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void accept(SessionLoginResponse sessionLoginResponse) {
                             GetDoctorIDRequest getDoctorIDRequest = new GetDoctorIDRequest(user.getEmail());
-                            DoctorResponse response = new GetDoctorIDResponse();
                             getDoctorIDRequest.makeRequest(getBaseContext(), new Consumer<GetDoctorIDResponse>() {
                                 @Override
                                 public void accept(GetDoctorIDResponse response) {

@@ -42,8 +42,6 @@ public class GsonRequest<T> extends JsonRequest<SessionResponse<T>> {
                 cookie = mToken;
             }
 
-            String body = new String(response.data);
-
             String json = new String(
                     response.data,
                     HttpHeaderParser.parseCharset(response.headers));
