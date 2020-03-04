@@ -5,3 +5,8 @@ export interface IFirebaseUser {
   isDoctor: Required<boolean>;
   displayName: Required<string>;
 }
+
+export interface ICustomClaims {
+  admin: boolean;
+  doctor: boolean;
+}

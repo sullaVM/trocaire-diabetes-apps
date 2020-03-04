@@ -16,7 +16,7 @@ export const createDoctor = async (request: Request, response: Response) => {
   const licenseNumber = request.body.licenseNumber;
   const email = request.body.email;
   const username = request.body.username;
-  const clinicIDs: number[] = request.body.clinicIDs;
+  const clinicIDs = request.body.clinicIDs;
 
   // Generate password.
   const generatedPass = generate({
@@ -76,9 +76,13 @@ export const createDoctor = async (request: Request, response: Response) => {
       .then(async result => {
         const doctorID = result.doctorID;
         if (doctorID) {
-          clinicIDs.forEach((id: number) => {
-            assignClinic(id, doctorID);
-          });
+          if (clinicIDs.isArray) {
+            clinicIDs.forEach((id: number) => {
+              assignClinic(id, doctorID);
+            });
+          } else {
+            assignClinic(clinicIDs, doctorID);
+          }
         }
 
         if (await createNewUser(user)) {

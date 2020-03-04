@@ -136,7 +136,7 @@ export const getAllClinics = (request: Request, response: Response) => {
 
 export const getDoctorID = (request: Request, response: Response) => {
   const getDoctorIDRequest: requests.IGetDoctorID = {
-    email: request.body.email,
+    email: request.query.email,
   };
 
   db.getDoctorID(getDoctorIDRequest)
