@@ -34,6 +34,7 @@
     <string name="delete">DELETE</string>
     <string name="submit">Submit</string>
     <string name="add_details">Add Details</string>
+    <string name="session"></string>
 
     <string-array name="numbers">
         <item>One</item>

@@ -2,7 +2,7 @@ package com.example.doctor_app.data.requests;
 
 import com.example.doctor_app.data.responses.GetDoctorsPatientsResponse;
 
-public class GetDoctorsPatientsRequest extends DoctorRequest<GetDoctorsPatientsResponse> {
+public class GetDoctorsPatientsRequest extends Request<GetDoctorsPatientsResponse> {
     private Integer doctorID;
 
     public GetDoctorsPatientsRequest(Integer doctorID) {
@@ -17,5 +17,10 @@ public class GetDoctorsPatientsRequest extends DoctorRequest<GetDoctorsPatientsR
     @Override
     public Class responseClass() {
         return GetDoctorsPatientsResponse.class;
+    }
+
+    @Override
+    public int requestType() {
+        return com.android.volley.Request.Method.GET;
     }
 }
