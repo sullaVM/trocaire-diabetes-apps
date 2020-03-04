@@ -16,6 +16,7 @@ export const createDoctor = async (request: Request, response: Response) => {
   const licenseNumber = request.body.licenseNumber;
   const email = request.body.email;
   const username = request.body.username;
+  const clinicIDs: number[] = request.body.clinicIDs;
 
   // Generate password.
   const generatedPass = generate({
@@ -72,7 +73,14 @@ export const createDoctor = async (request: Request, response: Response) => {
     };
 
     db.createDoctor(createDoctorRequest)
-      .then(async _result => {
+      .then(async result => {
+        const doctorID = result.doctorID;
+        if (doctorID) {
+          clinicIDs.forEach((id: number) => {
+            assignClinic(id, doctorID);
+          });
+        }
+
         if (await createNewUser(user)) {
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -168,4 +176,20 @@ export const addDoctorToClinic = (request: Request, response: Response) => {
         message: 'Request unsuccessful, Error: ' + error,
       });
     });
+};
+
+const assignClinic = async (
+  clinicID: number,
+  doctorID: number
+): Promise<string> => {
+  try {
+    const addDoctorToClinicRequest: requests.IAddDoctorToClinic = {
+      clinicID: clinicID,
+      doctorID: doctorID,
+    };
+    await db.addDoctorToClinic(addDoctorToClinicRequest);
+    return `Successfully added clinic ${doctorID} to ${clinicID}`;
+  } catch (error) {
+    return `Error assigning clinic ${clinicID} to ${doctorID}: ${error}`;
+  }
 };

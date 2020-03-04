@@ -64,14 +64,6 @@ function initApp() {
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      var displayName = user.displayName;
-      var email = user.email;
-      var emailVerified = user.emailVerified;
-      var photoURL = user.photoURL;
-      var isAnonymous = user.isAnonymous;
-      var uid = user.uid;
-      var providerData = user.providerData;
-
       const signInStatus = document.getElementById('sign-in-status');
       if (signInStatus) {
         signInStatus.textContent = 'Signed in';
@@ -86,7 +78,7 @@ function initApp() {
 
       const doctorSignUpForm = document.getElementById('doctor-sign-up');
       if (doctorSignUpForm) {
-        doctorSignUpForm.disabled = false;
+        initDoctorSignup();
       }
     } else {
       // User is signed out.
@@ -101,11 +93,6 @@ function initApp() {
       if (accountDetails) {
         accountDetails.textContent = 'null';
       }
-
-      const doctorSignUpForm = document.getElementById('doctor-sign-up');
-      if (doctorSignUpForm) {
-        doctorSignUpForm.disabled = true;
-      }
     }
   });
 
@@ -118,6 +105,46 @@ function initApp() {
   if (signout) {
     signout.addEventListener('click', signOut, false);
   }
+}
+
+async function initDoctorSignup() {
+  const clinicsRes = await axios.get('/api/admin/getAllClinics');
+  const clinicList = document.getElementById('clinic-list');
+
+  clinicsRes.data.clinics.forEach(clinic => {
+    const option = document.createElement('option');
+    option.innerHTML = clinic.clinicName;
+    option.value = clinic.clinicID;
+    clinicList.options.add(option);
+  });
+}
+
+function addToChosen() {
+  const clinicList = document.getElementById('clinic-list');
+  const clinicValue = clinicList.options[clinicList.selectedIndex].value;
+  const clinicName = clinicList.options[clinicList.selectedIndex].textContent;
+
+  const chosenClinics = document.getElementById('chosen-clinics');
+
+  const item = document.createElement('li');
+  const input = document.createElement('input');
+  const textNode = document.createTextNode(clinicName);
+
+  input.name = 'clinicIDs';
+  input.type = 'hidden';
+  input.value = clinicValue;
+
+  item.value = clinicValue;
+  item.appendChild(input);
+  item.appendChild(textNode);
+
+  chosenClinics.appendChild(item);
+
+  // Removing the item
+  item.addEventListener('click', elem => {
+    const target = elem.target;
+    target.parentNode.removeChild(target);
+  });
 }
 
 window.onload = function() {

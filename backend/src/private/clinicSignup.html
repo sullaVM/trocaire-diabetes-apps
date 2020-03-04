@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Create a Doctor Account</title>
+    <title>Register a Clinic</title>
     <meta name="description" content="Creating an account for a doctor.">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,15 +14,16 @@
 
 <body>
     <div id="body-wrap">
+        <h1>Register a Clinic</h1><br />
         <form action="/api/createClinic" method="post">
-            <label for="male">Clinic Name:</label>
+            <label for="clinicName">Clinic Name:</label>
             <input type="text" name="clinicName" required><br>
 
-            <input type="submit" id="action-submit" value="Submit">
+            <input type="submit" class="action-submit" value="Submit">
         </form>
 
         <!-- Firebase Debug -->
-
+        <hr>
         <button id="sign-out" name="signout">Sign Out</button>
 
         <div hidden class="quickstart-user-details-container">

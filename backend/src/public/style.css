@@ -101,7 +101,7 @@ a:visited {
   font-size: 14px;
 }
 
-#action-submit {
+.action-submit {
   margin: 20px 0;
   padding: 0 10px;
   height: 30px;
@@ -112,6 +112,7 @@ a:visited {
 
 #body-wrap form {
   font-size: 14px;
+  max-width: 500px;
 }
 
 /* ----------------------------------- */
@@ -127,13 +128,27 @@ form input[type='text'],
 select,
 textarea {
   width: 100%;
-  max-width: 500px;
   padding: 8px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
   resize: vertical;
   display: block;
+  font-size: 14px;
 }
 
 /* ----------------------------------- */
+
+#chosen-clinics {
+  list-style: none;
+}
+
+#chosen-clinics li {
+  line-height: 2;
+  display: block;
+  width: 100%;
+}
+
+#chosen-clinics li:before {
+  content: '╳ ';
+}

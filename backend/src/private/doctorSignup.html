@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
 
-    <title>Create a Doctor Account</title>
+    <title>Register a Doctor</title>
     <meta name="description" content="Creating an account for a doctor." />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,37 +14,35 @@
 
 <body>
     <div id="body-wrap">
+        <h1>Register a Doctor</h1><br />
         <form action="/api/createDoctor" method="post">
-            <label for="male">First Name:</label>
+            <label for="firstName">First Name:</label>
             <input type="text" name="firstName" required /><br />
 
-            <label for="male">Last Name:</label>
+            <label for="lastName">Last Name:</label>
             <input type="text" name="lastName" required /><br />
 
-            <label for="male">License Number:</label>
+            <label for="licenseNumber">License Number:</label>
             <input type="text" name="licenseNumber" required /><br />
 
-            <label for="male">Email Address:</label>
+            <label for="clinic-list">Clinics:</label>
+            <select name="clinics" id="clinic-list" onchange="addToChosen()">
+                <option value="" disabled selected>Select clinic/s</option>
+            </select>
+            <ul id="chosen-clinics">
+            </ul><br />
+
+            <label for="email">Email Address:</label>
             <input type="text" name="email" required /><br />
 
-            <label for="male">Username:</label>
+            <label for="username">Username:</label>
             <input type="text" name="username" required /><br />
 
-            <input type="submit" id="action-submit" value="Submit" />
-        </form>
-
-        <form action="/api/addDoctorToClinic" method="post">
-            <label for="male">Clinic ID:</label>
-            <input type="text" name="clinicID" required /><br />
-
-            <label for="male">Doctor ID:</label>
-            <input type="text" name="doctorID" required /><br />
-
-            <input type="submit" id="action-submit" value="Submit" />
+            <input type="submit" id="doctor-sign-up" class="action-submit" value="Submit" />
         </form>
 
         <!-- Firebase Debug -->
-
+        <hr>
         <button id="sign-out" name="signout">Sign Out</button>
 
         <div hidden class="quickstart-user-details-container">

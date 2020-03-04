@@ -151,6 +151,7 @@ const initApi = (router: Router) => {
   router.get('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
   router.get('/getAllDoctorsAtClinic', isDoctorLoggedIn, getAllDoctorsAtClinic);
   router.get('/getAllClinics', isDoctorLoggedIn, getAllClinics);
+  router.get('/admin/getAllClinics', isAdminLoggedIn, getAllClinics);
   router.get('/getDoctorID', isDoctorLoggedIn, getDoctorID);
 
   // TODO(sulla): Check if patient and doctor are logged in.
