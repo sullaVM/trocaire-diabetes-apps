@@ -130,6 +130,7 @@ public class Login extends AppCompatActivity {
                                     if (response != null && response.success) {
                                         Intent intent = new Intent(getBaseContext(), Dashboard.class);
                                         intent.putExtra("tag", response.doctorID);
+                                        startActivity(intent);
                                     } else {
                                         Log.println(Log.INFO, "GetDoctorIDRequest", "Request failed");
                                     }

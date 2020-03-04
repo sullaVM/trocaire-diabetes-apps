@@ -13,7 +13,7 @@
     <string name="action_sign_in_back">CANCEL</string>
     <string name="title_activity_doctor_login">Doctor Login</string>
     <string name="patients">Patients</string>
-    <string name="title_activity_doctor_dashboard">Doctor Dashboard</string>
+    <string name="title_activity_doctor_dashboard">Dashboard</string>
     <string name="patient">Patient</string>
     <string name="linear_layout_manager">Linear Layout Manager</string>
     <string name="grid_layout_manager">Grid Layout Manager</string>
