@@ -67,7 +67,7 @@ export const createDoctor = async (request: Request, response: Response) => {
     const user: IFirebaseUser = {
       email,
       temporaryPassword: generatedPass,
-      isAdmin: false,
+      isAdmin: true,
       isDoctor: true,
       displayName: [firstName, lastName].join(' '),
     };
