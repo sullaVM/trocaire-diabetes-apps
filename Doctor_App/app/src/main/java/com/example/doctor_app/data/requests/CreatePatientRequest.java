@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.example.doctor_app.data.responses.CreatePatientResponse;
 
-public class CreatePatientRequest extends DoctorRequest<CreatePatientResponse> {
+public class CreatePatientRequest extends Request<CreatePatientResponse> {
     private Integer doctorID;
     private String firstName;
     private String lastName;
@@ -34,5 +34,10 @@ public class CreatePatientRequest extends DoctorRequest<CreatePatientResponse> {
     @Override
     public Class responseClass() {
         return CreatePatientResponse.class;
+    }
+
+    @Override
+    public int requestType() {
+        return com.android.volley.Request.Method.GET;
     }
 }

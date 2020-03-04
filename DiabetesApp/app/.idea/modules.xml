@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../DiabetesApp.iml" filepath="$PROJECT_DIR$/../DiabetesApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../openCVLibrary343/openCVLibrary343.iml" filepath="$PROJECT_DIR$/../openCVLibrary343/openCVLibrary343.iml" />
       <module fileurl="file://$PROJECT_DIR$/../openCVLibrary349/openCVLibrary349.iml" filepath="$PROJECT_DIR$/../openCVLibrary349/openCVLibrary349.iml" />
       <module fileurl="file://$PROJECT_DIR$/../openCV_420/openCV_420.iml" filepath="$PROJECT_DIR$/../openCV_420/openCV_420.iml" />
     </modules>

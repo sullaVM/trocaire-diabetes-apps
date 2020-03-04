@@ -9,14 +9,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.android.volley.NetworkResponse;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.example.doctor_app.data.requests.GetDoctorIDRequest;
 import com.example.doctor_app.data.requests.SessionLoginRequest;
+import com.example.doctor_app.data.responses.DoctorResponse;
 import com.example.doctor_app.data.responses.GetDoctorIDResponse;
 import com.example.doctor_app.data.responses.SessionLoginResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +21,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 
 public class Login extends AppCompatActivity {
 
@@ -121,37 +120,24 @@ public class Login extends AppCompatActivity {
                 public void onComplete(@NonNull Task<GetTokenResult> task) {
                     final String token = task.getResult().getToken();
                     SessionLoginRequest sessionLoginRequest = new SessionLoginRequest(token);
-                    sessionLoginRequest.makeRequest(getBaseContext(), new Response.Listener<SessionLoginResponse>() {
+                    sessionLoginRequest.makeRequest(getBaseContext(), new Consumer<SessionLoginResponse>() {
                         @Override
-                        public void onResponse(SessionLoginResponse response) {
+                        public void accept(SessionLoginResponse sessionLoginResponse) {
                             GetDoctorIDRequest getDoctorIDRequest = new GetDoctorIDRequest(user.getEmail());
-                            getDoctorIDRequest.makeRequest(getBaseContext(), token, new Response.Listener<GetDoctorIDResponse>() {
+                            DoctorResponse response = new GetDoctorIDResponse();
+                            getDoctorIDRequest.makeRequest(getBaseContext(), new Consumer<GetDoctorIDResponse>() {
                                 @Override
-                                public void onResponse(GetDoctorIDResponse response) {
-                                    if (response.success) {
+                                public void accept(GetDoctorIDResponse response) {
+                                    if (response != null && response.success) {
                                         Intent intent = new Intent(getBaseContext(), Dashboard.class);
                                         intent.putExtra("tag", response.doctorID);
                                     } else {
                                         Log.println(Log.INFO, "GetDoctorIDRequest", "Request failed");
                                     }
                                 }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    NetworkResponse response = error.networkResponse;
-                                    String message = new String(error.networkResponse.data);
-                                    Log.println(Log.INFO, "GetDoctorIDRequest", "Request failed");
-                                }
                             });
                         }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.println(Log.INFO, "SessionLoginRequest", "Request failed");
-                        }
                     });
-
-
                 }
             });
         }
