@@ -130,7 +130,7 @@ public class PatientSignUpDetails extends AppCompatActivity{
         int pNumber = Integer.valueOf(mobileNumber.getText().toString());
         String h = height.getText().toString();
         String w = weight.getText().toString();
-        String p = pregnant.getText().toString();
+        Boolean p = pregnant.isChecked();
 
         // Put into the intent
         intent.putExtra("firstName", fName);
