@@ -27,13 +27,10 @@ CREATE TABLE `Doctors` (
   `FirstName` varchar(255) DEFAULT NULL,
   `LastName` varchar(255) DEFAULT NULL,
   `LicenseNo` int DEFAULT NULL,
-  `ClinicID` int DEFAULT NULL,
   `Email` varchar(320) DEFAULT NULL,
   `UserName` varchar(320) DEFAULT NULL,
   `Password` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`DoctorID`),
-  KEY `ClinicID` (`ClinicID`),
-  CONSTRAINT `Doctors_ibfk_1` FOREIGN KEY (`ClinicID`) REFERENCES `Clinics` (`ClinicID`)
+  PRIMARY KEY (`DoctorID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -46,4 +43,4 @@ CREATE TABLE `Doctors` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-16 14:47:25
+-- Dump completed on 2020-02-27 20:20:15

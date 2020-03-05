@@ -271,10 +271,29 @@ export const getGraphingData = async (
 export const createDoctor = async (
   request: requests.ICreateDoctor
 ): Promise<responses.ICreateDoctor> => {
-  const query = `INSERT INTO Doctors (FirstName, LastName, LicenseNo, ClinicID, Email, UserName,Password)
-  VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.clinicID}','${request.email}','${request.userName}','${request.password}');`;
+  const query = `INSERT INTO Doctors (FirstName, LastName, LicenseNo, Email, UserName,Password)
+  VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.email}','${request.userName}','${request.password}');`;
 
   const result = await new Promise<responses.ICreateDoctor>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ doctorID: results.insertId, success: true });
+    });
+  });
+
+  return result;
+};
+
+export const deleteDoctor = async (
+  request: requests.IDeleteDoctor
+): Promise<responses.IDeleteDoctor> => {
+  const query = `DELETE FROM Doctors WHERE DoctorID=
+'${request.doctorID}');`;
+
+  const result = await new Promise<responses.IDeleteDoctor>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -307,7 +326,6 @@ export const getDoctorProfile = async (
           firstName: results[0].FirstName,
           lastName: results[0].LastName,
           licenseNumber: results[0].LicenseNo,
-          clinicID: results[0].ClinicID,
           email: results[0].Email,
           userName: results[0].UserName,
         });
@@ -369,11 +387,6 @@ export const updateDoctor = async (
       ? `${updateCount++ ? ',' : ''}MobileNumber='${request.licenseNumber}'`
       : ''
   }
-  ${
-    request.clinicID
-      ? `${updateCount++ ? ',' : ''}ClinicID='${request.clinicID}'`
-      : ''
-  }
   ${request.email ? `${updateCount++ ? ',' : ''}Email='${request.email}'` : ''}
   ${
     request.userName
@@ -403,7 +416,7 @@ export const updateDoctor = async (
 export const getAllDoctorsAtClinic = async (
   request: requests.IGetAllDoctorsAtClinic
 ): Promise<responses.IGetAllDoctorsAtClinic> => {
-  const query = `SELECT DoctorID, FirstName, LastName FROM Doctors WHERE ClinicID='${request.clinicID}';`;
+  const query = `SELECT DoctorID, FROM ClinicsToDoctors WHERE ClinicID='${request.clinicID}';`;
   const result = await new Promise<responses.IGetAllDoctorsAtClinic>(
     resolve => {
       db.query(query, (error, results, fields) => {
@@ -489,6 +502,25 @@ export const createClinic = async (
   return result;
 };
 
+export const addDoctorToClinic = async (
+  request: requests.IAddDoctorToClinic
+): Promise<responses.IAddDoctorToClinic> => {
+  const query = `INSERT INTO ClinicsToDoctors (ClinicID, DoctorID)
+  VALUE ('${request.clinicID}','${request.doctorID}');`;
+
+  const result = await new Promise<responses.ICreateClinic>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
 export const getDoctorID = async (
   request: requests.IGetDoctorID
 ): Promise<responses.IGetDoctorID> => {
@@ -497,7 +529,6 @@ export const getDoctorID = async (
   const result = await new Promise<responses.IGetDoctorID>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
-        console.error(error);
         resolve({ success: false });
       }
       if (results.length < 1) {
@@ -513,3 +544,73 @@ export const getDoctorID = async (
 
   return result;
 };
+
+//  ----------------------------------------------------------------------------------------
+
+// Queries for Invited Doctors
+// Call these within a try...catch block to ensure errors are caught.
+export const addDoctorToInvitedDoctors = async (
+  request: requests.IAddDoctorToInvitedDoctors
+): Promise<responses.IAddDoctorToInvitedDoctors> => {
+  const query = `INSERT INTO InvitedDoctors (Email)
+  VALUE ('${request.email}');`;
+
+  const result = await new Promise<responses.IAddDoctorToInvitedDoctors>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          throw error;
+        }
+        resolve({ success: true });
+      });
+    }
+  );
+
+  return result;
+};
+
+export const deleteDoctorToInvitedDoctors = async (
+  request: requests.IDeleteDoctorToInvitedDoctors
+): Promise<responses.IDeleteDoctorToInvitedDoctors> => {
+  const query = `DELETE FROM InvitedDoctors WHERE Email='${request.email}';`;
+
+  const result = await new Promise<responses.IDeleteDoctorToInvitedDoctors>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          throw error;
+        }
+        resolve({ success: true });
+      });
+    }
+  );
+
+  return result;
+};
+
+export const verifyInvitedDoctor = async (
+  request: requests.IVerifyInvitedDoctor
+): Promise<responses.IVerifyInvitedDoctor> => {
+  const query = `SELECT * FROM InvitedDoctors WHERE Email='${request.email}';`;
+
+  const result = await new Promise<responses.IVerifyInvitedDoctor>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          throw error;
+        }
+        if (results) {
+          if (results.length < 1) {
+            resolve({ success: false });
+          }
+          resolve({ success: true });
+        }
+        resolve({ success: false });
+      });
+    }
+  );
+
+  return result;
+};
+
+//  ----------------------------------------------------------------------------------------

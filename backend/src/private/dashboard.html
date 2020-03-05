@@ -4,33 +4,57 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Create a Doctor Account</title>
+    <title>Trocaire Dashboard</title>
     <meta name="description" content="Creating an account for a doctor.">
 
-    <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style.css">
 
 </head>
 
 <body>
-    <a href="/doctorSignup">Create an new doctor account</a><br>
-    <a href="/clinicSignup">Register na new clinic</a>
+    <div id="body-wrap">
+        <h1>Dashboard</h1>
 
-    <div class="quickstart-user-details-container">
+        <a href="/inviteDoctor">
+            <div class="action">
+                Invite a doctor
+            </div>
+        </a>
+
+        <a href="/doctorSignup">
+            <div class="action">
+                Register a doctor
+            </div>
+        </a>
+
+        <a href="/clinicSignup">
+            <div class="action">
+                Register a clinic
+            </div>
+        </a>
+        <br />
+
+        <!-- Firebase Debug -->
+        <hr>
         <button id="sign-out" name="signout">Sign Out</button>
-        Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+
+        <div hidden class="quickstart-user-details-container">
+            Firebase sign-in status: <span id="sign-in-status">Unknown</span>
+        </div>
+
+        <div hidden>Firebase auth <code>currentUser</code> object value:
+            <pre><code id="quickstart-account-details">null</code></pre>
+        </div>
     </div>
-
-    <div>Firebase auth <code>currentUser</code> object value:</div>
-    <pre><code id="quickstart-account-details">null</code></pre>
-
 
     <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <script type="text/javascript" src="/script.js"></script>
 </body>
-
-<script type="text/javascript" src="/script.js"></script>
 
 </html>

@@ -1,10 +1,10 @@
 package com.example.doctor_app.data.requests;
 
-import androidx.annotation.Nullable;
-
 import com.example.doctor_app.data.responses.GetGraphingDataResponse;
 
-public class GetGraphingDataRequest extends PatientRequest<GetGraphingDataResponse> {
+import androidx.annotation.Nullable;
+
+public class GetGraphingDataRequest extends Request<GetGraphingDataResponse> {
     private Integer patientID;
     private String intervalStart;
     private String intervalEnd;
@@ -26,5 +26,10 @@ public class GetGraphingDataRequest extends PatientRequest<GetGraphingDataRespon
     @Override
     public Class responseClass() {
         return GetGraphingDataResponse.class;
+    }
+
+    @Override
+    public int requestType() {
+        return com.android.volley.Request.Method.POST;
     }
 }

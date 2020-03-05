@@ -5,6 +5,7 @@ import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
+import com.example.doctor_app.data.responses.SessionResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -13,26 +14,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GsonRequest<T> extends JsonRequest<T> {
+public class GsonRequest<T> extends JsonRequest<SessionResponse<T>> {
     private final Gson gson = new Gson();
-    private final Response.Listener<T> listener;
+    private final Response.Listener<SessionResponse<T>> listener;
     private final Class<T> responseClass;
     private String mToken;
 
-    public GsonRequest(String url, String jsonRequest, Class<T> responseClass, Response.Listener<T> listener, Response.ErrorListener errorListener) {
-        super(Method.GET, url, jsonRequest, listener, errorListener);
-        this.listener = listener;
-        this.responseClass = responseClass;
-    }
-
-    public GsonRequest(String url, String jsonRequest, String token, Class<T> responseClass, Response.Listener<T> listener, Response.ErrorListener errorListener) {
-        super(Method.GET, url, jsonRequest, listener, errorListener);
-        this.listener = listener;
-        this.mToken = token;
-        this.responseClass = responseClass;
-    }
-
-    public GsonRequest(int method, String url, String jsonRequest, String token, Class<T> responseClass, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+    public GsonRequest(int method, String url, String jsonRequest, String token, Class<T> responseClass, Response.Listener<SessionResponse<T>> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
         this.listener = listener;
         this.mToken = token;
@@ -40,18 +28,25 @@ public class GsonRequest<T> extends JsonRequest<T> {
     }
 
     @Override
-    protected void deliverResponse(T response) {
+    protected void deliverResponse(SessionResponse<T> response) {
         listener.onResponse(response);
     }
 
     @Override
-    protected Response<T> parseNetworkResponse(NetworkResponse response) {
+    protected Response<SessionResponse<T>> parseNetworkResponse(NetworkResponse response) {
         try {
+            String cookie = response.headers.get("Set-Cookie");
+            if (cookie != null) {
+                cookie = cookie.substring(8);
+            } else {
+                cookie = mToken;
+            }
+
             String json = new String(
                     response.data,
                     HttpHeaderParser.parseCharset(response.headers));
             return Response.success(
-                    gson.fromJson(json, responseClass),
+                    new SessionResponse<T>(cookie, gson.fromJson(json, responseClass)),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
@@ -64,6 +59,7 @@ public class GsonRequest<T> extends JsonRequest<T> {
     public Map<String, String> getHeaders() {
         if (mToken != null) {
             Map<String, String> params = new HashMap();
+            params.put("Set-Cookie", "session=" + mToken);
             params.put("Cookie", "session=" + mToken);
             return params;
         } else {

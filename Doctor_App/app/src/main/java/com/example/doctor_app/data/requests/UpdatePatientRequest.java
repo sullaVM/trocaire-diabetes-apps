@@ -1,10 +1,10 @@
 package com.example.doctor_app.data.requests;
 
-import androidx.annotation.Nullable;
-
 import com.example.doctor_app.data.responses.UpdatePatientResponse;
 
-public class UpdatePatientRequest extends PatientRequest<UpdatePatientResponse> {
+import androidx.annotation.Nullable;
+
+public class UpdatePatientRequest extends Request<UpdatePatientResponse> {
     private Integer patientID;
     @Nullable
     private Integer doctorID;
@@ -43,5 +43,10 @@ public class UpdatePatientRequest extends PatientRequest<UpdatePatientResponse> 
     @Override
     public Class responseClass() {
         return UpdatePatientResponse.class;
+    }
+
+    @Override
+    public int requestType() {
+        return com.android.volley.Request.Method.POST;
     }
 }

@@ -1,8 +1,8 @@
 package com.example.doctor_app.data.requests;
 
-import com.example.doctor_app.data.responses.DoctorResponse;
+import com.example.doctor_app.data.responses.GetDoctorIDResponse;
 
-public class GetDoctorIDRequest extends DoctorRequest {
+public class GetDoctorIDRequest extends Request {
     public String email;
 
     public GetDoctorIDRequest(String email) {
@@ -16,6 +16,11 @@ public class GetDoctorIDRequest extends DoctorRequest {
 
     @Override
     public Class responseClass() {
-        return DoctorResponse.class;
+        return GetDoctorIDResponse.class;
+    }
+
+    @Override
+    public int requestType() {
+        return com.android.volley.Request.Method.POST;
     }
 }

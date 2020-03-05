@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.example.doctor_app.data.responses.CreatePatientResponse;
 
-public class CreatePatientRequest extends DoctorRequest<CreatePatientResponse> {
+public class CreatePatientRequest extends Request<CreatePatientResponse> {
     private Integer doctorID;
     private String firstName;
     private String lastName;
@@ -12,10 +12,11 @@ public class CreatePatientRequest extends DoctorRequest<CreatePatientResponse> {
     private Integer mobileNumber;
     private String photoDataUrl;
     private String password;
+    private Boolean pregnant;
     @Nullable
     private String bslUnit;
 
-    public CreatePatientRequest(Integer doctorID, String firstName, String lastName, String height, Integer mobileNumber, String photoDataUrl, String password, @Nullable String bslUnit) {
+    public CreatePatientRequest(Integer doctorID, String firstName, String lastName, String height, Integer mobileNumber, String photoDataUrl, String password, @Nullable String bslUnit, Boolean pregnant) {
         this.doctorID = doctorID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,6 +25,7 @@ public class CreatePatientRequest extends DoctorRequest<CreatePatientResponse> {
         this.photoDataUrl = photoDataUrl;
         this.password = password;
         this.bslUnit = bslUnit;
+        this.pregnant = pregnant;
     }
 
     @Override
@@ -34,5 +36,10 @@ public class CreatePatientRequest extends DoctorRequest<CreatePatientResponse> {
     @Override
     public Class responseClass() {
         return CreatePatientResponse.class;
+    }
+
+    @Override
+    public int requestType() {
+        return com.android.volley.Request.Method.POST;
     }
 }

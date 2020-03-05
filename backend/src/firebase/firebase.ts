@@ -1,5 +1,5 @@
 import { initializeApp, credential, auth } from 'firebase-admin';
-import { IFirebaseUser } from './types';
+import { IFirebaseUser, ICustomClaims } from './types';
 
 export const initFirebase = () => {
   initializeApp({
@@ -11,16 +11,14 @@ export const createNewUser = async (user: IFirebaseUser): Promise<boolean> => {
   try {
     const userRecord = await auth().createUser({
       email: user.email,
-      password: user.temporaryPassword,
+      password: user.password,
       displayName: user.displayName,
     });
 
-    if (user.isAdmin) {
-      await auth().setCustomUserClaims(userRecord.uid, { admin: true });
-    }
-    if (user.isDoctor) {
-      await auth().setCustomUserClaims(userRecord.uid, { doctor: true });
-    }
+    await auth().setCustomUserClaims(userRecord.uid, {
+      admin: user.isAdmin,
+      doctor: user.isDoctor,
+    });
 
     return true;
   } catch (error) {
@@ -61,12 +59,12 @@ export const isAdmin = async (cookie: string): Promise<boolean> => {
   try {
     const decodedClaims = await auth().verifySessionCookie(cookie, true);
     const userRecord = await auth().getUser(decodedClaims.uid);
-    const claims = userRecord.customClaims;
+    const claims = userRecord.customClaims as ICustomClaims;
 
     if (!claims) {
       return false;
     }
-    if (claims.hasOwnProperty('admin')) {
+    if (claims.admin) {
       return true;
     }
     return false;
@@ -80,12 +78,12 @@ export const isDoctor = async (cookie: string): Promise<boolean> => {
   try {
     const decodedClaims = await auth().verifySessionCookie(cookie, true);
     const userRecord = await auth().getUser(decodedClaims.uid);
-    const claims = userRecord.customClaims;
+    const claims = userRecord.customClaims as ICustomClaims;
 
     if (!claims) {
       return false;
     }
-    if (claims.hasOwnProperty('doctor')) {
+    if (claims.doctor) {
       return true;
     }
     return false;

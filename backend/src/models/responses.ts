@@ -51,6 +51,11 @@ export interface ICreateDoctor {
   doctorID?: number;
 }
 
+export interface IDeleteDoctor {
+  success: boolean;
+  doctorID?: number;
+}
+
 export interface IUpdateDoctor {
   success: boolean;
 }
@@ -71,7 +76,6 @@ export interface IGetDoctorProfile {
   firstName?: string;
   lastName?: string;
   licenseNumber?: number;
-  clinicID?: number;
   email?: string;
   userName?: string;
 }
@@ -90,7 +94,23 @@ export interface IGetAllClinics {
   clinics?: { clinicID: number; clinicName: string }[];
 }
 
+export interface IAddDoctorToClinic {
+  success: boolean;
+}
+
 export interface ICreateClinic {
   success: boolean;
   clinicID?: number;
+}
+
+export interface IAddDoctorToInvitedDoctors {
+  success: boolean;
+}
+
+export interface IDeleteDoctorToInvitedDoctors {
+  success: boolean;
+}
+
+export interface IVerifyInvitedDoctor {
+  success: boolean;
 }

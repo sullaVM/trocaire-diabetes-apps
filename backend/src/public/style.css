@@ -1,0 +1,157 @@
+body,
+html {
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#body-wrap {
+  width: 90%;
+  padding: 20px 30px;
+  margin: auto;
+}
+
+h1 {
+  margin: 10px 0;
+  font-size: 21px;
+}
+
+/* ----------------------------------- */
+
+/* SIGNIN PAGE */
+
+.login-wrap {
+  width: 100%;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  width: 390px;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+  text-align: center;
+}
+
+.input-wrap {
+  width: 100%;
+  position: relative;
+  margin: 10px 0 10px 0;
+}
+
+.login-container #email,
+.login-container #password {
+  background-color: #e6e6e6;
+  color: #403866;
+  line-height: 1;
+  font-size: 16px;
+  display: block;
+  max-width: 350px;
+  width: 100%;
+  height: 30px;
+  padding: 10px 20px;
+  border: none;
+}
+
+#sign-in {
+  padding: 0 20px;
+  width: 100%;
+  height: 40px;
+  background-color: #1484c8;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* ----------------------------------- */
+
+.action {
+  width: 260px;
+  height: 40px;
+  line-height: 40px;
+  background-color: #1484c8;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 5px 0;
+  padding: 0 10px;
+  text-align: left;
+  color: #ffffff;
+  font-weight: 900;
+}
+
+a:link,
+a:active,
+a:visited {
+  text-decoration: none;
+}
+
+#sign-out {
+  margin: 20px 0;
+  padding: 0 10px;
+  height: 30px;
+  background-color: #e6e6e6;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.action-submit {
+  margin: 20px 0;
+  padding: 0 10px;
+  height: 30px;
+  background-color: #e6e6e6;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+#body-wrap form {
+  font-size: 14px;
+  max-width: 500px;
+}
+
+/* ----------------------------------- */
+
+/* Forms */
+
+form label {
+  padding: 5px 5px 5px 0;
+  display: inline-block;
+}
+
+form input[type='text'],
+form input[type='password'],
+form input[type='number'],
+select,
+textarea {
+  width: 100%;
+  padding: 8px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  display: block;
+  font-size: 14px;
+}
+
+/* ----------------------------------- */
+
+#chosen-clinics {
+  list-style: none;
+}
+
+#chosen-clinics li {
+  line-height: 2;
+  display: block;
+  width: 100%;
+}
+
+#chosen-clinics li:before {
+  content: '╳ ';
+}
