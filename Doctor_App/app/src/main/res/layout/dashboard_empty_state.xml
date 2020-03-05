@@ -13,6 +13,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
         android:hapticFeedbackEnabled="true"
+        android:onClick="addPatient"
         android:text="@string/patient_caps"
         android:textColor="@color/white"
         app:backgroundTint="?attr/actionMenuTextColor"

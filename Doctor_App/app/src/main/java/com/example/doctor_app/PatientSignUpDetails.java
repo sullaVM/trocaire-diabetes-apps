@@ -6,74 +6,79 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 
 import android.util.Log;
 import android.provider.MediaStore;
 import android.graphics.Bitmap;
 
-import java.io.FileOutputStream;
-
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
-
-public class PatientSignUpDetails extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class PatientSignUpDetails extends AppCompatActivity{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    Button enter;
+    // Input fields
+    private EditText firstName;
+    private EditText lastName;
+    private EditText mobileNumber;
+    private EditText height;
+    private EditText weight;
+    private CheckBox pregnant;
+    private ImageView profilePhoto;
 
-    EditText enterName;
+    // Submit button
+    private Button next;
 
-    ImageView imageView;
+    // Photo activity result variable
+    private Bitmap photo;
+    // Name of file to save photo to
+    private String photoDataUrl;
 
-    Bitmap photo;
-    int currentNumber;
-
-    String clinic = "";
+    private Integer doctorID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_patient);
 
-        enter = findViewById(R.id.next);
+        // Get the ID of the currently signed in doctor
+        Intent intent = getIntent();
+        doctorID = intent.getIntExtra("doctorID", 0);
 
-        enterName = findViewById(R.id.editText);
+        // Get inputs
+        firstName = findViewById(R.id.editText);
+        lastName = findViewById(R.id.editText2);
+        mobileNumber = findViewById(R.id.editText3);
+        height = findViewById(R.id.editText4);
+        weight = findViewById(R.id.editText5);
+        pregnant = findViewById(R.id.checkBox);
+        profilePhoto = findViewById(R.id.imageView);
 
-        imageView = findViewById(R.id.imageView);
+        // Get next button
+        next = findViewById(R.id.next);
 
-        enter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enterData();
-            }
-        });
+        // Get file name to save photo to
+        photoDataUrl = Integer.toString(findNumber());
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        // Set listeners
+        profilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePhoto();
             }
         });
-
-        currentNumber = findNumber();
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        clinic = parent.getItemAtPosition(position).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enterData();
+            }
+        });
     }
 
     private int findNumber(){
@@ -88,6 +93,7 @@ public class PatientSignUpDetails extends AppCompatActivity implements AdapterVi
                 while ((line = reader.readLine()) != null) {
                     text = line.split(" ");
                     val = Integer.parseInt(text[0]);
+                    Log.println(Log.INFO, "value", Integer.toString(val));
                 }
                 reader.close();
             } catch (Exception e) {
@@ -102,26 +108,6 @@ public class PatientSignUpDetails extends AppCompatActivity implements AdapterVi
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
-    private void enterData(){
-        Intent intent = new Intent(this, PatientSignUpPass.class);
-        String name = enterName.getText().toString();
-        intent.putExtra("name", name);
-        intent.putExtra("clinic", clinic);
-        intent.putExtra("number", currentNumber);
-
-            File photoFile = new File(this.getFilesDir(), "Image" + currentNumber + ".jpg");
-            try {
-                FileOutputStream out = new FileOutputStream(photoFile);
-                Bitmap bitmap = photo.copy(photo.getConfig(), true);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        startActivity(intent);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -130,8 +116,47 @@ public class PatientSignUpDetails extends AppCompatActivity implements AdapterVi
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 photo = imageBitmap;
-                imageView.setImageBitmap(imageBitmap);
+                profilePhoto.setImageBitmap(imageBitmap);
             }
         }
+    }
+
+    private void enterData(){
+        Intent intent = new Intent(this, PatientSignUpPass.class);
+
+        // Get the inputs
+        String fName = firstName.getText().toString();
+        String lName = lastName.getText().toString();
+        int pNumber = Integer.valueOf(mobileNumber.getText().toString());
+        String h = height.getText().toString();
+        String w = weight.getText().toString();
+        String p = pregnant.getText().toString();
+
+        // Put into the intent
+        intent.putExtra("firstName", fName);
+        intent.putExtra("lastName", lName);
+        intent.putExtra("mobileNumber",pNumber);
+        intent.putExtra("height",h);
+        intent.putExtra("weight",w);
+        intent.putExtra("pregnant",p);
+        intent.putExtra("photoDataUrl", photoDataUrl);
+        intent.putExtra("doctorID", doctorID);
+
+        // Save the profile photo locally
+        File photoFile = new File(this.getFilesDir(),"Image" + photoDataUrl + ".jpg");
+        try {
+            FileOutputStream out = new FileOutputStream(photoFile);
+
+            Bitmap bitmap = photo.copy(photo.getConfig(), true);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Start the intent (goes to the next stage of patient sign up: setting the password)
+        startActivity(intent);
     }
 }
