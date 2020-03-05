@@ -1,25 +1,26 @@
 package com.example.doctor_app;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.doctor_app.data.requests.CreatePatientRequest;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 
-import android.util.Log;
-import android.provider.MediaStore;
-import android.graphics.Bitmap;
-
-public class PatientSignUpDetails extends AppCompatActivity{
+public class PatientSignUpDetails extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -81,7 +82,7 @@ public class PatientSignUpDetails extends AppCompatActivity{
         });
     }
 
-    private int findNumber(){
+    private int findNumber() {
         int val = 0;
         String[] text;
         File testFile = new File(this.getFilesDir(), "TextFile.txt");
@@ -111,7 +112,7 @@ public class PatientSignUpDetails extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -121,7 +122,7 @@ public class PatientSignUpDetails extends AppCompatActivity{
         }
     }
 
-    private void enterData(){
+    private void enterData() {
         Intent intent = new Intent(this, PatientSignUpPass.class);
 
         // Get the inputs
@@ -130,20 +131,20 @@ public class PatientSignUpDetails extends AppCompatActivity{
         int pNumber = Integer.valueOf(mobileNumber.getText().toString());
         String h = height.getText().toString();
         String w = weight.getText().toString();
-        Boolean p = pregnant.isChecked();
+        int p = pregnant.isChecked() ? CreatePatientRequest.PREGNANT : CreatePatientRequest.NOT_PREGNANT;
 
         // Put into the intent
         intent.putExtra("firstName", fName);
         intent.putExtra("lastName", lName);
-        intent.putExtra("mobileNumber",pNumber);
-        intent.putExtra("height",h);
-        intent.putExtra("weight",w);
-        intent.putExtra("pregnant",p);
+        intent.putExtra("mobileNumber", pNumber);
+        intent.putExtra("height", h);
+        intent.putExtra("weight", w);
+        intent.putExtra("pregnant", p);
         intent.putExtra("photoDataUrl", photoDataUrl);
         intent.putExtra("doctorID", doctorID);
 
         // Save the profile photo locally
-        File photoFile = new File(this.getFilesDir(),"Image" + photoDataUrl + ".jpg");
+        File photoFile = new File(this.getFilesDir(), "Image" + photoDataUrl + ".jpg");
         try {
             FileOutputStream out = new FileOutputStream(photoFile);
 

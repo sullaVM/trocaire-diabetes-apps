@@ -90,7 +90,7 @@ public class PatientSignUpPass extends AppCompatActivity {
         int mobileNumber = intent.getIntExtra("mobileNumber",0);
         String height = intent.getStringExtra("height");
         String weight = intent.getStringExtra("weight");
-        Boolean pregnant = intent.getBooleanExtra("pregnant", false);
+        int pregnant = intent.getIntExtra("pregnant", CreatePatientRequest.NOT_PREGNANT);
         String photoDataUrl = intent.getStringExtra("photoDataUrl");
         int doctorID = intent.getIntExtra("doctorID", 0);
 
@@ -102,7 +102,7 @@ public class PatientSignUpPass extends AppCompatActivity {
         Log.println(Log.INFO, "mobileNumber", Integer.toString(mobileNumber));
         Log.println(Log.INFO, "photoDataUrl", photoDataUrl);
         Log.println(Log.INFO, "password", password);
-        Log.println(Log.INFO, "pregnant", Boolean.toString(pregnant));
+        Log.println(Log.INFO, "pregnant", Integer.toString(pregnant));
 
         // Create the patient using the API
         CreatePatientRequest patientRequest = new CreatePatientRequest(doctorID, firstName,
