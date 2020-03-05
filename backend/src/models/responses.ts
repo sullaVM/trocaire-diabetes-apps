@@ -102,3 +102,15 @@ export interface ICreateClinic {
   success: boolean;
   clinicID?: number;
 }
+
+export interface IAddDoctorToInvitedDoctors {
+  success: boolean;
+}
+
+export interface IDeleteDoctorToInvitedDoctors {
+  success: boolean;
+}
+
+export interface IVerifyInvitedDoctor {
+  success: boolean;
+}

@@ -11,7 +11,7 @@ export const createNewUser = async (user: IFirebaseUser): Promise<boolean> => {
   try {
     const userRecord = await auth().createUser({
       email: user.email,
-      password: user.temporaryPassword,
+      password: user.password,
       displayName: user.displayName,
     });
 

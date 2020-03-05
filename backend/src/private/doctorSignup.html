@@ -23,7 +23,7 @@
             <input type="text" name="lastName" required /><br />
 
             <label for="licenseNumber">License Number:</label>
-            <input type="text" name="licenseNumber" required /><br />
+            <input type="number" name="licenseNumber" required /><br />
 
             <label for="clinic-list">Clinics:</label>
             <select name="clinics" id="clinic-list" onchange="addToChosen()">
@@ -37,6 +37,9 @@
 
             <label for="username">Username:</label>
             <input type="text" name="username" required /><br />
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" required /><br />
 
             <input type="submit" id="doctor-sign-up" class="action-submit" value="Submit" />
         </form>

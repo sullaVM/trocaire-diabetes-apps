@@ -8,65 +8,104 @@ const firebaseConfig = {
   appId: '1:630337403399:web:9cdb0f2f1d3c9a08c1c8a2',
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 async function signIn() {
-  if (firebase.auth().currentUser) {
-    firebase.auth().signOut();
-    await axios.get('/sessionLogout');
-  } else {
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
-    if (email.length < 4) {
-      alert('Please enter an email address.');
-      return;
-    }
-    if (password.length < 4) {
-      alert('Please enter a password.');
-      return;
-    }
+  try {
+    if (firebase.auth().currentUser) {
+      firebase.auth().signOut();
+      await axios.get('/sessionLogout');
+    } else {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
 
-    // Sign in with email and password.
-    try {
+      if (email.length < 4) {
+        alert('Please enter an email address.');
+        return;
+      }
+      if (password.length < 4) {
+        alert('Please enter a password longer than 4 characters.');
+        return;
+      }
+
       await firebase.auth().signInWithEmailAndPassword(email, password);
-      const startSession = async user => {
-        if (user) {
-          const idToken = await user.getIdToken();
-          await axios.post('/sessionLogin', {
-            idToken: idToken,
-          });
-          window.location.assign('/');
-        }
-      };
-      firebase.auth().onAuthStateChanged(startSession);
-    } catch (error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
 
-      if (errorCode === 'auth/wrong-password') {
-        alert('Wrong password.');
-      } else {
-        alert(errorMessage);
+      const user = await new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged((user, error) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(user);
+        });
+      });
+
+      if (user) {
+        const idToken = await user.getIdToken();
+        await axios.post('/sessionLogin', {
+          idToken: idToken,
+        });
+        window.location.assign('/');
+      }
+
+      // TODO(sulla): Redirect instead of alert
+      if (!user.emailVerified) {
+        await user.sendEmailVerification();
+        alert(
+          'A verification email has been sent to you. Please check your email.'
+        );
       }
     }
+  } catch (error) {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+
+    if (errorCode === 'auth/wrong-password') {
+      alert('Wrong password.');
+    } else {
+      alert(errorMessage);
+    }
+
+    console.log(error);
   }
 }
 
 async function signOut() {
   firebase.auth().signOut();
   await axios.get('/sessionLogout');
-  window.location.assign('/login');
+  window.location.assign('/');
 }
 
-function initApp() {
-  firebase.auth().onAuthStateChanged(function(user) {
+async function initApp() {
+  try {
+    const signin = document.getElementById('sign-in');
+    if (signin) {
+      signin.addEventListener('click', signIn, false);
+    }
+
+    const signout = document.getElementById('sign-out');
+    if (signout) {
+      signout.addEventListener('click', signOut, false);
+    }
+
+    const user = await new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged((user, error) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(user);
+      });
+    });
+
     if (user) {
-      // User is signed in.
       const signInStatus = document.getElementById('sign-in-status');
       if (signInStatus) {
         signInStatus.textContent = 'Signed in';
+      }
+
+      const doctorSignUpForm = document.getElementById('doctor-sign-up');
+      if (doctorSignUpForm) {
+        initDoctorSignup();
       }
 
       const accountDetails = document.getElementById(
@@ -75,13 +114,11 @@ function initApp() {
       if (accountDetails) {
         accountDetails.textContent = JSON.stringify(user, null, '  ');
       }
-
-      const doctorSignUpForm = document.getElementById('doctor-sign-up');
-      if (doctorSignUpForm) {
-        initDoctorSignup();
-      }
     } else {
-      // User is signed out.
+      if (window.location.pathname !== '/login') {
+        signOut();
+      }
+
       const signInStatus = document.getElementById('sign-in-status');
       if (signInStatus) {
         signInStatus.textContent = 'Signed out';
@@ -94,16 +131,8 @@ function initApp() {
         accountDetails.textContent = 'null';
       }
     }
-  });
-
-  const signin = document.getElementById('sign-in');
-  if (signin) {
-    signin.addEventListener('click', signIn, false);
-  }
-
-  const signout = document.getElementById('sign-out');
-  if (signout) {
-    signout.addEventListener('click', signOut, false);
+  } catch (error) {
+    console.log('Error initialising app: ', error);
   }
 }
 

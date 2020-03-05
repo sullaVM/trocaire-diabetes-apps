@@ -544,3 +544,73 @@ export const getDoctorID = async (
 
   return result;
 };
+
+//  ----------------------------------------------------------------------------------------
+
+// Queries for Invited Doctors
+// Call these within a try...catch block to ensure errors are caught.
+export const addDoctorToInvitedDoctors = async (
+  request: requests.IAddDoctorToInvitedDoctors
+): Promise<responses.IAddDoctorToInvitedDoctors> => {
+  const query = `INSERT INTO InvitedDoctors (Email)
+  VALUE ('${request.email}');`;
+
+  const result = await new Promise<responses.IAddDoctorToInvitedDoctors>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          throw error;
+        }
+        resolve({ success: true });
+      });
+    }
+  );
+
+  return result;
+};
+
+export const deleteDoctorToInvitedDoctors = async (
+  request: requests.IDeleteDoctorToInvitedDoctors
+): Promise<responses.IDeleteDoctorToInvitedDoctors> => {
+  const query = `DELETE FROM InvitedDoctors WHERE Email='${request.email}';`;
+
+  const result = await new Promise<responses.IDeleteDoctorToInvitedDoctors>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          throw error;
+        }
+        resolve({ success: true });
+      });
+    }
+  );
+
+  return result;
+};
+
+export const verifyInvitedDoctor = async (
+  request: requests.IVerifyInvitedDoctor
+): Promise<responses.IVerifyInvitedDoctor> => {
+  const query = `SELECT * FROM InvitedDoctors WHERE Email='${request.email}';`;
+
+  const result = await new Promise<responses.IVerifyInvitedDoctor>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          throw error;
+        }
+        if (results) {
+          if (results.length < 1) {
+            resolve({ success: false });
+          }
+          resolve({ success: true });
+        }
+        resolve({ success: false });
+      });
+    }
+  );
+
+  return result;
+};
+
+//  ----------------------------------------------------------------------------------------

@@ -1,9 +1,9 @@
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-
 import { join } from 'path';
 import { config } from 'dotenv';
+import { readFile } from 'fs';
 
 import express, {
   Express,
@@ -40,6 +40,7 @@ import {
   updateDoctor,
   deleteDoctor,
   addDoctorToClinic,
+  inviteDoctor,
 } from './roles/admin';
 
 const apiPort = 8081;
@@ -69,6 +70,10 @@ const doctorSignup = (_request: Request, response: Response) => {
 
 const clinicSignup = (_request: Request, response: Response) => {
   response.sendFile(join(__dirname + '/../src/private/clinicSignup.html'));
+};
+
+const inviteDoctorPage = (_request: Request, response: Response) => {
+  response.sendFile(join(__dirname + '/../src/private/inviteDoctor.html'));
 };
 
 const isAdminLoggedIn = async (
@@ -119,6 +124,7 @@ const sessionLogout = async (request: Request, response: Response) => {
   const sessionCookie = request.cookies.session || ' ';
   response.clearCookie('session');
   await revokeToken(sessionCookie);
+
   response.redirect('/login');
 };
 
@@ -127,13 +133,15 @@ app.disable('etag');
 
 // tslint:disable-next-line: no-shadowed-variable
 const initRoutes = (app: Express) => {
-  app.get('/login', login);
-  app.post('/sessionLogin', sessionLogin);
-  app.get('/sessionLogout', sessionLogout);
-
   app.get('/', isAdminLoggedIn, dashboard);
   app.get('/doctorSignup', isAdminLoggedIn, doctorSignup);
   app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
+  app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
+
+  app.get('/login', login);
+  app.get('/sessionLogout', sessionLogout);
+
+  app.post('/sessionLogin', sessionLogin);
 };
 
 // tslint:disable-next-line: no-shadowed-variable
@@ -143,6 +151,7 @@ const initApi = (router: Router) => {
   router.post('/deleteDoctor', isAdminLoggedIn, deleteDoctor);
   router.post('/createClinic', isAdminLoggedIn, createClinic);
   router.post('/addDoctorToClinic', isAdminLoggedIn, addDoctorToClinic);
+  router.post('/inviteUser', isAdminLoggedIn, inviteDoctor);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
   router.post('/getPatientProfile', getPatientProfile);

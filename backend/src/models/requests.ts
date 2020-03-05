@@ -112,3 +112,15 @@ export interface IGetAllClinics {}
 export interface ICreateClinic {
   clinicName: string;
 }
+
+export interface IAddDoctorToInvitedDoctors {
+  email: string;
+}
+
+export interface IDeleteDoctorToInvitedDoctors {
+  email: string;
+}
+
+export interface IVerifyInvitedDoctor {
+  email: string;
+}
