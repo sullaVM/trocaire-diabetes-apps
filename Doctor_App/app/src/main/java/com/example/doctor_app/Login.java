@@ -124,13 +124,13 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void accept(SessionLoginResponse sessionLoginResponse) {
                             GetDoctorIDRequest getDoctorIDRequest = new GetDoctorIDRequest(user.getEmail());
-                            DoctorResponse response = new GetDoctorIDResponse();
                             getDoctorIDRequest.makeRequest(getBaseContext(), new Consumer<GetDoctorIDResponse>() {
                                 @Override
                                 public void accept(GetDoctorIDResponse response) {
                                     if (response != null && response.success) {
                                         Intent intent = new Intent(getBaseContext(), Dashboard.class);
                                         intent.putExtra("tag", response.doctorID);
+                                        startActivity(intent);
                                     } else {
                                         Log.println(Log.INFO, "GetDoctorIDRequest", "Request failed");
                                     }
