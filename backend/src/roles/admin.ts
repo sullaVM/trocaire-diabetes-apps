@@ -3,7 +3,6 @@ import { generate } from 'generate-password';
 import { createTransport } from 'nodemailer';
 import { hash } from 'bcrypt';
 import { createNewUser } from '../firebase/firebase';
-
 import * as db from '../database';
 import * as requests from '../models/requests';
 import { IFirebaseUser } from '../firebase/types';
@@ -11,57 +10,65 @@ import { IFirebaseUser } from '../firebase/types';
 const pwEncryptSaltRounds = 10;
 
 export const createDoctor = async (request: Request, response: Response) => {
-  const firstName = request.body.firstName;
-  const lastName = request.body.lastName;
-  const licenseNumber = request.body.licenseNumber;
-  const email = request.body.email;
-  const username = request.body.username;
-  const clinicIDs = request.body.clinicIDs;
+  try {
+    const firstName = request.body.firstName;
+    const lastName = request.body.lastName;
+    const licenseNumber = request.body.licenseNumber;
+    const email = request.body.email;
+    const username = request.body.username;
+    const clinicIDs = [...request.body.clinicIDs];
 
-  // Generate password.
-  const generatedPass = generate({
-    length: 12,
-    numbers: true,
-    lowercase: true,
-    uppercase: true,
-  });
+    // Generate password.
+    const generatedPass = generate({
+      length: 12,
+      numbers: true,
+      lowercase: true,
+      uppercase: true,
+    });
 
-  // Send temporary password to new user (doctor).
-  const transporter = createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      type: 'OAuth2',
-      user: process.env.GMAIL_ADDRESS,
-      refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    },
-  });
+    // Send temporary password to new user (doctor).
+    const transporter = createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        type: 'OAuth2',
+        user: process.env.GMAIL_ADDRESS,
+        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      },
+    });
 
-  const emailBody = [
-    `Hi ${firstName}`,
-    `You have a new account with Trocaire Diabetes App. Your temporary password is: ${generatedPass}.`,
-    `from the Trocaire Team`,
-  ].join('\n\n');
+    const emailBody = [
+      `Hi ${firstName}`,
+      `You have a new account with Trocaire Diabetes App. Your temporary password is: ${generatedPass}.`,
+      `from the Trocaire Team`,
+    ].join('\n\n');
 
-  const mailOptions = {
-    from: process.env.GMAIL_ADDRESS,
-    to: email,
-    subject: 'You have a new account with Trocaire Diabetes App',
-    text: emailBody,
-  };
+    const mailOptions = {
+      from: process.env.GMAIL_ADDRESS,
+      to: email,
+      subject: 'You have a new account with Trocaire Diabetes App',
+      text: emailBody,
+    };
 
-  // Encrypt generated password and add entry to db.
-  hash(generatedPass, pwEncryptSaltRounds, (_, hash) => {
+    const genHash: string = await new Promise((resolve, reject) => {
+      hash(generatedPass, pwEncryptSaltRounds, (error, hash) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(hash);
+      });
+    });
+
     const createDoctorRequest: requests.ICreateDoctor = {
       firstName,
       lastName,
       licenseNumber,
       email,
       userName: username,
-      password: hash,
+      password: genHash,
     };
 
     const user: IFirebaseUser = {
@@ -72,39 +79,38 @@ export const createDoctor = async (request: Request, response: Response) => {
       displayName: [firstName, lastName].join(' '),
     };
 
-    db.createDoctor(createDoctorRequest)
-      .then(async result => {
-        const doctorID = result.doctorID;
-        if (doctorID) {
-          if (clinicIDs.isArray) {
-            clinicIDs.forEach((id: number) => {
-              assignClinic(id, doctorID);
-            });
-          } else {
-            assignClinic(clinicIDs, doctorID);
-          }
-        }
+    const firebaseResult = await createNewUser(user);
+    if (!firebaseResult) {
+      throw new Error('Creating Firebase account for doctor failed');
+    }
 
-        if (await createNewUser(user)) {
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log('Error: ', error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
-          response.sendStatus(200);
+    const dbResult = await db.createDoctor(createDoctorRequest);
+
+    const doctorID = dbResult.doctorID;
+    if (!doctorID) {
+      throw new Error('DoctorID is invalid or undefined');
+    }
+
+    clinicIDs.forEach((id: number) => {
+      assignClinic(id, doctorID);
+    });
+
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          reject(error);
         } else {
-          response.sendStatus(500);
+          console.log('Email sent: ', info.response);
+          resolve();
         }
-      })
-      .catch(error => {
-        response.status(200).send({
-          success: false,
-          message: 'Request unsuccessful, Error:' + error,
-        });
       });
-  });
+    });
+
+    response.sendStatus(200);
+  } catch (error) {
+    console.log('Error creating doctor account: ', error);
+    response.sendStatus(500);
+  }
 };
 
 export const updateDoctor = (request: Request, response: Response) => {
