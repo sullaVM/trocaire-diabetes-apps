@@ -25,7 +25,7 @@
     <string name="action_sign_in_forgot">FORGOT PASS</string>
     <string name="okay">OKAY</string>
     <string name="cancel">CANCEL</string>
-    <string name="prompt_name">Name</string>
+    <string name="prompt_name">First Name</string>
     <string name="clinic">Clinic</string>
     <string name="photo">Photo</string>
     <string name="add_patient">Add Patient</string>
@@ -43,4 +43,8 @@
         <item>Four</item>
         <item>Five</item>
     </string-array>
+    <string name="prompt_surname">Last Name</string>
+    <string name="prompt_height">Height</string>
+    <string name="prompt_phone">Phone Number</string>
+    <string name="prompt_weight">Weight</string>
 </resources>
