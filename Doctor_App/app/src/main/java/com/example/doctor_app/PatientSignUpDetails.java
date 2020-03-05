@@ -64,14 +64,6 @@ public class PatientSignUpDetails extends AppCompatActivity implements AdapterVi
         });
 
         currentNumber = findNumber();
-
-        // Spinner element
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.numbers, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
     }
 
     @Override

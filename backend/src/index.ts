@@ -145,19 +145,23 @@ const initApi = (router: Router) => {
   router.post('/addDoctorToClinic', isAdminLoggedIn, addDoctorToClinic);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
-  router.get('/getPatientProfile', getPatientProfile);
-  router.get('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
-  router.get('/getGraphingData', isDoctorLoggedIn, getGraphingData);
-  router.get('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
-  router.get('/getAllDoctorsAtClinic', isDoctorLoggedIn, getAllDoctorsAtClinic);
-  router.get('/getAllClinics', isDoctorLoggedIn, getAllClinics);
+  router.post('/getPatientProfile', getPatientProfile);
+  router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
+  router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
+  router.post('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
+  router.post(
+    '/getAllDoctorsAtClinic',
+    isDoctorLoggedIn,
+    getAllDoctorsAtClinic
+  );
+  router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);
   router.get('/admin/getAllClinics', isAdminLoggedIn, getAllClinics);
-  router.get('/getDoctorID', isDoctorLoggedIn, getDoctorID);
+  router.post('/getDoctorID', isDoctorLoggedIn, getDoctorID);
 
   // TODO(sulla): Check if patient and doctor are logged in.
-  router.get('/storeRBP', storeRBP);
-  router.get('/storeBSL', storeBSL);
-  router.get('/storeWeight', storeWeight);
+  router.post('/storeRBP', storeRBP);
+  router.post('/storeBSL', storeBSL);
+  router.post('/storeWeight', storeWeight);
 };
 
 initRoutes(app);

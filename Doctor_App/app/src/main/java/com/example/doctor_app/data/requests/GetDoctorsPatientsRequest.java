@@ -21,6 +21,6 @@ public class GetDoctorsPatientsRequest extends Request<GetDoctorsPatientsRespons
 
     @Override
     public int requestType() {
-        return com.android.volley.Request.Method.GET;
+        return com.android.volley.Request.Method.POST;
     }
 }

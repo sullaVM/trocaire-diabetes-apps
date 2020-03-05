@@ -529,11 +529,9 @@ export const getDoctorID = async (
   const result = await new Promise<responses.IGetDoctorID>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
-        console.error(error);
         resolve({ success: false });
       }
       if (results.length < 1) {
-        console.log(results);
         resolve({ success: false });
       } else {
         resolve({

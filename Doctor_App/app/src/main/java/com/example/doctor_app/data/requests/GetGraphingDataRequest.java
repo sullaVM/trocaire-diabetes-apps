@@ -30,6 +30,6 @@ public class GetGraphingDataRequest extends Request<GetGraphingDataResponse> {
 
     @Override
     public int requestType() {
-        return com.android.volley.Request.Method.GET;
+        return com.android.volley.Request.Method.POST;
     }
 }
