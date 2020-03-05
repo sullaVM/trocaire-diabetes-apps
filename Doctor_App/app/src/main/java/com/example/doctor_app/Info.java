@@ -33,7 +33,7 @@ public class Info extends AppCompatActivity {
         patient = getIntent().getParcelableExtra("info");
 
         TextView name = findViewById(R.id.textView2);
-        name.setText(patient.getPatientName());
+        name.setText(patient.getName());
 
         graph();
     }

@@ -17,12 +17,17 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 import android.view.View;
 import android.graphics.Canvas;
+import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
@@ -48,6 +53,12 @@ public class Camera extends AppCompatActivity {
     String data;
     SurfaceView cameraView;
     CameraSource cameraSource;
+    Button saveButton;
+
+    Bitmap image;
+    int n = 0;
+
+    Mat img = new Mat();
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -91,13 +102,34 @@ public class Camera extends AppCompatActivity {
                 back();
             }
         });
+
+        saveButton = findViewById(R.id.save);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                save();
+            }
+        });
     }
 
-    private void saveData(String type) {
+    private void saveAndReturn(String type) {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(type, data);
         setResult(DataEnter.RESULT_OK, resultIntent);
         finish();
+    }
+
+    private void save(){
+        File photoFile = new File(this.getExternalFilesDir(null), "Image" + n + ".jpg");
+        try {
+            FileOutputStream out = new FileOutputStream(photoFile);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        n++;
     }
 
     private void back() {
@@ -191,12 +223,26 @@ public class Camera extends AppCompatActivity {
                         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2RGB);
                         Imgproc.cvtColor(mat,mat,Imgproc.COLOR_RGB2GRAY);
                         Imgproc.threshold( mat, mat, 150,255, Imgproc.THRESH_OTSU );
+                        Utils.matToBitmap(mat, rotatedBitmap);
+                        image = rotatedBitmap;
 
                         int rect_h = mat.height()/3;
                         int rect_w = mat.width()/2;
                         Rect roi = new Rect(mat.width()/2-(rect_w/2), mat.height()/2-(rect_h/2), rect_w,rect_h);
                         Mat crop = new Mat(mat, roi);
 
+                        int new_rect_h = crop.height()/2;
+                        int new_rect_w = crop.width();
+                        roi = new Rect(0, 0, new_rect_w, new_rect_h);
+                        Mat firstHalf = new Mat(crop, roi);
+                        Bitmap bimp = Bitmap.createBitmap(firstHalf.width(), firstHalf.height(), Bitmap.Config.ARGB_8888);
+                        Utils.matToBitmap(crop, bimp);
+                        img = crop;
+                        image = bimp;
+
+                        matching(Imgproc.TM_CCOEFF_NORMED);
+                        save();
+                        /*
                         int new_rect_h = crop.height()/2;
                         int new_rect_w = crop.width();
                         roi = new Rect(0, 0, new_rect_w, new_rect_h);
@@ -247,13 +293,105 @@ public class Camera extends AppCompatActivity {
                         Bitmap halfTwo = Bitmap.createBitmap(new_rect_w, new_rect_h, Bitmap.Config.ARGB_8888);
                         Utils.matToBitmap(secondHalf, halfTwo);
 
-                        int thing = 0;
-
-                        saveData(data);
+                         */
                     } catch( Exception ex) {
                     Log.w("Camera", "Detector dependencies are not yet available");
                     }
                 }
             });
         }
+
+    public void matching(int match_method) {
+
+        double[] x = new double[10];
+        double[] per = new double[10];
+
+        int current_num = 0;
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.zero);
+        Mat templ = new Mat();
+        Utils.bitmapToMat(bitmap, templ);
+        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.resize(templ, templ, new Size(templ.width()/2, templ.height()/2), 0, 0);
+
+        // / Create the result matrix
+        int result_cols = img.cols() - templ.cols() + 1;
+        int result_rows = img.rows() - templ.rows() + 1;
+        Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
+
+        // / Do the Matching and Normalize
+        Imgproc.matchTemplate(img, templ, result, match_method);
+        //Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+
+        // / Localizing the best match with minMaxLoc
+        Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
+
+        Point matchLoc;
+        if (match_method == Imgproc.TM_SQDIFF || match_method == Imgproc.TM_SQDIFF_NORMED) {
+            matchLoc = mmr.minLoc;
+        } else {
+            matchLoc = mmr.maxLoc;
+        }
+        x[current_num] = matchLoc.x;
+        per[current_num] = mmr.maxVal;
+
+        // / Show me what you got
+        Imgproc.rectangle(img, matchLoc, new Point(matchLoc.x + templ.cols(),
+                matchLoc.y + templ.rows()), new Scalar(0, 255, 0), 8);
+
+        current_num = 1;
+        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.one);
+        templ = new Mat();
+        Utils.bitmapToMat(bitmap, templ);
+        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.resize(templ, templ, new Size(templ.width()/2, templ.height()/2), 0, 0);
+
+        Imgproc.matchTemplate(img, templ, result, match_method);
+        //Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+
+        // / Localizing the best match with minMaxLoc
+        mmr = Core.minMaxLoc(result);
+
+        if (match_method == Imgproc.TM_SQDIFF || match_method == Imgproc.TM_SQDIFF_NORMED) {
+            matchLoc = mmr.minLoc;
+        } else {
+            matchLoc = mmr.maxLoc;
+        }
+        x[current_num] = matchLoc.x;
+        per[current_num] = mmr.maxVal;
+
+        // / Show me what you got
+        Imgproc.rectangle(img, matchLoc, new Point(matchLoc.x + templ.cols(),
+                matchLoc.y + templ.rows()), new Scalar(0, 255, 0), 8);
+
+
+        current_num = 3;
+        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.three);
+        templ = new Mat();
+        Utils.bitmapToMat(bitmap, templ);
+        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.resize(templ, templ, new Size(templ.width()/2, templ.height()/2), 0, 0);
+
+        Imgproc.matchTemplate(img, templ, result, match_method);
+        //Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
+
+        // / Localizing the best match with minMaxLoc
+        mmr = Core.minMaxLoc(result);
+
+        if (match_method == Imgproc.TM_SQDIFF || match_method == Imgproc.TM_SQDIFF_NORMED) {
+            matchLoc = mmr.minLoc;
+        } else {
+            matchLoc = mmr.maxLoc;
+        }
+        x[current_num] = matchLoc.x;
+        per[current_num] = mmr.maxVal;
+
+        // / Show me what you got
+        Imgproc.rectangle(img, matchLoc, new Point(matchLoc.x + templ.cols(),
+                matchLoc.y + templ.rows()), new Scalar(0, 255, 0), 8);
+
+
+        Bitmap bimp = Bitmap.createBitmap(img.width(), img.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(img, bimp);
+        int thing = 0;
+    }
     }

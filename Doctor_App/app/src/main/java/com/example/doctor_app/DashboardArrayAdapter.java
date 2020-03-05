@@ -33,8 +33,8 @@ public class DashboardArrayAdapter extends ArrayAdapter<Patient> {
         v = inflater.inflate(R.layout.dashboard_list_item, null);
         TextView textView = v.findViewById(R.id.textView);
         ImageView imageView = v.findViewById(R.id.imageView);
-        textView.setText(patientList.get(position).getPatientName());
-        imageView.setImageResource(patientList.get(position).getPatientImage());
+        textView.setText(patientList.get(position).getName());
+        imageView.setImageResource(R.drawable.blank_icon);
         return v;
     }
 }

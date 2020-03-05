@@ -12,10 +12,11 @@ public class CreatePatientRequest extends Request<CreatePatientResponse> {
     private Integer mobileNumber;
     private String photoDataUrl;
     private String password;
+    private Boolean pregnant;
     @Nullable
     private String bslUnit;
 
-    public CreatePatientRequest(Integer doctorID, String firstName, String lastName, String height, Integer mobileNumber, String photoDataUrl, String password, @Nullable String bslUnit) {
+    public CreatePatientRequest(Integer doctorID, String firstName, String lastName, String height, Integer mobileNumber, String photoDataUrl, String password, @Nullable String bslUnit, Boolean pregnant) {
         this.doctorID = doctorID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,6 +25,7 @@ public class CreatePatientRequest extends Request<CreatePatientResponse> {
         this.photoDataUrl = photoDataUrl;
         this.password = password;
         this.bslUnit = bslUnit;
+        this.pregnant = pregnant;
     }
 
     @Override
