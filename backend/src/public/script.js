@@ -169,7 +169,6 @@ function addToChosen() {
 
   chosenClinics.appendChild(item);
 
-  // Removing the item
   item.addEventListener('click', elem => {
     const target = elem.target;
     target.parentNode.removeChild(target);

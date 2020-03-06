@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8" />
 
-  <title>Add doctor to clinic</title>
-  <meta name="description" content="Add doctor to clinic." />
+  <title>Create a clinic</title>
+  <meta name="description" content="Create a clinic." />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,14 +14,12 @@
 
 <body>
   <div id="body-wrap">
-    <form action="/api/addDoctorToClinic" method="post">
-      <label for="male">Clinic ID:</label>
-      <input type="text" name="clinicID" required /><br />
+    <h1>Register a Clinic</h1>
+    <form action="/api/createClinic" method="post">
+      <label for="male">Clinic Name:</label>
+      <input type="text" name="clinicName" required /><br />
 
-      <label for="male">Doctor ID:</label>
-      <input type="text" name="doctorID" required /><br />
-
-      <input disabled type="submit" class="action-submit" value="Submit" />
+      <input type="submit" class="action-submit" value="Submit" />
     </form>
 
     <!-- Firebase Debug -->
