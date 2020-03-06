@@ -83,7 +83,7 @@ public class PatientSignUpPass extends AppCompatActivity {
         }
     };
 
-    private void enterData(Intent intent) {
+    private void enterData(final Intent intent) {
 
         String firstName = intent.getStringExtra("firstName");
         String lastName = intent.getStringExtra("lastName");
@@ -91,8 +91,8 @@ public class PatientSignUpPass extends AppCompatActivity {
         String height = intent.getStringExtra("height");
         String weight = intent.getStringExtra("weight");
         int pregnant = intent.getIntExtra("pregnant", CreatePatientRequest.NOT_PREGNANT);
-        String photoDataUrl = intent.getStringExtra("photoDataUrl");
-        int doctorID = intent.getIntExtra("doctorID", 0);
+        final String photoDataUrl = intent.getStringExtra("photoDataUrl");
+        final int doctorID = intent.getIntExtra("doctorID", 0);
 
         // Test info
         Log.println(Log.INFO, "doctorID", Integer.toString(doctorID));
@@ -112,13 +112,18 @@ public class PatientSignUpPass extends AppCompatActivity {
             public void accept(CreatePatientResponse response) {
                 if (response != null && response.success) {
                     Log.println(Log.INFO, "CreatePatientRequest", "Request succeeded");
+                    success(doctorID, response.patientID, photoDataUrl, intent);
                 } else {
                     Log.println(Log.INFO, "CreatePatientRequest", "Request failed");
+                    fail(doctorID, intent);
                 }
             }
         });
+    }
 
-        // Save the profile photo URL locally
+    private void success(int doctorID, int patientID, String photoDataUrl, Intent intent) {
+
+        // Save the profile photo locally using the URL name
         try {
             // Creates a file in the primary external storage space of the
             // current application.
@@ -144,8 +149,19 @@ public class PatientSignUpPass extends AppCompatActivity {
             Log.e("ReadWriteFile", "Unable to write data.");
         }
 
-        // Finish the patient sign up
+        // Finish
         intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.putExtra("tag", doctorID);
+        intent.putExtra("patientID", patientID);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    private void fail(int doctorID, Intent intent) {
+        // Finish
+        intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.putExtra("tag", doctorID);
+        intent.putExtra("patientID", -1);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

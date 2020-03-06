@@ -2,6 +2,7 @@ package com.example.doctor_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,6 +12,10 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.util.Consumer;
+
+import com.example.doctor_app.data.requests.GetDoctorsPatientsRequest;
+import com.example.doctor_app.data.responses.GetDoctorsPatientsResponse;
 
 import java.util.ArrayList;
 
@@ -30,9 +35,44 @@ public class Dashboard extends AppCompatActivity {
 
         // Get the doctor ID
         mDoctorID = getIntent().getIntExtra("tag", -1);
+        Log.d("doctorID",Integer.toString(mDoctorID));
 
         // Get the patients of the doctor
         getPatients();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getPatients();
+    }
+
+    // Currently using dummy patients
+    private void getPatients() {
+
+        // Get the patient IDs using the API
+        GetDoctorsPatientsRequest patientsRequest = new GetDoctorsPatientsRequest(mDoctorID);
+        patientsRequest.makeRequest(getBaseContext(), new Consumer<GetDoctorsPatientsResponse>() {
+            @Override
+            public void accept(GetDoctorsPatientsResponse response) {
+                if (response != null && response.success) {
+                    Log.println(Log.INFO, "GetDoctorsPatients", "Request succeeded");
+                    success(response.patientIDs);
+                } else {
+                    Log.println(Log.INFO, "GetDoctorsPatients", "Request failed");
+                    fail();
+                }
+            }
+        });
+    }
+
+    private void success(Integer[] patientIDs) {
+        patientDataSet = new ArrayList<>();
+        for (int i = 0; i < patientIDs.length; i++) {
+            Patient patient = new Patient(mDoctorID, "Test", Integer.toString(patientIDs[i]),
+                    "123", 456, "1", "1", "0");
+            patientDataSet.add(patient);
+        }
 
         if (patientDataSet.size() == 0) {
             // Show an empty screen if no patients
@@ -49,21 +89,8 @@ public class Dashboard extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getPatients();
-    }
-
-    // Currently using dummy patients
-    private void getPatients() {
-        patientDataSet = new ArrayList<>();
-        int size = 51;
-        for (int i = 0; i < size; i++) {
-            Patient patient = new Patient(mDoctorID, "Test", Integer.toString(i),
-                    "123", 456, "1", "1", "0");
-            patientDataSet.add(patient);
-        }
+    private void fail() {
+        setContentView(R.layout.dashboard_empty_state);
     }
 
     // Called by list item selection. Goes to patient info (i.e. the graphs for that patient)
