@@ -15,13 +15,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.util.Consumer;
 
 import com.example.doctor_app.data.requests.GetDoctorsPatientsRequest;
+import com.example.doctor_app.data.requests.GetPatientProfileRequest;
 import com.example.doctor_app.data.responses.GetDoctorsPatientsResponse;
+import com.example.doctor_app.data.responses.GetPatientProfileResponse;
 
 import java.util.ArrayList;
 
 public class Dashboard extends AppCompatActivity {
 
     private int mDoctorID;
+    private Integer patientID;
     protected ArrayList<Patient> patientDataSet;
 
     @Override
@@ -41,14 +44,8 @@ public class Dashboard extends AppCompatActivity {
         getPatients();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getPatients();
-    }
-
-    // Currently using dummy patients
     private void getPatients() {
+        patientDataSet = new ArrayList<>();
 
         // Get the patient IDs using the API
         GetDoctorsPatientsRequest patientsRequest = new GetDoctorsPatientsRequest(mDoctorID);
@@ -66,13 +63,33 @@ public class Dashboard extends AppCompatActivity {
         });
     }
 
-    private void success(Integer[] patientIDs) {
-        patientDataSet = new ArrayList<>();
+    private void success(final Integer[] patientIDs) {
         for (int i = 0; i < patientIDs.length; i++) {
-            Patient patient = new Patient(mDoctorID, "Test", Integer.toString(patientIDs[i]),
-                    "123", 456, "1", "1", "0");
-            patientDataSet.add(patient);
+
+            patientID = patientIDs[i];
+
+            // Get the patient profile using the API
+            GetPatientProfileRequest profileRequest = new GetPatientProfileRequest(patientID);
+            profileRequest.makeRequest(getBaseContext(), new Consumer<GetPatientProfileResponse>() {
+                @Override
+                public void accept(GetPatientProfileResponse response) {
+                    if (response != null && response.success) {
+                        Log.println(Log.INFO, "GetPatientProfile", "Request succeeded");
+                        successProfile(response);
+                    } else {
+                        Log.println(Log.INFO, "GetPatientProfile", "Request failed");
+                        fail();
+                    }
+                }
+            });
         }
+    }
+
+    private void successProfile(GetPatientProfileResponse response) {
+        Patient patient = new Patient(response.doctorID, response.firstName, response.lastName,
+                response.height, response.mobileNumber, response.photoDataUrl, response.password,
+                    response.pregnant, response.bslUnit, patientID);
+        patientDataSet.add(patient);
 
         if (patientDataSet.size() == 0) {
             // Show an empty screen if no patients
@@ -80,7 +97,7 @@ public class Dashboard extends AppCompatActivity {
         } else {
             // Else show the list of patients
             DashboardArrayAdapter adapter = new DashboardArrayAdapter(this,
-                    R.layout.dashboard_list_item, patientDataSet);
+                    R.layout.dashboard_list_item, patientDataSet, this.getFilesDir());
 
             ListView listView = findViewById(R.id.listViewPatients);
             listView.setAdapter(adapter);

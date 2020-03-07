@@ -106,7 +106,7 @@ public class PatientSignUpPass extends AppCompatActivity {
 
         // Create the patient using the API
         CreatePatientRequest patientRequest = new CreatePatientRequest(doctorID, firstName,
-                lastName, height, mobileNumber, photoDataUrl, password, "test", pregnant);
+                lastName, height, mobileNumber, photoDataUrl, password, "mmolL", pregnant);
         patientRequest.makeRequest(getBaseContext(), new Consumer<CreatePatientResponse>() {
             @Override
             public void accept(CreatePatientResponse response) {
@@ -123,7 +123,7 @@ public class PatientSignUpPass extends AppCompatActivity {
 
     private void success(int doctorID, int patientID, String photoDataUrl, Intent intent) {
 
-        // Save the profile photo locally using the URL name
+        // Save the profile photo name locally
         try {
             // Creates a file in the primary external storage space of the
             // current application.
