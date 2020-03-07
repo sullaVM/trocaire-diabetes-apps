@@ -17,9 +17,9 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import com.example.doctor_app.data.requests.GetGraphingDataRequest;
 import com.example.doctor_app.data.responses.BSLRecord;
@@ -62,14 +62,23 @@ public class Info extends AppCompatActivity {
         Paint p = lineChart.getPaint(Chart.PAINT_INFO);
         p.setColor(Color.BLACK);
 
-        // Set Default Times
-        startDate = "2020-03-1 00:00:00.000";
-        Date date = new Date();
-        Timestamp timestamp = new Timestamp(date.getTime());
+        // Set initial start date
+        LocalDate localStart =  LocalDate.now().minusDays(5);
+        startDate = localStart.getYear() + "-" + localStart.getMonthValue() + "-" + localStart.getDayOfMonth()
+                + " " + "00:00:00.000";
+
+        Timestamp timestamp = Timestamp.valueOf(startDate);
+        startDate = timestamp.toString();
+
+        // Set initial end date
+        LocalDate localEnd =  LocalDate.now();
+        endDate = localEnd.getYear() + "-" + localEnd.getMonthValue() + "-" + localEnd.getDayOfMonth()
+                + " " + "00:00:00.000";
+
+        timestamp = Timestamp.valueOf(endDate);
         endDate = timestamp.toString();
 
-        // Get the patient's graph data
-        getData(startDate, endDate); // startDate and endDate can be changed by the date picker
+        getData(startDate,endDate);
     }
 
     private void getData(String start, String end) {
@@ -92,10 +101,9 @@ public class Info extends AppCompatActivity {
 
     private void success(GetGraphingDataResponse response) {
 
-        // Test info
-        int i = 0;
-
         try {
+            // Test info
+            int i = 0;
             Log.println(Log.INFO, "RBPTime", response.RBP[i].time);
             Log.println(Log.INFO, "RBPSystole", Float.toString(response.RBP[i].systole));
             Log.println(Log.INFO, "RBPDiastole", Float.toString(response.RBP[i].diastole));
@@ -106,7 +114,7 @@ public class Info extends AppCompatActivity {
             Log.println(Log.INFO, "WeightTime", response.Weight[i].time);
             Log.println(Log.INFO, "WeightValue", Float.toString(response.Weight[i].value));
         } catch (Exception e) {
-            Log.println(Log.ERROR, "graph", "Success but no graph data for time picked");
+            Log.println(Log.INFO, "graph", "No graph data for time picked");
         }
 
         // Update the UI with the graph data
@@ -160,7 +168,8 @@ public class Info extends AppCompatActivity {
         lineChart.getXAxis().setDrawGridLines(false);
 
 
-        final String[] labels = new String[] { "Day 1", "Day 2", "Day 3", "Day 4", "Day 5"};
+        String startLabel = startDate.substring(5,7) + "/" + startDate.substring(8,10);
+        final String[] labels = new String[] { startLabel, "Day 2", "Day 3", "Day 4", "Day 5"};
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
@@ -189,8 +198,8 @@ public class Info extends AppCompatActivity {
         dialogDelete.show();
     }
 
-    public void submitDate(View view) {
-        getData(startDate, endDate);
+    public void updateDate(View view) {
+        getData(startDate,endDate);
     }
 
     public static class DatePickerFragmentStart extends DialogFragment
@@ -209,27 +218,22 @@ public class Info extends AppCompatActivity {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            startDate = year + "-" + month + "-" + day + " " + "00:00:00.000";
-        }
-    }
 
-    public static class DatePickerFragmentEnd extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
+            Timestamp timestamp;
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            // Set the start date
+            startDate = year + "-" + (month+1) + "-" + day + " " + "00:00:00.000"; // Months are zero-indexed
 
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
+            timestamp = Timestamp.valueOf(startDate);
+            startDate = timestamp.toString();
 
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            endDate = year + "-" + month + "-" + day + " " + "00:00:00.000";
+            // Set the end date
+            LocalDate endLocal = LocalDate.of(year, month+1, day).plusDays(5); // Months are zero indexed
+            endDate = endLocal.getYear() + "-" + endLocal.getMonthValue() + "-" + endLocal.getDayOfMonth()
+                            + " " + "00:00:00.000";
+
+            timestamp = Timestamp.valueOf(endDate);
+            endDate = timestamp.toString();
         }
     }
 
@@ -238,8 +242,4 @@ public class Info extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public void showDatePickerDialogEnd(View v) {
-        DialogFragment newFragment = new DatePickerFragmentEnd();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
 }

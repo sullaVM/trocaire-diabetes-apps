@@ -119,30 +119,17 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/endDate"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:onClick="showDatePickerDialogEnd"
-                android:text="@string/end_date"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/startDate" />
-
-            <com.google.android.material.button.MaterialButton
                 android:id="@+id/submitDate"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:onClick="submitDate"
+                android:onClick="updateDate"
                 android:text="@string/submit_date"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/endDate" />
+                app:layout_constraintStart_toEndOf="@+id/startDate" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -154,7 +141,6 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/average_bg"
                 android:textColor="@color/dark_gray"
-                app:layout_constraintBottom_toTopOf="@+id/endDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -184,8 +170,6 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/textView6"
                 app:layout_constraintEnd_toEndOf="parent"
