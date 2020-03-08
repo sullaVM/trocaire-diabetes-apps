@@ -160,3 +160,17 @@ export const getDoctorID = (request: Request, response: Response) => {
       });
     });
 };
+
+export const getDoctorIDFromLogin = async (email: string) => {
+  try {
+    const getDoctorIDRequest: requests.IGetDoctorID = {
+      email: email,
+    };
+
+    const doctorID = await db.getDoctorID(getDoctorIDRequest);
+
+    return doctorID.doctorID;
+  } catch (error) {
+    return ' ';
+  }
+};

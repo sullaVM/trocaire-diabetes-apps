@@ -13,11 +13,15 @@ export const inviteDoctor = async (request: Request, response: Response) => {
     const email = request.body.email;
     const firstName = request.body.firstName;
     const lastName = request.body.lastName;
-    const inviterName = request.body.inviterName;
+    const inviterID = request.body.inviterID;
     const originUrl = request.headers.host;
 
+    const doctorProfileResponse = await db.getDoctorProfile({
+      doctorID: inviterID,
+    });
+
     // TODO(sulla): Clean this up
-    const emailBody = `Hi ${firstName}, \nYou have been invited by Dr. ${inviterName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
+    const emailBody = `Hi ${firstName}, \nYou have been invited by Dr. ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
 
     const addDoctorToInvitedDoctorsRequest: requests.IAddDoctorToInvitedDoctors = {
       email: email,
@@ -82,13 +86,6 @@ export const createDoctor = async (request: Request, response: Response) => {
     const doctorID = dbResult.doctorID;
     if (!doctorID) {
       throw new Error('DoctorID is invalid or undefined');
-    }
-
-    if (request.body.clinicIDs) {
-      const clinicIDs = [...request.body.clinicIDs];
-      clinicIDs.forEach((id: number) => {
-        assignClinic(id, doctorID);
-      });
     }
 
     const user: IFirebaseUser = {
@@ -204,22 +201,25 @@ export const createClinic = (request: Request, response: Response) => {
     });
 };
 
-export const addDoctorToClinic = (request: Request, response: Response) => {
-  const addDoctorToClinicRequest: requests.IAddDoctorToClinic = {
-    clinicID: request.body.clinicID,
-    doctorID: request.body.doctorID,
-  };
+export const addDoctorToMultClinics = (
+  request: Request,
+  response: Response
+) => {
+  try {
+    const doctorID = request.body.doctorID;
 
-  db.addDoctorToClinic(addDoctorToClinicRequest)
-    .then(result => {
-      response.status(200).send(result);
-    })
-    .catch(error => {
-      response.status(200).send({
-        success: false,
-        message: 'Request unsuccessful, Error: ' + error,
+    if (request.body.clinicIDs) {
+      const clinicIDs = [...request.body.clinicIDs];
+      clinicIDs.forEach((id: number) => {
+        assignClinic(id, doctorID);
       });
-    });
+    }
+
+    response.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(500);
+  }
 };
 
 const assignClinic = async (

@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { join } from 'path';
 import { config } from 'dotenv';
+import exphbs from 'express-handlebars';
 
 import express, {
   Express,
@@ -29,6 +30,7 @@ import {
   getAllDoctorsAtClinic,
   getAllClinics,
   getDoctorID,
+  getDoctorIDFromLogin,
 } from './roles/doctor';
 
 import {
@@ -43,7 +45,7 @@ import {
   createDoctor,
   updateDoctor,
   deleteDoctor,
-  addDoctorToClinic,
+  addDoctorToMultClinics,
   inviteDoctor,
 } from './roles/admin';
 
@@ -60,6 +62,10 @@ const router = express.Router();
 config();
 initFirebase();
 
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+app.set('views', join(__dirname, '/../src/views'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -70,20 +76,48 @@ const login = (_request: Request, response: Response) => {
   response.sendFile(join(__dirname + '/../src/private/login.html'));
 };
 
-const dashboard = (_request: Request, response: Response) => {
-  response.sendFile(join(__dirname + '/../src/private/dashboard.html'));
+const doctorSignup = (_request: Request, response: Response) => {
+  response.sendFile(join(__dirname + '/../src/private/signup.html'));
 };
 
-const doctorSignup = (_request: Request, response: Response) => {
-  response.sendFile(join(__dirname + '/../src/private/doctorSignup.html'));
+const dashboard = (_request: Request, response: Response) => {
+  response.render('dashboard', {
+    layout: 'main',
+
+    helpers: {
+      title: 'Dashboard',
+    },
+  });
 };
 
 const clinicSignup = (_request: Request, response: Response) => {
-  response.sendFile(join(__dirname + '/../src/private/clinicSignup.html'));
+  response.render('registerClinic', {
+    layout: 'main',
+
+    helpers: {
+      title: 'Register a Clinic',
+    },
+  });
 };
 
 const inviteDoctorPage = (_request: Request, response: Response) => {
-  response.sendFile(join(__dirname + '/../src/private/inviteDoctor.html'));
+  response.render('inviteDoctor', {
+    layout: 'main',
+
+    helpers: {
+      title: 'Invite a Doctor',
+    },
+  });
+};
+
+const addDoctorToClinics = (_request: Request, response: Response) => {
+  response.render('addDoctorToClinics', {
+    layout: 'main',
+
+    helpers: {
+      title: 'Add a Doctor to Clinics',
+    },
+  });
 };
 
 const isAdminLoggedIn = async (
@@ -131,6 +165,7 @@ const sessionLogin = async (request: Request, response: Response) => {
   // Set session expiration to 24 hours.
   const expiresIn = 60 * 60 * 24 * 1000;
   const idToken = request.body.idToken.toString();
+  const email = request.body.email;
 
   const sessionCookie = await createNewCookie(idToken, expiresIn);
   if (!sessionCookie) {
@@ -141,8 +176,13 @@ const sessionLogin = async (request: Request, response: Response) => {
     httpOnly: true,
     secure: false /* set to false when testing locally */,
   };
+
+  const doctorID = await getDoctorIDFromLogin(email);
+
   response.cookie('session', sessionCookie, options);
-  response.end();
+  response.send({
+    doctorID: doctorID,
+  });
 };
 
 const sessionLogout = async (request: Request, response: Response) => {
@@ -182,11 +222,12 @@ app.disable('etag');
 // tslint:disable-next-line: no-shadowed-variable
 const initRoutes = (app: Express) => {
   app.get('/', isAdminLoggedIn, dashboard);
-  app.get('/doctorSignup', isAdminLoggedIn, doctorSignup);
   app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
   app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
+  app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinics);
 
   app.get('/login', login);
+  app.get('/signup', doctorSignup);
   app.get('/sessionLogout', sessionLogout);
 
   app.post('/sessionLogin', sessionLogin);
@@ -195,11 +236,12 @@ const initRoutes = (app: Express) => {
 
 // tslint:disable-next-line: no-shadowed-variable
 const initApi = (router: Router) => {
-  router.post('/createDoctor', isAdminLoggedIn, createDoctor);
+  router.post('/createDoctor', createDoctor);
+
   router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
   router.post('/deleteDoctor', isAdminLoggedIn, deleteDoctor);
   router.post('/createClinic', isAdminLoggedIn, createClinic);
-  router.post('/addDoctorToClinic', isAdminLoggedIn, addDoctorToClinic);
+  router.post('/addDoctorToClinics', isAdminLoggedIn, addDoctorToMultClinics);
   router.post('/inviteUser', isAdminLoggedIn, inviteDoctor);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
@@ -207,6 +249,7 @@ const initApi = (router: Router) => {
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.post('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
+
   router.post(
     '/getAllDoctorsAtClinic',
     isDoctorLoggedIn,
@@ -216,7 +259,6 @@ const initApi = (router: Router) => {
   router.get('/admin/getAllClinics', isAdminLoggedIn, getAllClinics);
   router.post('/getDoctorID', isDoctorLoggedIn, getDoctorID);
 
-  // TODO(sulla): Check if patient and doctor are logged in.
   router.post('/storeRBP', isPatientLoggedIn, storeRBP);
   router.post('/storeBSL', isPatientLoggedIn, storeBSL);
   router.post('/storeWeight', isPatientLoggedIn, storeWeight);

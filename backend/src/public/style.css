@@ -1,18 +1,97 @@
 body,
 html {
-  height: 100%;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
 }
 
 #body-wrap {
-  width: 90%;
   padding: 20px 30px;
+  width: 80%;
+  max-width: 500px;
   margin: auto;
 }
 
 h1 {
   margin: 10px 0;
   font-size: 21px;
+}
+
+#left-nav {
+  width: 25%;
+  height: 100vh;
+  background-color: #3e9ad2;
+  position: fixed;
+  margin: 0;
+  overflow: hidden;
+}
+
+#left-nav a,
+#left-nav a:visited,
+#left-nav a:active {
+  text-decoration: none;
+}
+
+#right-data {
+  width: 75%;
+  height: 100vh;
+  position: relative;
+  margin-left: 25%;
+}
+
+/* ----------------------------------- */
+
+#menu-title {
+  width: 100%;
+  max-width: inherit;
+  height: 18px;
+  margin: 0;
+  padding: 17px 15px;
+  background-color: #1484c8;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.action-link {
+  width: 100%;
+  height: 17px;
+  margin: 0;
+  padding: 17px 15px;
+  color: #ffffff;
+  border-bottom: #187ab8 1px solid;
+}
+
+.action-link:hover {
+  background-color: #1484c8;
+}
+
+#sign-out {
+  width: 100%;
+  height: 17px;
+  display: block;
+  padding: 17px 15px;
+  color: #ffffffb6;
+  border: none;
+  cursor: pointer;
+}
+
+/* ----------------------------------- */
+
+#page-title {
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  padding: 17px 15px;
+  background-color: #dddddd;
+  font-weight: 800;
+}
+
+#content {
+  padding: 5px 15px;
+  max-width: 500px;
 }
 
 /* ----------------------------------- */
@@ -70,6 +149,16 @@ h1 {
   font-size: 16px;
 }
 
+.login-container a,
+.login-container a:visited,
+.login-container a.active {
+  color: #000000;
+  text-decoration: underline;
+  font-weight: 700;
+  margin: 10px 10px;
+  display: block;
+}
+
 /* ----------------------------------- */
 
 .action {
@@ -87,21 +176,6 @@ h1 {
   font-weight: 900;
 }
 
-a:link,
-a:active,
-a:visited {
-  text-decoration: none;
-}
-
-#sign-out {
-  margin: 20px 0;
-  padding: 0 10px;
-  height: 30px;
-  background-color: #e6e6e6;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
 .action-submit {
   margin: 20px 0;
   padding: 0 10px;
@@ -111,7 +185,7 @@ a:visited {
   font-size: 14px;
 }
 
-#body-wrap form {
+form {
   font-size: 14px;
   max-width: 500px;
 }

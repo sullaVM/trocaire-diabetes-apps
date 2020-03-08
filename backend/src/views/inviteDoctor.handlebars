@@ -1,0 +1,19 @@
+<p>
+  Invite a doctor to join this service. When you submit this form, an automatic
+  will me sent to them.
+</p>
+
+<form action="/api/inviteUser" method="post">
+  <label for="firstName">First Name:</label>
+  <input type="text" name="firstName" required><br>
+
+  <label for="firstName">Last Name:</label>
+  <input type="text" name="lastName" required><br>
+
+  <label for="firstName">Email:</label>
+  <input type="text" name="email" required>
+
+  <input type="hidden" name="inviterID" id="inviteUser" required>
+
+  <input type="submit" class="action-submit" name="submit">
+</form>

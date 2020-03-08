@@ -9,7 +9,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 async function signIn() {
   try {
@@ -17,15 +17,15 @@ async function signIn() {
       firebase.auth().signOut();
       await axios.get('/sessionLogout');
     } else {
-      var email = document.getElementById('email').value;
-      var password = document.getElementById('password').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
       if (email.length < 4) {
         alert('Please enter an email address.');
         return;
       }
       if (password.length < 4) {
-        alert('Please enter a password longer than 4 characters.');
+        alert('Please enter a password longer than 6 characters.');
         return;
       }
 
@@ -42,9 +42,12 @@ async function signIn() {
 
       if (user) {
         const idToken = await user.getIdToken();
-        await axios.post('/sessionLogin', {
+        const response = await axios.post('/sessionLogin', {
+          email: email,
           idToken: idToken,
         });
+        console.log(response);
+        localStorage.setItem('doctorID', response.data.doctorID);
         window.location.assign('/');
       }
 
@@ -88,6 +91,11 @@ async function initApp() {
       signout.addEventListener('click', signOut, false);
     }
 
+    const invite = document.getElementById('inviteUser');
+    if (invite) {
+      invite.value = localStorage.getItem('doctorID');
+    }
+
     const user = await new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged((user, error) => {
         if (error) {
@@ -115,10 +123,6 @@ async function initApp() {
         accountDetails.textContent = JSON.stringify(user, null, '  ');
       }
     } else {
-      if (window.location.pathname !== '/login') {
-        signOut();
-      }
-
       const signInStatus = document.getElementById('sign-in-status');
       if (signInStatus) {
         signInStatus.textContent = 'Signed out';

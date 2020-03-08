@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>{{ title }}</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+  <a href="/">
+    <div id="left-nav">
+      <div id="menu-title">
+        Dashboard
+      </div>
+  </a>
+
+  <a href="/inviteDoctor">
+    <div class="action-link">
+      Invite a Doctor
+    </div>
+  </a>
+
+  <a href="/clinicSignup">
+    <div class="action-link">
+      Register a Clinic
+    </div>
+  </a>
+
+  <a href="/addDoctorToClinics">
+    <div class="action-link">
+      Join a Clinic
+    </div>
+  </a>
+
+  <div id="sign-out" name="signout">Sign Out</div>
+  </div>
+
+  <div id="right-data">
+    <div id="page-title">
+      {{ title }}
+    </div>
+
+    <div id="content">
+      {{{ body }}}
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script type="text/javascript" src="/script.js"></script>
+</body>
+
+</html>
