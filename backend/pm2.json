@@ -1,11 +1,13 @@
 {
     "apps": [
         {
-            "name": "web",
-            "exec_mode": "cluster",
+            "name": "diabetes",
+            "exec_mode": "fork",
             "instances": "max",
             "script": "./src/index.ts",
-            "interpreter": "ts-node"
+            "interpreter": "ts-node",
+						"out_file": "./src/public/out.log",
+						"error_file": "./src/public/err.log"
         }
     ]
 }
