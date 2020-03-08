@@ -18,5 +18,7 @@ public class GetPatientProfileResponse extends PatientResponse {
     @Nullable
     public String password;
     @Nullable
+    public Integer pregnant;
+    @Nullable
     public String bslUnit;
 }

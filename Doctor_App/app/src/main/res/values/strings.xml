@@ -20,7 +20,7 @@
     <string name="phone_number">+123 456 789 234</string>
     <string name="patient_caps">PATIENT</string>
     <string name="empty_state_doctor">Add a patient and they will show up here.</string>
-    <string name="chart_line">Last Five Days</string>
+    <string name="chart_line">Blood Glucose</string>
     <string name="name">Name</string>
     <string name="action_sign_in_forgot">FORGOT PASS</string>
     <string name="okay">OKAY</string>
@@ -47,4 +47,9 @@
     <string name="prompt_height">Height</string>
     <string name="prompt_phone">Phone Number</string>
     <string name="prompt_weight">Weight</string>
+    <string name="chart_summary">mmol/L</string>
+    <string name="start_date">START</string>
+    <string name="end_date">END</string>
+    <string name="submit_date">UPDATE</string>
+    <string name="average_bg">Average BG = 6.2444 +/-2.077412098</string>
 </resources>

@@ -12,10 +12,13 @@ public class Patient implements Parcelable {
     private Integer mobileNumber;
     private String photoDataUrl;
     private String password;
+    private Integer pregnant;
     private String bslUnit;
+    private Integer patientID;
 
     public Patient(Integer doctorID, String firstName, String lastName, String height,
-                   Integer mobileNumber, String photoDataUrl, String password, String bslUnit)
+                   Integer mobileNumber, String photoDataUrl, String password, Integer pregnant,
+                   String bslUnit, Integer patientID)
     {
         this.doctorID = doctorID;
         this.firstName = firstName;
@@ -24,7 +27,9 @@ public class Patient implements Parcelable {
         this.mobileNumber = mobileNumber;
         this.photoDataUrl = photoDataUrl;
         this.password = password;
+        this.pregnant = pregnant;
         this.bslUnit = bslUnit;
+        this.patientID = patientID;
 
     }
 
@@ -97,4 +102,6 @@ public class Patient implements Parcelable {
     public String getBslUnit() {
         return this.bslUnit;
     }
+
+    public Integer getPatientID() { return this.patientID; }
 }
