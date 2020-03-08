@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
-import { generate } from 'generate-password';
 import { createTransport } from 'nodemailer';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { createNewUser } from '../firebase/firebase';
 import * as db from '../database';
 import * as requests from '../models/requests';
 import { IFirebaseUser } from '../firebase/types';
 
-const pwEncryptSaltRounds = 10;
+export const pwEncryptSaltRounds = 10;
 
 export const inviteDoctor = async (request: Request, response: Response) => {
   try {
@@ -17,10 +16,8 @@ export const inviteDoctor = async (request: Request, response: Response) => {
     const inviterName = request.body.inviterName;
     const originUrl = request.headers.host;
 
-    console.log(originUrl);
-
     // TODO(sulla): Clean this up
-    const emailBody = `Hi ${firstName}, \nYou have been invited by Dr. ${inviterName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to ${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
+    const emailBody = `Hi ${firstName}, \nYou have been invited by Dr. ${inviterName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
 
     const addDoctorToInvitedDoctorsRequest: requests.IAddDoctorToInvitedDoctors = {
       email: email,

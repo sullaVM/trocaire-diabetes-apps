@@ -114,3 +114,17 @@ export interface IDeleteDoctorToInvitedDoctors {
 export interface IVerifyInvitedDoctor {
   success: boolean;
 }
+
+export interface IGetPatientPassword {
+  success: boolean;
+  password: string;
+}
+
+export interface IGetPatientToken {
+  success: boolean;
+  sessionToken: string;
+}
+
+export interface ISetPatientToken {
+  success: boolean;
+}

@@ -3,7 +3,6 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { join } from 'path';
 import { config } from 'dotenv';
-import { readFile } from 'fs';
 
 import express, {
   Express,
@@ -32,7 +31,12 @@ import {
   getDoctorID,
 } from './roles/doctor';
 
-import { storeRBP, storeBSL, storeWeight } from './roles/patient';
+import {
+  storeRBP,
+  storeBSL,
+  storeWeight,
+  verifyPatientToken,
+} from './roles/patient';
 
 import {
   createClinic,
@@ -42,6 +46,12 @@ import {
   addDoctorToClinic,
   inviteDoctor,
 } from './roles/admin';
+
+import {
+  verifyPassword,
+  generateToken,
+  updatePatientToken,
+} from './roles/patient';
 
 const apiPort = 8081;
 const app = express();
@@ -102,6 +112,21 @@ const isDoctorLoggedIn = async (
   }
 };
 
+const isPatientLoggedIn = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const patientID = request.body.patientID;
+  const tokenID = request.body.tokenID || ' ';
+
+  if (verifyPatientToken(patientID, tokenID)) {
+    next();
+  } else {
+    response.sendStatus(403);
+  }
+};
+
 const sessionLogin = async (request: Request, response: Response) => {
   // Set session expiration to 24 hours.
   const expiresIn = 60 * 60 * 24 * 1000;
@@ -128,6 +153,29 @@ const sessionLogout = async (request: Request, response: Response) => {
   response.redirect('/login');
 };
 
+const patientLogin = async (request: Request, response: Response) => {
+  const password = request.body.password;
+  const patientID: number = request.body.patientID;
+
+  const verified = await verifyPassword(patientID, password);
+  if (!verified) {
+    response.status(403).send({
+      message: 'Incorrect password',
+    });
+  }
+
+  const tokenID = generateToken();
+
+  if (await updatePatientToken(patientID, tokenID)) {
+    response.status(200).send({
+      success: true,
+      tokenID: tokenID,
+    });
+  } else {
+    response.sendStatus(403);
+  }
+};
+
 app.use('/api', router);
 app.disable('etag');
 
@@ -142,6 +190,7 @@ const initRoutes = (app: Express) => {
   app.get('/sessionLogout', sessionLogout);
 
   app.post('/sessionLogin', sessionLogin);
+  app.post('/patientLogin', patientLogin);
 };
 
 // tslint:disable-next-line: no-shadowed-variable
@@ -168,9 +217,9 @@ const initApi = (router: Router) => {
   router.post('/getDoctorID', isDoctorLoggedIn, getDoctorID);
 
   // TODO(sulla): Check if patient and doctor are logged in.
-  router.post('/storeRBP', storeRBP);
-  router.post('/storeBSL', storeBSL);
-  router.post('/storeWeight', storeWeight);
+  router.post('/storeRBP', isPatientLoggedIn, storeRBP);
+  router.post('/storeBSL', isPatientLoggedIn, storeBSL);
+  router.post('/storeWeight', isPatientLoggedIn, storeWeight);
 };
 
 initRoutes(app);

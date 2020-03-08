@@ -1,10 +1,20 @@
 // Queries accessible by a doctor.
 import * as db from '../database';
 import * as requests from '../models/requests';
-
+import { pwEncryptSaltRounds } from '../roles/admin';
+import { hash } from 'bcrypt';
 import { Request, Response } from 'express';
 
-export const createPatient = (request: Request, response: Response) => {
+export const createPatient = async (request: Request, response: Response) => {
+  const genHash: string = await new Promise((resolve, reject) => {
+    hash(request.body.password, pwEncryptSaltRounds, (error, hash) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(hash);
+    });
+  });
+
   const createPatientRequest: requests.ICreatePatient = {
     doctorID: request.body.doctorID,
     firstName: request.body.firstName,
@@ -13,7 +23,7 @@ export const createPatient = (request: Request, response: Response) => {
     pregnant: request.body.pregnant,
     mobileNumber: request.body.mobileNumber,
     photoDataUrl: request.body.photoDataUrl,
-    password: request.body.password,
+    password: genHash,
     bslUnit: request.body.bslUnit,
   };
 

@@ -1,7 +1,8 @@
 // Queries accessible by a patients (and their doctors).
 import * as db from '../database';
 import * as requests from '../models/requests';
-
+import crypto from 'crypto-random-string';
+import { compare } from 'bcrypt';
 import { Request, Response } from 'express';
 
 export const storeRBP = (request: Request, response: Response) => {
@@ -61,4 +62,70 @@ export const storeWeight = (request: Request, response: Response) => {
         message: 'Request unsuccessful, Error: ' + error,
       });
     });
+};
+
+export const verifyPassword = async (
+  patientID: number,
+  password: string
+): Promise<boolean> => {
+  try {
+    const getPasswordRequest: requests.IGetPatientProfile = {
+      patientID: patientID,
+    };
+
+    const getPasswordResponse = await db.getPatientPassword(getPasswordRequest);
+    const bycryptCallback = (error: Error, result: boolean) => {
+      if (error) {
+        return false;
+      }
+      if (!result) {
+        return false;
+      }
+      return true;
+    };
+    compare(password, getPasswordResponse.password, bycryptCallback);
+
+    return false;
+  } catch (error) {
+    console.log('Error verifying password: ', error);
+    return false;
+  }
+};
+
+export const generateToken = (): string => {
+  return crypto({ length: 10, type: 'base64' });
+};
+
+export const updatePatientToken = async (
+  patientID: number,
+  token: string
+): Promise<boolean> => {
+  try {
+    const setPatientTokenRequest: requests.ISetPatientToken = {
+      sessionToken: token,
+      patientID: patientID,
+    };
+
+    await db.setPatientToken(setPatientTokenRequest);
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const verifyPatientToken = async (
+  patientID: number,
+  token: string
+): Promise<boolean> => {
+  const correctToken = await db.getPatientToken({
+    patientID: patientID,
+  });
+
+  if (token === correctToken.sessionToken) {
+    return true;
+  } else {
+    return false;
+  }
 };

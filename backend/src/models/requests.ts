@@ -124,3 +124,8 @@ export interface IDeleteDoctorToInvitedDoctors {
 export interface IVerifyInvitedDoctor {
   email: string;
 }
+
+export interface ISetPatientToken {
+  sessionToken: string;
+  patientID: number;
+}

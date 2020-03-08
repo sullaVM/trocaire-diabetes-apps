@@ -38,6 +38,77 @@ export const createPatient = async (
   return result;
 };
 
+export const getPatientPassword = async (
+  request: requests.IGetPatientProfile
+): Promise<responses.IGetPatientPassword> => {
+  const query = `SELECT Password FROM Patients WHERE PatientID='${request.patientID}';`;
+
+  const result = await new Promise<responses.IGetPatientPassword>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          reject(error);
+        }
+        if (!results[0]) {
+          reject(error);
+        } else {
+          resolve({
+            success: true,
+            password: results[0].password,
+          });
+        }
+      });
+    }
+  );
+
+  return result;
+};
+
+export const getPatientToken = async (
+  request: requests.IGetPatientProfile
+): Promise<responses.IGetPatientToken> => {
+  const query = `SELECT SessionToken FROM Patients WHERE PatientID='${request.patientID}';`;
+
+  const result = await new Promise<responses.IGetPatientToken>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          reject(error);
+        }
+        if (!results[0]) {
+          reject(error);
+        } else {
+          resolve({
+            success: true,
+            sessionToken: results[0].sessionToken,
+          });
+        }
+      });
+    }
+  );
+
+  return result;
+};
+
+export const setPatientToken = async (
+  request: requests.ISetPatientToken
+): Promise<responses.ISetPatientToken> => {
+  const query = `UPDATE Patients SET SessionToken='${request.sessionToken}' WHERE PatientID=${request.patientID};`;
+
+  const result = await new Promise<responses.ISetPatientToken>(
+    (resolve, reject) => {
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          reject(error);
+        }
+        resolve({ success: true });
+      });
+    }
+  );
+
+  return result;
+};
+
 export const getPatientProfile = async (
   request: requests.IGetPatientProfile
 ): Promise<responses.IGetPatientProfile> => {
