@@ -200,6 +200,7 @@ const patientLogin = async (request: Request, response: Response) => {
 
   console.log(password);
   const verified = await verifyPassword(patientID, password);
+  console.log({ verified });
   if (!verified) {
     response.status(403).send({
       message: 'Incorrect password',
