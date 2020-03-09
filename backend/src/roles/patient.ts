@@ -64,13 +64,32 @@ export const storeWeight = (request: Request, response: Response) => {
     });
 };
 
+export const getPatientID = (request: Request, response: Response) => {
+  const getPatientIDRequest: requests.IGetPatientID = {
+    doctorID: request.body.doctorID,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+  };
+
+  db.getPatientID(getPatientIDRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(200).send({
+        success: false,
+        message: 'Request unsuccessful, Error: ' + error,
+      });
+    });
+};
+
 export const verifyPassword = async (
   patientID: number,
   password: string
 ): Promise<boolean> => {
   try {
     const getPasswordRequest: requests.IGetPatientProfile = {
-      patientID: patientID,
+      patientID,
     };
 
     const getPasswordResponse = await db.getPatientPassword(getPasswordRequest);
@@ -103,7 +122,7 @@ export const updatePatientToken = async (
   try {
     const setPatientTokenRequest: requests.ISetPatientToken = {
       sessionToken: token,
-      patientID: patientID,
+      patientID,
     };
 
     await db.setPatientToken(setPatientTokenRequest);
@@ -120,7 +139,7 @@ export const verifyPatientToken = async (
   token: string
 ): Promise<boolean> => {
   const correctToken = await db.getPatientToken({
-    patientID: patientID,
+    patientID,
   });
 
   if (token === correctToken.sessionToken) {

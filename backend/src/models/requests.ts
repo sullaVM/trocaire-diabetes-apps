@@ -60,6 +60,12 @@ export interface IGetGraphingData {
   bslUnit?: string;
 }
 
+export interface IGetPatientID {
+  doctorID: number;
+  firstName: string;
+  lastName: string;
+}
+
 /**
  * Doctor requests
  */

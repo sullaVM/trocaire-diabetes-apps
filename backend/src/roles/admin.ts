@@ -24,7 +24,7 @@ export const inviteDoctor = async (request: Request, response: Response) => {
     const emailBody = `Hi ${firstName}, \nYou have been invited by Dr. ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
 
     const addDoctorToInvitedDoctorsRequest: requests.IAddDoctorToInvitedDoctors = {
-      email: email,
+      email,
     };
 
     await db.addDoctorToInvitedDoctors(addDoctorToInvitedDoctorsRequest);
@@ -52,7 +52,7 @@ export const createDoctor = async (request: Request, response: Response) => {
     const password = request.body.password;
 
     const verifyEmailInvitedRequest: requests.IVerifyInvitedDoctor = {
-      email: email,
+      email,
     };
 
     const verifyInvitedDoctorResult = await db.verifyInvitedDoctor(
@@ -90,7 +90,7 @@ export const createDoctor = async (request: Request, response: Response) => {
 
     const user: IFirebaseUser = {
       email,
-      password: password,
+      password,
       isAdmin: true,
       isDoctor: true,
       displayName: [firstName, lastName].join(' '),
@@ -228,8 +228,8 @@ const assignClinic = async (
 ): Promise<string> => {
   try {
     const addDoctorToClinicRequest: requests.IAddDoctorToClinic = {
-      clinicID: clinicID,
-      doctorID: doctorID,
+      clinicID,
+      doctorID,
     };
     await db.addDoctorToClinic(addDoctorToClinicRequest);
     return `Successfully added clinic ${doctorID} to ${clinicID}`;

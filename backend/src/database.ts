@@ -344,6 +344,31 @@ export const getGraphingData = async (
   return result;
 };
 
+export const getPatientID = async (
+  request: requests.IGetPatientID
+): Promise<responses.IGetPatientID> => {
+  const query = `SELECT PatientID FROM Patients WHERE DoctorID='${request.doctorID}' AND FirstName='${request.firstName}' AND LastName='${request.lastName}';`;
+
+  const result = await new Promise<responses.IGetPatientID>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      if (!results[0]) {
+        resolve({ success: false });
+      } else {
+        resolve({
+          success: true,
+          patientID: results[0].PatientID,
+        });
+      }
+    });
+  });
+
+  return result;
+};
+
 export const createDoctor = async (
   request: requests.ICreateDoctor
 ): Promise<responses.ICreateDoctor> => {

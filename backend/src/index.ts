@@ -38,6 +38,7 @@ import {
   storeBSL,
   storeWeight,
   verifyPatientToken,
+  getPatientID,
 } from './roles/patient';
 
 import {
@@ -181,7 +182,7 @@ const sessionLogin = async (request: Request, response: Response) => {
 
   response.cookie('session', sessionCookie, options);
   response.send({
-    doctorID: doctorID,
+    doctorID,
   });
 };
 
@@ -209,7 +210,7 @@ const patientLogin = async (request: Request, response: Response) => {
   if (await updatePatientToken(patientID, tokenID)) {
     response.status(200).send({
       success: true,
-      tokenID: tokenID,
+      tokenID,
     });
   } else {
     response.sendStatus(403);
@@ -245,6 +246,7 @@ const initApi = (router: Router) => {
   router.post('/inviteUser', isAdminLoggedIn, inviteDoctor);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
+  router.post('/getPatientID', getPatientID);
   router.post('/getPatientProfile', getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);

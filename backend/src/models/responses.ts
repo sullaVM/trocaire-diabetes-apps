@@ -42,6 +42,11 @@ export interface IGetGraphingData {
   Weight?: { time: string; value: number }[];
 }
 
+export interface IGetPatientID {
+  success: boolean;
+  patientID?: number;
+}
+
 /**
  * Doctor responses
  */
