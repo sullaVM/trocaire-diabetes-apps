@@ -198,22 +198,23 @@ const patientLogin = async (request: Request, response: Response) => {
   const password = request.body.password;
   const patientID: number = request.body.patientID;
 
+  console.log(password);
   const verified = await verifyPassword(patientID, password);
   if (!verified) {
     response.status(403).send({
       message: 'Incorrect password',
     });
-  }
-
-  const tokenID = generateToken();
-
-  if (await updatePatientToken(patientID, tokenID)) {
-    response.status(200).send({
-      success: true,
-      tokenID,
-    });
   } else {
-    response.sendStatus(403);
+    const tokenID = generateToken();
+    console.log({ tokenID });
+    if (await updatePatientToken(patientID, tokenID)) {
+      response.status(200).send({
+        success: true,
+        tokenID,
+      });
+    } else {
+      response.sendStatus(403);
+    }
   }
 };
 
