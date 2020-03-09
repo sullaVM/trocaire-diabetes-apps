@@ -18,10 +18,10 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const createPatient = async (
   request: requests.ICreatePatient
 ): Promise<responses.ICreatePatient> => {
-  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName,Height, Pregnant, MobileNumber, PhotoLink, Password, BslUnit)
+  const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, UserName, Height, Pregnant, MobileNumber, PhotoDataUrl, Password, BslUnit)
   VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${
-    request.height
-  }', '${request.pregnant}', '${request.mobileNumber}','${
+    request.userName
+  }','${request.height}', '${request.pregnant}', '${request.mobileNumber}','${
     request.photoDataUrl
   }','${request.password}','${request.bslUnit === 'mgDL' ? 1 : 0}');`;
 
@@ -131,7 +131,7 @@ export const getPatientProfile = async (
           height: results[0].Height,
           pregnant: results[0].Pregnant,
           mobileNumber: results[0].MobileNumber,
-          photoDataUrl: results[0].PhotoLink,
+          photoDataUrl: results[0].PhotoDataUrl,
           bslUnit: results[0].BslUnit === 1 ? 'mgDL' : 'mmolL',
         });
       }
@@ -164,6 +164,11 @@ export const updatePatient = async (
       : ''
   }
   ${
+    request.userName
+      ? `${updateCount++ ? ',' : ''}UserName='${request.userName}'`
+      : ''
+  }
+  ${
     request.height
       ? `${updateCount++ ? ',' : ''}Height='${request.height}'`
       : ''
@@ -180,7 +185,7 @@ export const updatePatient = async (
   }
   ${
     request.photoDataUrl
-      ? `${updateCount++ ? ',' : ''}PhotoLink='${request.photoDataUrl}'`
+      ? `${updateCount++ ? ',' : ''}PhotoDataUrl='${request.photoDataUrl}'`
       : ''
   }
   ${

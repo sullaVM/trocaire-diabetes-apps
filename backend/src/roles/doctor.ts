@@ -19,6 +19,7 @@ export const createPatient = async (request: Request, response: Response) => {
     doctorID: request.body.doctorID,
     firstName: request.body.firstName,
     lastName: request.body.lastName,
+    userName: request.body.userName,
     height: request.body.height,
     pregnant: request.body.pregnant,
     mobileNumber: request.body.mobileNumber,
@@ -164,7 +165,7 @@ export const getDoctorID = (request: Request, response: Response) => {
 export const getDoctorIDFromLogin = async (email: string) => {
   try {
     const getDoctorIDRequest: requests.IGetDoctorID = {
-      email: email,
+      email,
     };
 
     const doctorID = await db.getDoctorID(getDoctorIDRequest);

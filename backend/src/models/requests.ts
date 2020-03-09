@@ -6,6 +6,7 @@ export interface ICreatePatient {
   doctorID: number;
   firstName: string;
   lastName: string;
+  userName: string;
   height: string;
   pregnant: number;
   mobileNumber: number;
@@ -19,6 +20,7 @@ export interface IUpdatePatient {
   doctorID?: number;
   firstName?: string;
   lastName?: string;
+  userName?: string;
   height?: string;
   pregnant?: number;
   mobileNumber?: number;
