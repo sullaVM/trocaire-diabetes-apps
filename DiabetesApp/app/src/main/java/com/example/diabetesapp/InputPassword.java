@@ -3,20 +3,22 @@ package com.example.diabetesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
+import com.example.diabetesapp.data.requests.PatientLoginRequest;
+import com.example.diabetesapp.data.responses.PatientLoginResponse;
 
 import java.util.List;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 
 public class InputPassword extends AppCompatActivity {
 
-    Button enter;
     PatternLockView mPatternLockView;
     int mPatientID;
 
@@ -38,7 +40,7 @@ public class InputPassword extends AppCompatActivity {
             Log.d(getClass().getName(), "Pattern complete: " +
                     PatternLockUtils.patternToString(mPatternLockView, pattern));
             String password = PatternLockUtils.patternToString(mPatternLockView, pattern);
-            checkPassword(mPatientID, password);
+            checkPassword(password);
         }
 
         @Override
@@ -58,35 +60,21 @@ public class InputPassword extends AppCompatActivity {
         mPatientID = getIntent().getIntExtra("tag", -1);
     }
 
-    void checkPassword(int tag, String password) {
-        /*
-        File testFile = new File(this.getFilesDir(), "TextFile.txt");
-        if (testFile != null) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(testFile));
-                String line;
-                for (int i = 1; i < tag; i++) {
-                    line = reader.readLine();
-                }
-                line = reader.readLine();
-                String[] info = line.split(" ");
-                String realPassword = info[3];
+    void checkPassword(final String password) {
 
-         */
-        //if (realPassword.equals(password)) {
-        Intent intent = new Intent(this, DataEnter.class);
-        intent.putExtra("tag", tag);
-        startActivity(intent);
-                /*} else {
-                    //Intent intent = new Intent(this, MainActivity.class);
-                    //startActivity(intent);
+        final PatientLoginRequest patientLoginRequest = new PatientLoginRequest(mPatientID, password);
+        patientLoginRequest.makeRequest(getBaseContext(), new Consumer<PatientLoginResponse>() {
+            @Override
+            public void accept(PatientLoginResponse patientLoginResponse) {
+                if (patientLoginResponse.success != null && patientLoginResponse.success) {
+                    Intent intent = new Intent(getBaseContext(), DataEnter.class);
+                    intent.putExtra("tag", mPatientID);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT);
                 }
-            } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TextFile.txt file.");
             }
-        }
-        */
+        });
     }
 
 }

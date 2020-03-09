@@ -1,40 +1,30 @@
 package com.example.diabetesapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.text.InputType;
+import android.widget.Toast;
 
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.example.diabetesapp.data.requests.StoreBSLRequest;
 import com.example.diabetesapp.data.requests.StoreRBPRequest;
-import com.example.diabetesapp.data.requests.StoreWeightRequest;
 import com.example.diabetesapp.data.responses.StoreBSLResponse;
 import com.example.diabetesapp.data.responses.StoreRBPResponse;
-import com.example.diabetesapp.data.responses.StoreWeightResponse;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.sql.Timestamp;
 
 public class InputPressureSugar extends AppCompatActivity {
 
-    EditText dataBox1, dataBox2;
-    ImageView back, done, camera;
-
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
 
+    EditText dataBox1, dataBox2;
+    ImageView back, done, camera;
     String input;
     String input2;
     int mPatientID;
@@ -63,7 +53,7 @@ public class InputPressureSugar extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getIntent().getIntExtra("tag", 0)==REQUEST_SUGAR) saveData(REQUEST_SUGAR);
+                if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) saveData(REQUEST_SUGAR);
                 else saveData(REQUEST_PRESSURE);
             }
         });
@@ -74,16 +64,10 @@ public class InputPressureSugar extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = getIntent();
                 int id = i.getIntExtra("tag", 0);
-                if(id==0) OCRNormal(id);
+                if (id == 0) OCRNormal(id);
                 else OCRSevenDigit(id);
             }
         });
-    }
-
-    private void enterManual(int code, int boxNo) {
-        Intent intent = new Intent(this, Manual.class);
-        intent.getIntExtra("tag", boxNo);
-        startActivityForResult(intent, code);
     }
 
     private void OCRNormal(int code) {
@@ -107,45 +91,37 @@ public class InputPressureSugar extends AppCompatActivity {
         }
     }
 
-    private void back(){
+    private void back() {
         finish();
     }
 
-    private void saveData(int request){
+    private void saveData(int request) {
         String timestamp = new Timestamp(System.currentTimeMillis()).toString();
-        if(request==REQUEST_SUGAR) {
+        if (request == REQUEST_SUGAR) {
 
             try {
                 StoreBSLRequest storeBSLRequest = new StoreBSLRequest(mPatientID, timestamp, Float.parseFloat(input), null);
-                storeBSLRequest.makeRequest(this, new Response.Listener<StoreBSLResponse>() {
+                storeBSLRequest.makeRequest(this, new Consumer<StoreBSLResponse>() {
                     @Override
-                    public void onResponse(StoreBSLResponse response) {
-                        Log.println(Log.INFO, "StoreBSLRequest", response.success.toString());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.println(Log.ERROR, "StoreBSLRequest", error.getMessage());
+                    public void accept(StoreBSLResponse storeBSLResponse) {
+                        finish();
                     }
                 });
-            } catch (Exception e) {}
-        }
-        if(request==REQUEST_PRESSURE){
+            } catch (Exception e) {
+                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT);
+            }
+        } else if (request == REQUEST_PRESSURE) {
             try {
                 StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(input), Float.parseFloat(input));
-                storeRBPRequest.makeRequest(this, new Response.Listener<StoreRBPResponse>() {
+                storeRBPRequest.makeRequest(this, new Consumer<StoreRBPResponse>() {
                     @Override
-                    public void onResponse(StoreRBPResponse response) {
-                        Log.println(Log.INFO, "StoreRBPRequest", response.success.toString());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.println(Log.ERROR, "StoreRBPRequest", error.getMessage());
-
+                    public void accept(StoreRBPResponse storeRBPResponse) {
+                        finish();
                     }
                 });
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT);
+            }
         }
     }
 }

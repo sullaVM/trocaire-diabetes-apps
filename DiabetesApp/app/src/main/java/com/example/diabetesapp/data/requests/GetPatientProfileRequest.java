@@ -1,12 +1,11 @@
 package com.example.diabetesapp.data.requests;
 
-import com.android.volley.Response;
-import com.example.diabetesapp.GsonRequest;
+import com.android.volley.Request;
 import com.example.diabetesapp.data.responses.GetPatientProfileResponse;
-import com.google.gson.Gson;
 
 public class GetPatientProfileRequest extends PatientRequest<GetPatientProfileResponse> {
     private Integer patientID;
+    private String tokenID;
 
     public GetPatientProfileRequest(Integer patientID) {
         this.patientID = patientID;
@@ -20,5 +19,15 @@ public class GetPatientProfileRequest extends PatientRequest<GetPatientProfileRe
     @Override
     public Class responseClass() {
         return GetPatientProfileResponse.class;
+    }
+
+    @Override
+    public int requestType() {
+        return Request.Method.POST;
+    }
+
+    @Override
+    public void setTokenID(String tokenID) {
+        this.tokenID = tokenID;
     }
 }

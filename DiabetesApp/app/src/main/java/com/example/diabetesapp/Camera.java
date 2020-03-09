@@ -3,48 +3,39 @@ package com.example.diabetesapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.widget.ImageView;
-import android.view.View;
-import android.graphics.Canvas;
-import org.opencv.core.Scalar;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import com.google.android.gms.vision.Frame;
-
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-import android.graphics.Matrix;
-import org.opencv.core.Rect;
-import org.opencv.core.Size;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Camera extends AppCompatActivity {
 
@@ -117,7 +108,7 @@ public class Camera extends AppCompatActivity {
         finish();
     }
 
-    private void save(){
+    private void save() {
         File photoFile = new File(this.getExternalFilesDir(null), "Image" + n + ".jpg");
         try {
             FileOutputStream out = new FileOutputStream(photoFile);
@@ -204,152 +195,152 @@ public class Camera extends AppCompatActivity {
     }
 
     private void takeImage() {
-            cameraSource.takePicture(null, new CameraSource.PictureCallback() {
+        cameraSource.takePicture(null, new CameraSource.PictureCallback() {
 
-                @Override
-                public void onPictureTaken(byte[] bytes) {
-                    try {
-                        Bitmap loadedImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            @Override
+            public void onPictureTaken(byte[] bytes) {
+                try {
+                    Bitmap loadedImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-                        Matrix matrix = new Matrix();
-                        matrix.postRotate(90);
-                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(loadedImage, loadedImage.getWidth(), loadedImage.getHeight(), true);
-                        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-                        Mat mat = new Mat(rotatedBitmap.getHeight(),rotatedBitmap.getWidth(),CvType.CV_8UC3);
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(90);
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(loadedImage, loadedImage.getWidth(), loadedImage.getHeight(), true);
+                    Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+                    Mat mat = new Mat(rotatedBitmap.getHeight(), rotatedBitmap.getWidth(), CvType.CV_8UC3);
 
-                        Utils.bitmapToMat(rotatedBitmap, mat);
-                        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2RGB);
-                        Imgproc.cvtColor(mat,mat,Imgproc.COLOR_RGB2GRAY);
-                        Imgproc.threshold( mat, mat, 150,255, Imgproc.THRESH_OTSU );
-                        Utils.matToBitmap(mat, rotatedBitmap);
-                        image = rotatedBitmap;
+                    Utils.bitmapToMat(rotatedBitmap, mat);
+                    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2RGB);
+                    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY);
+                    Imgproc.threshold(mat, mat, 150, 255, Imgproc.THRESH_OTSU);
+                    Utils.matToBitmap(mat, rotatedBitmap);
+                    image = rotatedBitmap;
 
-                        int rect_h = mat.height()/3;
-                        int rect_w = mat.width()/2;
-                        Rect roi = new Rect(mat.width()/2-(rect_w/2), mat.height()/2-(rect_h/2), rect_w,rect_h);
-                        Mat crop = new Mat(mat, roi);
+                    int rect_h = mat.height() / 3;
+                    int rect_w = mat.width() / 2;
+                    Rect roi = new Rect(mat.width() / 2 - (rect_w / 2), mat.height() / 2 - (rect_h / 2), rect_w, rect_h);
+                    Mat crop = new Mat(mat, roi);
 
-                        int new_rect_h = crop.height()/2;
-                        int new_rect_w = crop.width();
-                        roi = new Rect(0, 0, new_rect_w, new_rect_h);
-                        Mat firstHalf = new Mat(crop, roi);
-                        roi = new Rect(0, new_rect_h, new_rect_w, new_rect_h);
-                        Mat secondHalf = new Mat(crop, roi);
+                    int new_rect_h = crop.height() / 2;
+                    int new_rect_w = crop.width();
+                    roi = new Rect(0, 0, new_rect_w, new_rect_h);
+                    Mat firstHalf = new Mat(crop, roi);
+                    roi = new Rect(0, new_rect_h, new_rect_w, new_rect_h);
+                    Mat secondHalf = new Mat(crop, roi);
 
-                        Bitmap bimp = Bitmap.createBitmap(firstHalf.width(), firstHalf.height(), Bitmap.Config.ARGB_8888);
-                        Utils.matToBitmap(firstHalf, bimp);
-                        image = bimp;
+                    Bitmap bimp = Bitmap.createBitmap(firstHalf.width(), firstHalf.height(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(firstHalf, bimp);
+                    image = bimp;
 
-                        bimp = Bitmap.createBitmap(secondHalf.width(), secondHalf.height(), Bitmap.Config.ARGB_8888);
-                        Utils.matToBitmap(secondHalf, bimp);
-                        image = bimp;
+                    bimp = Bitmap.createBitmap(secondHalf.width(), secondHalf.height(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(secondHalf, bimp);
+                    image = bimp;
 
-                        StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new StringBuilder();
 
-                        new_rect_h = firstHalf.height();
-                        new_rect_w = firstHalf.width()/3;
-                        roi = new Rect(0, 0, new_rect_w, new_rect_h);
-                        Mat piece = new Mat(firstHalf, roi);
+                    new_rect_h = firstHalf.height();
+                    new_rect_w = firstHalf.width() / 3;
+                    roi = new Rect(0, 0, new_rect_w, new_rect_h);
+                    Mat piece = new Mat(firstHalf, roi);
 
-                        double[] result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
-                        double value = Double.MIN_VALUE;
-                        int index = 0;
-                        for(int i = 0; i < 10; i++){
-                            if(result[i] > value) {
-                                value = result[i];
-                                index = i;
-                            }
+                    double[] result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
+                    double value = Double.MIN_VALUE;
+                    int index = 0;
+                    for (int i = 0; i < 10; i++) {
+                        if (result[i] > value) {
+                            value = result[i];
+                            index = i;
                         }
-                        if(value > .2) sb.append(index);
-
-                        roi = new Rect(new_rect_w, 0, new_rect_w, new_rect_h);
-                        piece = new Mat(firstHalf, roi);
-
-                        result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
-                        value = Double.MIN_VALUE;
-                        index = 0;
-                        for(int i = 0; i < 10; i++){
-                            if(result[i] > value) {
-                                value = result[i];
-                                index = i;
-                            }
-                        }
-                        if(value > .2) sb.append(index);
-
-                        roi = new Rect(new_rect_w*2, 0, new_rect_w, new_rect_h);
-                        piece = new Mat(firstHalf, roi);
-
-                        result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
-                        value = Double.MIN_VALUE;
-                        index = 0;
-                        for(int i = 0; i < 10; i++){
-                            if(result[i] > value) {
-                                value = result[i];
-                                index = i;
-                            }
-                        }
-                        if(value > .2) sb.append(index);
-
-
-                        StringBuilder sb2 = new StringBuilder();
-
-                        new_rect_h = secondHalf.height();
-                        new_rect_w = secondHalf.width()/3;
-                        roi = new Rect(0, 0, new_rect_w, new_rect_h);
-                        piece = new Mat(secondHalf, roi);
-
-                        result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
-                        value = Double.MIN_VALUE;
-                        index = 0;
-                        for(int i = 0; i < 10; i++){
-                            if(result[i] > value) {
-                                value = result[i];
-                                index = i;
-                            }
-                        }
-                        if(value > .2) sb2.append(index);
-
-                        roi = new Rect(new_rect_w, 0, new_rect_w, new_rect_h);
-                        piece = new Mat(secondHalf, roi);
-
-                        result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
-                        value = Double.MIN_VALUE;
-                        index = 0;
-                        for(int i = 0; i < 10; i++){
-                            if(result[i] > value) {
-                                value = result[i];
-                                index = i;
-                            }
-                        }
-                        if(value > .2) sb2.append(index);
-
-                        roi = new Rect(new_rect_w*2, 0, new_rect_w, new_rect_h);
-                        piece = new Mat(secondHalf, roi);
-
-                        bimp = Bitmap.createBitmap(piece.width(), piece.height(), Bitmap.Config.ARGB_8888);
-                        Utils.matToBitmap(piece, bimp);
-                        image = bimp;
-
-                        result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
-                        value = Double.MIN_VALUE;
-                        index = 0;
-                        for(int i = 0; i < 10; i++){
-                            if(result[i] > value) {
-                                value = result[i];
-                                index = i;
-                            }
-                        }
-                        if(value > .2) sb2.append(index);
-
-
-                        saveAndReturn(sb.toString(), sb2.toString());
-
-                    } catch( Exception ex) {
-                    Log.w("Camera", "Detector dependencies are not yet available");
                     }
+                    if (value > .2) sb.append(index);
+
+                    roi = new Rect(new_rect_w, 0, new_rect_w, new_rect_h);
+                    piece = new Mat(firstHalf, roi);
+
+                    result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
+                    value = Double.MIN_VALUE;
+                    index = 0;
+                    for (int i = 0; i < 10; i++) {
+                        if (result[i] > value) {
+                            value = result[i];
+                            index = i;
+                        }
+                    }
+                    if (value > .2) sb.append(index);
+
+                    roi = new Rect(new_rect_w * 2, 0, new_rect_w, new_rect_h);
+                    piece = new Mat(firstHalf, roi);
+
+                    result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
+                    value = Double.MIN_VALUE;
+                    index = 0;
+                    for (int i = 0; i < 10; i++) {
+                        if (result[i] > value) {
+                            value = result[i];
+                            index = i;
+                        }
+                    }
+                    if (value > .2) sb.append(index);
+
+
+                    StringBuilder sb2 = new StringBuilder();
+
+                    new_rect_h = secondHalf.height();
+                    new_rect_w = secondHalf.width() / 3;
+                    roi = new Rect(0, 0, new_rect_w, new_rect_h);
+                    piece = new Mat(secondHalf, roi);
+
+                    result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
+                    value = Double.MIN_VALUE;
+                    index = 0;
+                    for (int i = 0; i < 10; i++) {
+                        if (result[i] > value) {
+                            value = result[i];
+                            index = i;
+                        }
+                    }
+                    if (value > .2) sb2.append(index);
+
+                    roi = new Rect(new_rect_w, 0, new_rect_w, new_rect_h);
+                    piece = new Mat(secondHalf, roi);
+
+                    result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
+                    value = Double.MIN_VALUE;
+                    index = 0;
+                    for (int i = 0; i < 10; i++) {
+                        if (result[i] > value) {
+                            value = result[i];
+                            index = i;
+                        }
+                    }
+                    if (value > .2) sb2.append(index);
+
+                    roi = new Rect(new_rect_w * 2, 0, new_rect_w, new_rect_h);
+                    piece = new Mat(secondHalf, roi);
+
+                    bimp = Bitmap.createBitmap(piece.width(), piece.height(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(piece, bimp);
+                    image = bimp;
+
+                    result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
+                    value = Double.MIN_VALUE;
+                    index = 0;
+                    for (int i = 0; i < 10; i++) {
+                        if (result[i] > value) {
+                            value = result[i];
+                            index = i;
+                        }
+                    }
+                    if (value > .2) sb2.append(index);
+
+
+                    saveAndReturn(sb.toString(), sb2.toString());
+
+                } catch (Exception ex) {
+                    Log.w("Camera", "Detector dependencies are not yet available");
                 }
-            });
-        }
+            }
+        });
+    }
 
     public double[] matching(int match_method, Mat img) {
 
@@ -360,7 +351,7 @@ public class Camera extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.zero);
         Mat templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         int result_cols = img.cols() - templ.cols() + 1;
@@ -382,7 +373,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.one);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -402,7 +393,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.two);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -421,7 +412,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.three);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -439,7 +430,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.four);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -457,7 +448,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.five);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -475,7 +466,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.six);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -493,7 +484,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.seven);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -511,7 +502,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.eight);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -529,7 +520,7 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.nine);
         templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ,templ,Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
@@ -548,4 +539,4 @@ public class Camera extends AppCompatActivity {
         Utils.matToBitmap(img, bimp);
         return per;
     }
-    }
+}

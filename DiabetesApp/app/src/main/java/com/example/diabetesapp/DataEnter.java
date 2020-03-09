@@ -31,8 +31,7 @@ public class DataEnter extends AppCompatActivity {
 
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
-    static final int REQUEST_HEIGHT = 2;
-    static final int REQUEST_WEIGHT = 3;
+    static final int REQUEST_WEIGHT = 2;
 
     ImageView back;
     ImageView blood_sugar, blood_pressure, cm, kg;
@@ -70,14 +69,6 @@ public class DataEnter extends AppCompatActivity {
             }
         });
 
-        cm = findViewById(R.id.cm);
-        cm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goTo(REQUEST_HEIGHT);
-            }
-        });
-
         kg = findViewById(R.id.kg);
         kg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,11 +86,6 @@ public class DataEnter extends AppCompatActivity {
             startActivity(i);
         } else if (id == REQUEST_PRESSURE) {
             Intent i = new Intent(this, InputPressureSugar.class);
-            i.putExtra("tag", id);
-            i.putExtra("patientId", mPatientID);
-            startActivity(i);
-        } else if (id == REQUEST_HEIGHT) {
-            Intent i = new Intent(this, Manual.class);
             i.putExtra("tag", id);
             i.putExtra("patientId", mPatientID);
             startActivity(i);
