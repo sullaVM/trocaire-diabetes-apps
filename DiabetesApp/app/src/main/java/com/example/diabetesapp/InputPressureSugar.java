@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.text.InputType;
 
 import android.util.Log;
 
@@ -27,13 +29,14 @@ import java.sql.Timestamp;
 
 public class InputPressureSugar extends AppCompatActivity {
 
-    TextView dataBox;
-    ImageView back, done, camera, manual;
+    EditText dataBox1, dataBox2;
+    ImageView back, done, camera;
 
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
 
     String input;
+    String input2;
     int mPatientID;
 
     @Override
@@ -43,7 +46,10 @@ public class InputPressureSugar extends AppCompatActivity {
 
         mPatientID = getIntent().getIntExtra("patientId", 0);
 
-        dataBox = findViewById(R.id.data);
+        dataBox1 = findViewById(R.id.data);
+        dataBox2 = findViewById(R.id.data2);
+        dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        dataBox2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +69,6 @@ public class InputPressureSugar extends AppCompatActivity {
         });
 
         camera = findViewById(R.id.camera);
-        manual = findViewById(R.id.manual);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,16 +78,11 @@ public class InputPressureSugar extends AppCompatActivity {
                 else OCRSevenDigit(id);
             }
         });
-        manual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enterManual(0);
-            }
-        });
     }
 
-    private void enterManual(int code) {
+    private void enterManual(int code, int boxNo) {
         Intent intent = new Intent(this, Manual.class);
+        intent.getIntExtra("tag", boxNo);
         startActivityForResult(intent, code);
     }
 
@@ -100,8 +100,10 @@ public class InputPressureSugar extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == InputPressureSugar.RESULT_OK) {
-            input = data.getStringExtra("input");
-            if (data != null) dataBox.setText(input);
+            input = data.getStringExtra("input1");
+            input2 = data.getStringExtra("input2");
+            if (input != null) dataBox1.setText(input);
+            if (input2 != null) dataBox2.setText(input2);
         }
     }
 

@@ -50,7 +50,7 @@ public class Manual extends AppCompatActivity {
                 int type = intent.getIntExtra("tag", 0);
                 if(type==2) saveData(STORE_HEIGHT, intent);
                 if(type==3) saveData(STORE_WEIGHT, intent);
-                else enterData("input");
+                //else enterData("input");
             }
         });
 

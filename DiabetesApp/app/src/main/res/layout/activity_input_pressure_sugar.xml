@@ -38,7 +38,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
-    <TextView
+    <EditText
         android:id="@+id/data"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -50,8 +50,25 @@
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.60"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintWidth_percent="0.4"  />
+
+    <EditText
+        android:id="@+id/data2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:text=""
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@id/guidelineHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.95"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintWidth_percent="0.4" />
 
     <ImageView
         android:id="@+id/camera"
@@ -66,17 +83,5 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
         app:srcCompat="@drawable/baseline_camera_alt_black_48dp" />
 
-    <ImageView
-        android:id="@+id/manual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias=".05"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
-        app:srcCompat="@drawable/baseline_keyboard_black_48dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
