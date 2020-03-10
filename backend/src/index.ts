@@ -121,6 +121,16 @@ const addDoctorToClinics = (_request: Request, response: Response) => {
   });
 };
 
+const registerPatient = (_request: Request, response: Response) => {
+  response.render('registerPatient', {
+    layout: 'main',
+
+    helpers: {
+      title: 'Register a Patient',
+    },
+  });
+};
+
 const isAdminLoggedIn = async (
   request: Request,
   response: Response,
@@ -198,16 +208,13 @@ const patientLogin = async (request: Request, response: Response) => {
   const password = request.body.password;
   const patientID: number = request.body.patientID;
 
-  console.log(password);
   const verified = await verifyPassword(patientID, password);
-  console.log({ verified });
   if (!verified) {
     response.status(403).send({
       message: 'Incorrect password',
     });
   } else {
     const tokenID = generateToken();
-    console.log({ tokenID });
     if (await updatePatientToken(patientID, tokenID)) {
       response.status(200).send({
         success: true,
@@ -228,6 +235,7 @@ const initRoutes = (app: Express) => {
   app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
   app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
   app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinics);
+  app.get('/registerPatient', isDoctorLoggedIn, registerPatient);
 
   app.get('/login', login);
   app.get('/signup', doctorSignup);

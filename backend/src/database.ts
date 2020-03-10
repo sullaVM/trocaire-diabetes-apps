@@ -52,9 +52,10 @@ export const getPatientPassword = async (
         if (!results[0]) {
           reject(error);
         } else {
+          console.log(results[0]);
           resolve({
             success: true,
-            password: results[0].password,
+            password: results[0].Password,
           });
         }
       });

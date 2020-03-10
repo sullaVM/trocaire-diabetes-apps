@@ -93,18 +93,8 @@ export const verifyPassword = async (
     };
 
     const getPasswordResponse = await db.getPatientPassword(getPasswordRequest);
-    const bycryptCallback = (error: Error, result: boolean) => {
-      if (error) {
-        return false;
-      }
-      if (!result) {
-        return false;
-      }
-      return true;
-    };
-    compare(password, getPasswordResponse.password, bycryptCallback);
 
-    return false;
+    return await compare(password, getPasswordResponse.password);
   } catch (error) {
     console.log('Error verifying password: ', error);
     return false;

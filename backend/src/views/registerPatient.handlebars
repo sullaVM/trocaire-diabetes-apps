@@ -1,0 +1,31 @@
+<p>
+  Invite a doctor to join this service. When you submit this form, an automatic
+  will me sent to them.
+</p>
+
+<form action="/api/createPatient" method="post">
+  <label for="firstName">First Name:</label>
+  <input type="text" name="firstName" required><br>
+
+  <label for="lastName">Last Name:</label>
+  <input type="text" name="lastName" required><br>
+
+  <label for="height">Height:</label>
+  <input type="number" name="height" required><br>
+
+  <label for="pregnant">Is the patient pregnant?</label>
+  <input type="number" name="pregnant" required><br>
+
+  <label for="mobileNumber">Mobile Number:</label>
+  <input type="number" name="mobileNumber" required><br>
+
+  <label for="userName">Username:</label>
+  <input type="text" name="userName" required><br>
+
+  <label for="password">Password:</label>
+  <input type="password" name="password" required>
+
+  <input type="hidden" name="doctorID" id="inviteUser" required>
+
+  <input type="submit" class="action-submit" name="submit">
+</form>
