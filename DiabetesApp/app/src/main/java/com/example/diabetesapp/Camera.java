@@ -158,6 +158,18 @@ public class Camera extends AppCompatActivity {
         });
     }
 
+    private void save() {
+        File photoFile = new File(this.getExternalFilesDir(null), "Image.jpg");
+        try {
+            FileOutputStream out = new FileOutputStream(photoFile);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void takeImage() {
         cameraSource.takePicture(null, new CameraSource.PictureCallback() {
 
@@ -185,6 +197,8 @@ public class Camera extends AppCompatActivity {
                     Mat crop = new Mat(mat, roi);
                     Bitmap bmp = Bitmap.createBitmap(crop.width(), crop.height(), Bitmap.Config.ARGB_8888);
                     Utils.matToBitmap(crop, bmp);
+                    image = bmp;
+                    save();
 
                     StringBuilder sb = new StringBuilder();
 
@@ -215,19 +229,11 @@ public class Camera extends AppCompatActivity {
         });
     }
 
-    public double singleMatching(int match_method, Bitmap bitmap, Mat img, boolean warp){
+    public double singleMatching(int match_method, Bitmap bitmap, Mat img){
         Mat templ = new Mat();
         Utils.bitmapToMat(bitmap, templ);
         Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
-        if(warp) {
-            double ih = img.height();
-            double th = templ.height();
-            double tw = templ.width();
-            int nw = (int) Math.round(tw * (ih / th));
-            Size s = new Size(nw, img.height());
-            Imgproc.resize(templ, templ, s, 0, 0);
-        }
-        else Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
+        Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
 
         int result_cols = img.cols() - templ.cols() + 1;
         int result_rows = img.rows() - templ.rows() + 1;
@@ -245,43 +251,43 @@ public class Camera extends AppCompatActivity {
 
         int current_num = 0;
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.zero);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.one);
-        per[current_num] = singleMatching(match_method, bitmap, img, true);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.two);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.three);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.four);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.five);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.six);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.seven);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.eight);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         current_num++;
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.nine);
-        per[current_num] = singleMatching(match_method, bitmap, img, false);
+        per[current_num] = singleMatching(match_method, bitmap, img);
 
         return per;
     }
