@@ -14,10 +14,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
@@ -30,6 +26,10 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
 import java.io.IOException;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 public class CameraSugar extends AppCompatActivity {
 
@@ -65,7 +65,7 @@ public class CameraSugar extends AppCompatActivity {
 
         cameraView = findViewById(R.id.surface_view);
 
-        ImageButton done = findViewById(R.id.done);
+        ImageButton done = findViewById(R.id.enter);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +83,7 @@ public class CameraSugar extends AppCompatActivity {
 
     private void saveData() {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("input", data);
+        resultIntent.putExtra("input1", data);
         setResult(InputPressureSugar.RESULT_OK, resultIntent);
         finish();
     }

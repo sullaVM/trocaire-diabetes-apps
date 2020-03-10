@@ -23,4 +23,7 @@
     <string name="session"></string>
     <string name="prompt_username">Username</string>
     <string name="prompt_weight">Weight</string>
+    <string name="prompt_diastole">Diastole</string>
+    <string name="prompt_systole">Systole</string>
+    <string name="prompt_blood_sugar">Blood Sugar</string>
 </resources>

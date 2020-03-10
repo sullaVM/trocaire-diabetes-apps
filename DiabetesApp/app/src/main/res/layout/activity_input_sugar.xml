@@ -38,16 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9"
-        app:layout_constraintWidth_percent="0.8">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_diastole"
-            android:inputType="text"
-            android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintWidth_percent="0.8"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/enterData2"
@@ -67,10 +58,10 @@
         app:layout_constraintWidth_percent="0.8">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/data2"
+            android:id="@+id/data1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_systole"
+            android:hint="@string/prompt_blood_sugar"
             android:inputType="text"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>

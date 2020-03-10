@@ -74,62 +74,6 @@ public class DataEnter extends AppCompatActivity {
         }
     }
 
-    /*
-    private void enterData() {
-        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
-        try {
-            StoreWeightRequest storeWeightRequest = new StoreWeightRequest(mPatientID, timestamp, Float.parseFloat(weight.getText().toString()));
-            storeWeightRequest.makeRequest(this, new Response.Listener<StoreWeightResponse>() {
-                @Override
-                public void onResponse(StoreWeightResponse response) {
-                    Log.println(Log.INFO, "StoreWeightRequest", response.success.toString());
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.println(Log.ERROR, "StoreWeightRequest", error.getMessage());
-                }
-            });
-        } catch (Exception e) {
-
-        }
-        try {
-            StoreBSLRequest storeBSLRequest = new StoreBSLRequest(mPatientID, timestamp, Float.parseFloat(sugar_data), null);
-            storeBSLRequest.makeRequest(this, new Response.Listener<StoreBSLResponse>() {
-                @Override
-                public void onResponse(StoreBSLResponse response) {
-                    Log.println(Log.INFO, "StoreBSLRequest", response.success.toString());
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.println(Log.ERROR, "StoreBSLRequest", error.getMessage());
-                }
-            });
-        } catch (Exception e) {
-
-        }
-        try {
-            StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(pressure_data), Float.parseFloat(pressure_data));
-            storeRBPRequest.makeRequest(this, new Response.Listener<StoreRBPResponse>() {
-                @Override
-                public void onResponse(StoreRBPResponse response) {
-                    Log.println(Log.INFO, "StoreRBPRequest", response.success.toString());
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.println(Log.ERROR, "StoreRBPRequest", error.getMessage());
-
-                }
-            });
-        } catch (Exception e) {
-
-        }
-    }
-
-     */
-
     private void back() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

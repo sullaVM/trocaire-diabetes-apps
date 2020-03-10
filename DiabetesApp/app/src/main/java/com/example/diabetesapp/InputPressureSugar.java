@@ -8,15 +8,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
-
 import com.example.diabetesapp.data.requests.StoreBSLRequest;
 import com.example.diabetesapp.data.requests.StoreRBPRequest;
 import com.example.diabetesapp.data.responses.StoreBSLResponse;
 import com.example.diabetesapp.data.responses.StoreRBPResponse;
 
 import java.sql.Timestamp;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 
 public class InputPressureSugar extends AppCompatActivity {
 
@@ -31,14 +31,23 @@ public class InputPressureSugar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_input_pressure_sugar);
+        if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) {
+            setContentView(R.layout.activity_input_pressure_sugar);
 
-        mPatientID = getIntent().getIntExtra("patientId", 0);
+            mPatientID = getIntent().getIntExtra("patientId", 0);
 
-        dataBox1 = findViewById(R.id.data);
-        dataBox2 = findViewById(R.id.data2);
-        dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        dataBox2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            dataBox1 = findViewById(R.id.data);
+            dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        } else {
+            setContentView(R.layout.activity_input_sugar);
+
+            mPatientID = getIntent().getIntExtra("patientId", 0);
+
+            dataBox1 = findViewById(R.id.data);
+            dataBox2 = findViewById(R.id.data2);
+            dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            dataBox2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        }
 
         ImageButton back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -83,10 +92,15 @@ public class InputPressureSugar extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == InputPressureSugar.RESULT_OK) {
-            input = data.getStringExtra("input1");
-            input2 = data.getStringExtra("input2");
-            if (input != null) dataBox1.setText(input);
-            if (input2 != null) dataBox2.setText(input2);
+            if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) {
+                input = data.getStringExtra("input1");
+                input2 = data.getStringExtra("input2");
+                if (input != null) dataBox1.setText(input);
+                if (input2 != null) dataBox2.setText(input2);
+            } else {
+                input = data.getStringExtra("input1");
+                if (input != null) dataBox1.setText(input);
+            }
         }
     }
 
