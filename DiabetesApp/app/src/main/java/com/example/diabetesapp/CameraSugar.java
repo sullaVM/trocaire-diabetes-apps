@@ -1,24 +1,22 @@
 package com.example.diabetesapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -26,25 +24,19 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
-import java.io.IOException;
-import android.os.Bundle;
-
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
+
+import java.io.IOException;
 
 public class CameraSugar extends AppCompatActivity {
 
-    ImageView back, done;
+    final int RequestCameraPermissionID = 1001;
     String data;
-
     SurfaceView cameraView;
     CameraSource cameraSource;
-    final int RequestCameraPermissionID = 1001;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -73,14 +65,14 @@ public class CameraSugar extends AppCompatActivity {
 
         cameraView = findViewById(R.id.surface_view);
 
-        done = findViewById(R.id.done);
+        ImageButton done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takeImage();
             }
         });
-        back = findViewById(R.id.back);
+        ImageButton back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,18 +81,19 @@ public class CameraSugar extends AppCompatActivity {
         });
     }
 
-    private void saveData(){
+    private void saveData() {
         Intent resultIntent = new Intent();
         resultIntent.putExtra("input", data);
         setResult(InputPressureSugar.RESULT_OK, resultIntent);
         finish();
     }
-    private void back(){
+
+    private void back() {
         this.finish();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();

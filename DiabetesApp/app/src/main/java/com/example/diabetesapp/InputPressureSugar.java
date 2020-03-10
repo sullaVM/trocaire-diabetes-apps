@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +24,6 @@ public class InputPressureSugar extends AppCompatActivity {
     static final int REQUEST_PRESSURE = 1;
 
     EditText dataBox1, dataBox2;
-    ImageView back, done, camera;
     String input;
     String input2;
     int mPatientID;
@@ -41,7 +40,7 @@ public class InputPressureSugar extends AppCompatActivity {
         dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         dataBox2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        back = findViewById(R.id.back);
+        ImageButton back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,7 +48,7 @@ public class InputPressureSugar extends AppCompatActivity {
             }
         });
 
-        done = findViewById(R.id.done);
+        ImageButton done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +57,7 @@ public class InputPressureSugar extends AppCompatActivity {
             }
         });
 
-        camera = findViewById(R.id.camera);
+        ImageButton camera = findViewById(R.id.camera);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,11 +107,11 @@ public class InputPressureSugar extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
-                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT);
+                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
             }
         } else if (request == REQUEST_PRESSURE) {
             try {
-                StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(input), Float.parseFloat(input));
+                StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(input), Float.parseFloat(input2));
                 storeRBPRequest.makeRequest(this, new Consumer<StoreRBPResponse>() {
                     @Override
                     public void accept(StoreRBPResponse storeRBPResponse) {
@@ -120,7 +119,7 @@ public class InputPressureSugar extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
-                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT);
+                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
             }
         }
     }

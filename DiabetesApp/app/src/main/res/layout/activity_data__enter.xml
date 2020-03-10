@@ -7,16 +7,6 @@
     android:background="#C8E6C9"
     tools:context=".DataEnter">
 
-    <ImageView
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/baseline_keyboard_backspace_black_48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertical"
         android:layout_width="0dp"
@@ -84,5 +74,17 @@
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintVertical_bias=".1"
         app:srcCompat="@drawable/kg" />
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_background"
+        android:padding="10dp"
+        android:src="@drawable/ic_arrow_back_white_48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

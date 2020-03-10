@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +25,8 @@ public class Manual extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
 
-        ImageView enter = findViewById(R.id.enter);
-        ImageView back = findViewById(R.id.back);
+        ImageButton enter = findViewById(R.id.enter);
+        ImageButton back = findViewById(R.id.back);
 
         data = findViewById(R.id.enterData);
         data.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -64,7 +64,7 @@ public class Manual extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT);
+            Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
         }
     }
 }

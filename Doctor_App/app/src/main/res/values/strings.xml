@@ -2,7 +2,7 @@
     <string name="app_name">Diabetes App</string>
     <string name="title_activity_patient__login">Sign in</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Pass</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">SIGN IN</string>
     <string name="welcome">"Welcome !"</string>
@@ -22,7 +22,7 @@
     <string name="empty_state_doctor">Add a patient and they will show up here.</string>
     <string name="chart_line">Blood Glucose</string>
     <string name="name">Name</string>
-    <string name="action_sign_in_forgot">FORGOT PASS</string>
+    <string name="action_sign_in_forgot">FORGOT PASSWORD</string>
     <string name="okay">OKAY</string>
     <string name="cancel">CANCEL</string>
     <string name="prompt_name">First Name</string>

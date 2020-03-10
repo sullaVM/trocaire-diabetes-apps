@@ -53,23 +53,27 @@
     </RelativeLayout>
 
 
-    <ImageView
-        android:id="@+id/done"
+    <ImageButton
+        android:id="@+id/enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/baseline_done_black_48dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_background"
+        android:padding="10dp"
+        android:src="@drawable/ic_check_white_48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/baseline_keyboard_backspace_black_48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_background"
+        android:padding="10dp"
+        android:src="@drawable/ic_arrow_back_white_48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +20,7 @@ import org.opencv.android.OpenCVLoader;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    ImageView done;
+    ImageButton done;
     EditText username;
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -77,12 +77,12 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("tag", getPatientIDResponse.patientID);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT);
+                        Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         } else {
-            Toast.makeText(getBaseContext(), "Username Invalid", Toast.LENGTH_SHORT);
+            Toast.makeText(getBaseContext(), "Username Invalid", Toast.LENGTH_SHORT).show();
         }
     }
 

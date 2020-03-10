@@ -22,7 +22,6 @@ public class InputPassword extends AppCompatActivity {
     PatternLockView mPatternLockView;
     int mPatientID;
 
-
     private PatternLockViewListener mPatternLockViewListener = new PatternLockViewListener() {
         @Override
         public void onStarted() {
@@ -66,12 +65,12 @@ public class InputPassword extends AppCompatActivity {
         patientLoginRequest.makeRequest(getBaseContext(), new Consumer<PatientLoginResponse>() {
             @Override
             public void accept(PatientLoginResponse patientLoginResponse) {
-                if (patientLoginResponse.success != null && patientLoginResponse.success) {
+                if (patientLoginResponse != null && patientLoginResponse.success != null && patientLoginResponse.success) {
                     Intent intent = new Intent(getBaseContext(), DataEnter.class);
                     intent.putExtra("tag", mPatientID);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT);
+                    Toast.makeText(getBaseContext(), "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
