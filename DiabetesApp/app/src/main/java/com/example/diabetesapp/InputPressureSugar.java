@@ -32,14 +32,14 @@ public class InputPressureSugar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) {
-            setContentView(R.layout.activity_input_pressure_sugar);
+            setContentView(R.layout.activity_input_sugar);
 
             mPatientID = getIntent().getIntExtra("patientId", 0);
 
-            dataBox1 = findViewById(R.id.data);
+            dataBox1 = findViewById(R.id.data1);
             dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         } else {
-            setContentView(R.layout.activity_input_sugar);
+            setContentView(R.layout.activity_input_pressure_sugar);
 
             mPatientID = getIntent().getIntExtra("patientId", 0);
 
@@ -92,7 +92,7 @@ public class InputPressureSugar extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == InputPressureSugar.RESULT_OK) {
-            if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) {
+            if (getIntent().getIntExtra("tag", 0) == REQUEST_PRESSURE) {
                 input = data.getStringExtra("input1");
                 input2 = data.getStringExtra("input2");
                 if (input != null) dataBox1.setText(input);
@@ -111,7 +111,7 @@ public class InputPressureSugar extends AppCompatActivity {
     private void saveData(int request) {
         String timestamp = new Timestamp(System.currentTimeMillis()).toString();
         if (request == REQUEST_SUGAR) {
-
+            if(input==null) input = dataBox1.getText().toString();
             try {
                 StoreBSLRequest storeBSLRequest = new StoreBSLRequest(mPatientID, timestamp, Float.parseFloat(input), null);
                 storeBSLRequest.makeRequest(this, new Consumer<StoreBSLResponse>() {
@@ -124,6 +124,8 @@ public class InputPressureSugar extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
             }
         } else if (request == REQUEST_PRESSURE) {
+            if(input==null) input = dataBox1.getText().toString();
+            if(input2==null) input2 = dataBox2.getText().toString();
             try {
                 StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(input), Float.parseFloat(input2));
                 storeRBPRequest.makeRequest(this, new Consumer<StoreRBPResponse>() {
