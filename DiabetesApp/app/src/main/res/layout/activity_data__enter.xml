@@ -15,73 +15,63 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintGuide_percent="0.5"
         app:layout_constraintStart_toStartOf="parent" />
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineHorizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
 
-    <ImageView
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <ImageButton
         android:id="@+id/blood_sugar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="fitXY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background_96dp"
+        android:padding="30dp"
+        android:src="@drawable/ic_sugar_blood_level"
         app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintVertical_bias=".9"
-        app:srcCompat="@drawable/drop" />
+        app:layout_constraintVertical_bias=".9" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/blood_pressure"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="fitXY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background_96dp"
+        android:padding="30dp"
+        android:src="@drawable/ic_pressure"
         app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.3"
-        app:layout_constraintVertical_bias=".9"
-        app:srcCompat="@drawable/meter" />
+        app:layout_constraintVertical_bias=".9" />
 
-    <ImageView
-        android:id="@+id/cm"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:scaleType="fitXY"
+    <ImageButton
+        android:id="@+id/kg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/button_background_96dp"
+        android:padding="30dp"
+        android:src="@drawable/ic_weight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
-        app:layout_constraintHorizontal_bias="0.3"
-        app:layout_constraintVertical_bias=".1"
-        app:srcCompat="@drawable/height" />
-
-    <ImageView
-        android:id="@+id/kg"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="10dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintVertical_bias=".1"
-        app:srcCompat="@drawable/kg" />
+        app:layout_constraintVertical_bias=".1" />
 
     <ImageButton
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:background="@drawable/button_background"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background_48dp"
         android:padding="10dp"
         android:src="@drawable/ic_arrow_back_white_48dp"
         app:layout_constraintStart_toStartOf="parent"

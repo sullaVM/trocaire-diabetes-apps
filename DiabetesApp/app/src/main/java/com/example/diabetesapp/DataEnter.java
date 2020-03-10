@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +12,6 @@ public class DataEnter extends AppCompatActivity {
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
     static final int REQUEST_WEIGHT = 2;
-
-    ImageView blood_sugar, blood_pressure, kg;
 
     int mPatientID;
 
@@ -33,7 +30,7 @@ public class DataEnter extends AppCompatActivity {
             }
         });
 
-        blood_sugar = findViewById(R.id.blood_sugar);
+        ImageButton blood_sugar = findViewById(R.id.blood_sugar);
         blood_sugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,7 +38,7 @@ public class DataEnter extends AppCompatActivity {
             }
         });
 
-        blood_pressure = findViewById(R.id.blood_pressure);
+        ImageButton blood_pressure = findViewById(R.id.blood_pressure);
         blood_pressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,7 +46,7 @@ public class DataEnter extends AppCompatActivity {
             }
         });
 
-        kg = findViewById(R.id.kg);
+        ImageButton kg = findViewById(R.id.kg);
         kg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
