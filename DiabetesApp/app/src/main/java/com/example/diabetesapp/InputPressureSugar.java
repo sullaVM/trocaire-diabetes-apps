@@ -23,6 +23,7 @@ public class InputPressureSugar extends AppCompatActivity {
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
 
+    ImageButton camera, camera2, back, done;
     EditText dataBox1, dataBox2;
     String input;
     String input2;
@@ -31,8 +32,18 @@ public class InputPressureSugar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_input_sugar);
+
         if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) {
-            setContentView(R.layout.activity_input_sugar);
+            camera = findViewById(R.id.camera);
+            camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = getIntent();
+                    int id = i.getIntExtra("tag", 0);
+                    OCRNormal(id);
+                }
+            });
 
             mPatientID = getIntent().getIntExtra("patientId", 0);
 
@@ -40,6 +51,26 @@ public class InputPressureSugar extends AppCompatActivity {
             dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         } else {
             setContentView(R.layout.activity_input_pressure_sugar);
+
+            camera = findViewById(R.id.camera);
+            camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = getIntent();
+                    int id = i.getIntExtra("tag", 0);
+                    OCRSevenDigit(id, true);
+                }
+            });
+
+            camera2 = findViewById(R.id.camera2);
+            camera2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = getIntent();
+                    int id = i.getIntExtra("tag", 0);
+                    OCRSevenDigit(id, false);
+                }
+            });
 
             mPatientID = getIntent().getIntExtra("patientId", 0);
 
@@ -49,7 +80,7 @@ public class InputPressureSugar extends AppCompatActivity {
             dataBox2.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         }
 
-        ImageButton back = findViewById(R.id.back);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +88,7 @@ public class InputPressureSugar extends AppCompatActivity {
             }
         });
 
-        ImageButton done = findViewById(R.id.done);
+        done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,16 +97,6 @@ public class InputPressureSugar extends AppCompatActivity {
             }
         });
 
-        ImageButton camera = findViewById(R.id.camera);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = getIntent();
-                int id = i.getIntExtra("tag", 0);
-                if (id == 0) OCRNormal(id);
-                else OCRSevenDigit(id);
-            }
-        });
     }
 
     private void OCRNormal(int code) {
@@ -83,8 +104,9 @@ public class InputPressureSugar extends AppCompatActivity {
         startActivityForResult(intent, code);
     }
 
-    private void OCRSevenDigit(int code) {
+    private void OCRSevenDigit(int code, boolean diastole) {
         Intent intent = new Intent(this, Camera.class);
+        intent.putExtra("diastole", diastole);
         startActivityForResult(intent, code);
     }
 
@@ -93,10 +115,14 @@ public class InputPressureSugar extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == InputPressureSugar.RESULT_OK) {
             if (getIntent().getIntExtra("tag", 0) == REQUEST_PRESSURE) {
-                input = data.getStringExtra("input1");
-                input2 = data.getStringExtra("input2");
-                if (input != null) dataBox1.setText(input);
-                if (input2 != null) dataBox2.setText(input2);
+                if(data.getBooleanExtra("diastole", true) == true){
+                    input = data.getStringExtra("input");
+                    if (input != null) dataBox1.setText(input);
+                }
+                else {
+                    input2 = data.getStringExtra("input");
+                    if (input2 != null) dataBox2.setText(input2);
+                }
             } else {
                 input = data.getStringExtra("input1");
                 if (input != null) dataBox1.setText(input);
