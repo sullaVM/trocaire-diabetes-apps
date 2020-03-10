@@ -75,7 +75,7 @@ public class Camera extends AppCompatActivity {
 
         cameraView = findViewById(R.id.surface_view);
 
-        done = findViewById(R.id.done);
+        done = findViewById(R.id.enter);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
