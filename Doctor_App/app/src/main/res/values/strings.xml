@@ -34,7 +34,6 @@
     <string name="delete">DELETE</string>
     <string name="submit">Submit</string>
     <string name="add_details">Add Details</string>
-    <string name="prompt_username">Username</string>
     <string name="session"></string>
 
     <string-array name="numbers">
@@ -45,12 +44,14 @@
         <item>Five</item>
     </string-array>
     <string name="prompt_surname">Last Name</string>
-    <string name="prompt_height">Height</string>
+    <string name="prompt_height">Height (cm)</string>
     <string name="prompt_phone">Phone Number</string>
-    <string name="prompt_weight">Weight</string>
+    <string name="prompt_weight">Weight (kg)</string>
     <string name="chart_summary">mmol/L</string>
     <string name="start_date">START</string>
     <string name="end_date">END</string>
     <string name="submit_date">UPDATE</string>
     <string name="average_bg">Average BG = 6.2444 +/-2.077412098</string>
+    <string name="prompt_username">Username</string>
+    <string name="username_hint">e.g. John</string>
 </resources>
