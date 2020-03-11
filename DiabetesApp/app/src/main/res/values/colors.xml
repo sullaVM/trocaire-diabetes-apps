@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
     <color name="appWhite">#EAEBED</color>
     <color name="appBlue"> #0083CC</color>
+    <color name="colorPrimary">#0083CC</color>
+    <color name="colorPrimaryDark">#006989</color>
+    <color name="colorAccent">#007090</color>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_gray">#A3BAC3</color>
+    <color name="pattern_lock">#0083CC</color>
+    <color name="darkest_gray">#626262</color>
 </resources>
