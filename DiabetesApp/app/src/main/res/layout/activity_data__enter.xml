@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C8E6C9"
+    android:background="@color/appBlue"
     tools:context=".DataEnter">
 
     <androidx.constraintlayout.widget.Guideline
@@ -73,7 +73,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/button_background_48dp"
         android:padding="10dp"
-        android:src="@drawable/ic_arrow_back_white_48dp"
+        android:src="@drawable/ic_arrow_back_black_48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
