@@ -1,20 +1,15 @@
 package com.example.doctor_app;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
-
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.util.Log;
-
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
-import java.io.IOException;
-import java.io.File;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import android.media.MediaScannerConnection;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
@@ -22,42 +17,23 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.example.doctor_app.data.requests.CreatePatientRequest;
 import com.example.doctor_app.data.responses.CreatePatientResponse;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 public class PatientSignUpPass extends AppCompatActivity {
 
     // Input fields
     private PatternLockView mPatternLockView;
+    private EditText mEditText;
 
     // Submit button
     private Button next;
 
     // Pattern lock view result variable
     private String password;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_patient_pass);
-
-        // Get inputs
-        mPatternLockView = findViewById(R.id.pattern_lock_view);
-
-        // Get next button
-        next = findViewById(R.id.enter);
-
-        // Set Listeners
-        mPatternLockView.addPatternLockListener(mPatternLockViewListener);
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = getIntent();
-                enterData(intent);
-            }
-        });
-    }
-
     private PatternLockViewListener mPatternLockViewListener = new PatternLockViewListener() {
         @Override
         public void onStarted() {
@@ -83,11 +59,35 @@ public class PatientSignUpPass extends AppCompatActivity {
         }
     };
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_patient_pass);
+
+        // Get inputs
+        mPatternLockView = findViewById(R.id.pattern_lock_view);
+        mEditText = findViewById(R.id.editText1);
+
+        // Get next button
+        next = findViewById(R.id.enter);
+
+        // Set Listeners
+        mPatternLockView.addPatternLockListener(mPatternLockViewListener);
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                enterData(intent);
+            }
+        });
+    }
+
     private void enterData(final Intent intent) {
 
         String firstName = intent.getStringExtra("firstName");
         String lastName = intent.getStringExtra("lastName");
-        int mobileNumber = intent.getIntExtra("mobileNumber",0);
+        int mobileNumber = intent.getIntExtra("mobileNumber", 0);
         String height = intent.getStringExtra("height");
         String weight = intent.getStringExtra("weight");
         int pregnant = intent.getIntExtra("pregnant", CreatePatientRequest.NOT_PREGNANT);
@@ -105,8 +105,8 @@ public class PatientSignUpPass extends AppCompatActivity {
         Log.println(Log.INFO, "pregnant", Integer.toString(pregnant));
 
         // Create the patient using the API
-        CreatePatientRequest patientRequest = new CreatePatientRequest(doctorID, firstName,
-                lastName, height, mobileNumber, photoDataUrl, password, "mmolL", pregnant);
+        CreatePatientRequest patientRequest = new CreatePatientRequest(doctorID, mEditText.getText().toString(), password, firstName,
+                lastName, height, mobileNumber, photoDataUrl, pregnant, "mmolL");
         patientRequest.makeRequest(getBaseContext(), new Consumer<CreatePatientResponse>() {
             @Override
             public void accept(CreatePatientResponse response) {
@@ -144,8 +144,7 @@ public class PatientSignUpPass extends AppCompatActivity {
             // the files.
             MediaScannerConnection.scanFile(this, new String[]{textFile.toString()},
                     null, null);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e("ReadWriteFile", "Unable to write data.");
         }
 

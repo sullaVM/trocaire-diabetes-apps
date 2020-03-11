@@ -7,6 +7,7 @@ import { Request, Response } from 'express';
 
 export const createPatient = async (request: Request, response: Response) => {
   const genHash: string = await new Promise((resolve, reject) => {
+    // tslint:disable-next-line: no-shadowed-variable
     hash(request.body.password, pwEncryptSaltRounds, (error, hash) => {
       if (error) {
         reject(error);

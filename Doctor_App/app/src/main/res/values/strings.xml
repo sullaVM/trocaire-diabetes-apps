@@ -30,10 +30,11 @@
     <string name="photo">Photo</string>
     <string name="add_patient">Add Patient</string>
     <string name="next">Next</string>
-    <string name="set_password">Set Pass</string>
+    <string name="set_password">Set Username &amp; Password</string>
     <string name="delete">DELETE</string>
     <string name="submit">Submit</string>
     <string name="add_details">Add Details</string>
+    <string name="prompt_username">Username</string>
     <string name="session"></string>
 
     <string-array name="numbers">

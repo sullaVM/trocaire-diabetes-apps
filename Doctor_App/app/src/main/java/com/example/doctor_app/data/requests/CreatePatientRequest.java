@@ -9,26 +9,28 @@ public class CreatePatientRequest extends Request<CreatePatientResponse> {
     public static final int NOT_PREGNANT = 0;
 
     private Integer doctorID;
+    private String userName;
+    private String password;
     private String firstName;
     private String lastName;
     private String height;
     private Integer mobileNumber;
     private String photoDataUrl;
-    private String password;
     private Integer pregnant;
     @Nullable
     private String bslUnit;
 
-    public CreatePatientRequest(Integer doctorID, String firstName, String lastName, String height, Integer mobileNumber, String photoDataUrl, String password, @Nullable String bslUnit, Integer pregnant) {
+    public CreatePatientRequest(Integer doctorID, String userName, String password, String firstName, String lastName, String height, Integer mobileNumber, String photoDataUrl, Integer pregnant, @Nullable String bslUnit) {
         this.doctorID = doctorID;
+        this.userName = userName;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.height = height;
         this.mobileNumber = mobileNumber;
         this.photoDataUrl = photoDataUrl;
-        this.password = password;
-        this.bslUnit = bslUnit;
         this.pregnant = pregnant;
+        this.bslUnit = bslUnit;
     }
 
     @Override
