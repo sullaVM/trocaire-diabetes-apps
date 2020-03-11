@@ -366,7 +366,7 @@ export const getGraphingData = async (
 export const getPatientID = async (
   request: requests.IGetPatientID
 ): Promise<responses.IGetPatientID> => {
-  const query = `SELECT PatientID FROM Patients WHERE DoctorID='${request.doctorID}' AND FirstName='${request.firstName}' AND LastName='${request.lastName}';`;
+  const query = `SELECT PatientID FROM Patients WHERE UserName='${request.userName}';`;
 
   const result = await new Promise<responses.IGetPatientID>(resolve => {
     db.query(query, (error, results, fields) => {

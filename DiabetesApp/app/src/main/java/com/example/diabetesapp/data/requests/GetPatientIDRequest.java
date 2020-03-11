@@ -4,14 +4,10 @@ import com.android.volley.Request;
 import com.example.diabetesapp.data.responses.GetPatientIDResponse;
 
 public class GetPatientIDRequest extends PatientRequest {
-    private Integer doctorID;
-    private String firstName;
-    private String lastName;
+    private String userName;
 
-    public GetPatientIDRequest(Integer doctorID, String firstName, String lastName) {
-        this.doctorID = doctorID;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public GetPatientIDRequest(String userName) {
+        this.userName = userName;
     }
 
     @Override

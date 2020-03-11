@@ -61,29 +61,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLogin() {
-        String user = username.getText().toString();
-        String[] tempUser = user.split("-");
-        if (tempUser.length == 3) {
-            int doctorID = Integer.parseInt(tempUser[0]);
-            String firstName = tempUser[1];
-            String lastName = tempUser[2];
-            GetPatientIDRequest getPatientIDRequest = new GetPatientIDRequest(doctorID, firstName, lastName);
-            getPatientIDRequest.makeRequest(getBaseContext(), new Consumer<GetPatientIDResponse>() {
-                @Override
-                public void accept(GetPatientIDResponse getPatientIDResponse) {
-                    if (getPatientIDResponse.success != null && getPatientIDResponse.success) {
-                        Intent intent = new Intent(getBaseContext(), InputPassword.class);
+        GetPatientIDRequest getPatientIDRequest = new GetPatientIDRequest(username.getText().toString());
+        getPatientIDRequest.makeRequest(getBaseContext(), new Consumer<GetPatientIDResponse>() {
+            @Override
+            public void accept(GetPatientIDResponse getPatientIDResponse) {
+                if (getPatientIDResponse.success != null && getPatientIDResponse.success) {
+                    Intent intent = new Intent(getBaseContext(), InputPassword.class);
 
-                        intent.putExtra("tag", getPatientIDResponse.patientID);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT).show();
-                    }
+                    intent.putExtra("tag", getPatientIDResponse.patientID);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT).show();
                 }
-            });
-        } else {
-            Toast.makeText(getBaseContext(), "Username Invalid", Toast.LENGTH_SHORT).show();
-        }
+            }
+        });
     }
 
     @Override

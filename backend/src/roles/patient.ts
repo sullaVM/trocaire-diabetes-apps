@@ -66,9 +66,7 @@ export const storeWeight = (request: Request, response: Response) => {
 
 export const getPatientID = (request: Request, response: Response) => {
   const getPatientIDRequest: requests.IGetPatientID = {
-    doctorID: request.body.doctorID,
-    firstName: request.body.firstName,
-    lastName: request.body.lastName,
+    userName: request.body.userName,
   };
 
   db.getPatientID(getPatientIDRequest)
