@@ -23,13 +23,11 @@ import com.example.doctor_app.data.responses.RBPRecord;
 import com.example.doctor_app.data.responses.WeightRecord;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -99,23 +97,13 @@ public class Info extends AppCompatActivity {
     private void success(GetGraphingDataResponse response) {
 
         try {
-            // Test info
-            int i = 0;
-            Log.println(Log.INFO, "RBPTime", response.RBP[i].time);
-            Log.println(Log.INFO, "RBPSystole", Float.toString(response.RBP[i].systole));
-            Log.println(Log.INFO, "RBPDiastole", Float.toString(response.RBP[i].diastole));
-
-            Log.println(Log.INFO, "BSLTime", response.BSL[i].time);
-            Log.println(Log.INFO, "BSLValue", Float.toString(response.BSL[i].value));
-
-            Log.println(Log.INFO, "WeightTime", response.Weight[i].time);
-            Log.println(Log.INFO, "WeightValue", Float.toString(response.Weight[i].value));
+            // Currently using dummy data
+            graph();
         } catch (Exception e) {
+            LineChart lineChart = findViewById(R.id.lineChart);
+            lineChart.setNoDataText("No data for time picked.");
             Log.println(Log.INFO, "graph", "No graph data for time picked");
         }
-
-        // Update the UI with the graph data
-        graph(response.RBP, response.BSL, response.Weight);
     }
 
     private void fail() {
@@ -125,20 +113,64 @@ public class Info extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void graph(RBPRecord[] RBP, BSLRecord[] BSL, WeightRecord[] weight) {
+    private void graph() {
+
+        BSLRecord[] BSL = dummyData();
+
+        String start = BSL[0].time.substring(5,7) + "/" + BSL[0].time.substring(8,10);
+        int lastChange = 0;
 
         ArrayList<Entry> data1 = new ArrayList<Entry>();
-        Entry one = new Entry(0f, 10f);
-        data1.add(one);
-        Entry two = new Entry(1f, 8f);
-        data1.add(two);
-        Entry three = new Entry(2f, 9f);
-        data1.add(three);
-        Entry four = new Entry(3f, 2f);
-        data1.add(four);
-        Entry five = new Entry(4f, 4f);
-        data1.add(five);
+        int entryIndex = 0;
 
+        for(int i = 0; i < BSL.length; i++) {
+
+            String day = BSL[i].time.substring(5,7) + "/" + BSL[i].time.substring(8,10);
+
+            if(day.compareTo(start) != 0) {
+                // Found a new day
+
+                // Compute the average of the past day
+                Float sum = (float)0;
+                int count = 0;
+                for(int j = lastChange; j < i; j++) {
+
+                    sum = sum + BSL[j].value;
+                    count++;
+                }
+                Float average = sum / count;
+
+                Entry entry = new Entry(entryIndex,average);
+                data1.add(entry);
+                entryIndex++;
+
+                lastChange = i;
+                start = day;
+            }
+        }
+
+        // Compute the average of the last day
+        Float sum = (float)0;
+        int count = 0;
+        for(int j = lastChange; j < BSL.length; j++) {
+
+            sum = sum + BSL[j].value;
+            count++;
+        }
+        Float average = sum / count;
+        Entry entry = new Entry(entryIndex,average);
+        data1.add(entry);
+
+        // Calculate the average of the days
+        sum = (float)0;
+        for(int i = 0; i < data1.size(); i++) {
+            sum = sum + data1.get(i).getY();
+        }
+        average = sum / data1.size();
+        TextView daysAverage = findViewById(R.id.textView5);
+        daysAverage.setText("Average BG Since " + start + " = " + average);
+
+        // Graph
         LineDataSet set1 = new LineDataSet(data1, null);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
         set1.setColors(Color.BLACK);
@@ -164,18 +196,8 @@ public class Info extends AppCompatActivity {
         lineChart.getAxisLeft().setDrawGridLines(false);
         lineChart.getXAxis().setDrawGridLines(false);
 
-
-        String startLabel = startDate.substring(5, 7) + "/" + startDate.substring(8, 10);
-        final String[] labels = new String[]{startLabel, "Day 2", "Day 3", "Day 4", "Day 5"};
-        ValueFormatter formatter = new ValueFormatter() {
-            @Override
-            public String getAxisLabel(float value, AxisBase axis) {
-                return labels[(int) value];
-            }
-        };
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(formatter);
+        xAxis.setGranularity(1);
 
         lineChart.notifyDataSetChanged();
         lineChart.invalidate();
@@ -239,4 +261,39 @@ public class Info extends AppCompatActivity {
         }
     }
 
+    private BSLRecord[] dummyData() {
+
+        BSLRecord day0Morning = new BSLRecord();
+        day0Morning.time = "2020-02-10 13:10:02.047";
+        day0Morning.value = (float)6.4;
+
+        BSLRecord day0Afternoon = new BSLRecord();
+        day0Afternoon.time = "2020-02-10 18:10:02.047";
+        day0Afternoon.value = (float)7;
+
+        BSLRecord day1Morning = new BSLRecord();
+        day1Morning.time = "2020-02-11 12:10:02.047";
+        day1Morning.value = (float)4;
+
+        BSLRecord day1Afternoon = new BSLRecord();
+        day1Afternoon.time = "2020-02-11 17:10:02.047";
+        day1Afternoon.value = (float)7;
+
+        BSLRecord day2Morning = new BSLRecord();
+        day2Morning.time = "2020-02-12 09:10:02.047";
+        day2Morning.value = (float)11;
+
+        BSLRecord day2Afternoon = new BSLRecord();
+        day2Afternoon.time = "2020-02-12 09:10:02.047";
+        day2Afternoon.value = (float)11;
+
+        BSLRecord day2Evening = new BSLRecord();
+        day2Evening.time = "2020-02-12 09:10:02.047";
+        day2Evening.value = (float)1;
+
+        BSLRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
+            day2Afternoon, day2Evening};
+
+        return result;
+    }
 }
