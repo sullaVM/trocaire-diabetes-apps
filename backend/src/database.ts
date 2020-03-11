@@ -309,6 +309,10 @@ export const getGraphingData = async (
   TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
   ORDER BY TimeTaken ASC;`;
 
+  console.log(BSLQuery);
+  console.log(RBPQuery);
+  console.log(WeightQuery);
+
   const result = await new Promise<responses.IGetGraphingData>(resolve => {
     db.query(BSLQuery, (BSLError, BSLResults, BSLfields) => {
       if (BSLError) {
