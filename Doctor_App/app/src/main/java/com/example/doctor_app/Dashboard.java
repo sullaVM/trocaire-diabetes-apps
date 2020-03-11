@@ -2,6 +2,7 @@ package com.example.doctor_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +25,6 @@ import java.util.ArrayList;
 public class Dashboard extends AppCompatActivity {
 
     private int mDoctorID;
-    private Integer patientID;
     protected ArrayList<Patient> patientDataSet;
 
     @Override
@@ -66,7 +66,7 @@ public class Dashboard extends AppCompatActivity {
     private void success(final Integer[] patientIDs) {
         for (int i = 0; i < patientIDs.length; i++) {
 
-            patientID = patientIDs[i];
+            final int patientID = patientIDs[i];
 
             // Get the patient profile using the API
             GetPatientProfileRequest profileRequest = new GetPatientProfileRequest(patientID);
@@ -75,7 +75,7 @@ public class Dashboard extends AppCompatActivity {
                 public void accept(GetPatientProfileResponse response) {
                     if (response != null && response.success) {
                         Log.println(Log.INFO, "GetPatientProfile", "Request succeeded");
-                        successProfile(response);
+                        successProfile(response, patientID);
                     } else {
                         Log.println(Log.INFO, "GetPatientProfile", "Request failed");
                         fail();
@@ -85,7 +85,7 @@ public class Dashboard extends AppCompatActivity {
         }
     }
 
-    private void successProfile(GetPatientProfileResponse response) {
+    private void successProfile(GetPatientProfileResponse response, int patientID) {
         Patient patient = new Patient(response.doctorID, response.firstName, response.lastName,
                 response.height, response.mobileNumber, response.photoDataUrl, response.password,
                     response.pregnant, response.bslUnit, patientID);

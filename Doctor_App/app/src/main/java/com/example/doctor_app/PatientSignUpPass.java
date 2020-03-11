@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Consumer;
@@ -113,6 +114,10 @@ public class PatientSignUpPass extends AppCompatActivity {
                 if (response != null && response.success) {
                     Log.println(Log.INFO, "CreatePatientRequest", "Request succeeded");
                     success(doctorID, response.patientID, photoDataUrl, intent);
+                } else if (response != null && response.success == false) {
+                    if (response.message != null) {
+                        Toast.makeText(getBaseContext(), response.message, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Log.println(Log.INFO, "CreatePatientRequest", "Request failed");
                     fail(doctorID, intent);

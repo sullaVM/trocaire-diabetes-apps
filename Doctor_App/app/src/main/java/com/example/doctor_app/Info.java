@@ -1,9 +1,5 @@
 package com.example.doctor_app;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
-import androidx.fragment.app.DialogFragment;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -16,10 +12,9 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.doctor_app.data.requests.GetGraphingDataRequest;
 import com.example.doctor_app.data.responses.BSLRecord;
@@ -38,12 +33,19 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class Info extends AppCompatActivity {
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Calendar;
 
-    private Patient patient;
+public class Info extends AppCompatActivity {
 
     private static String startDate;
     private static String endDate;
+    private Patient patient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,34 +59,29 @@ public class Info extends AppCompatActivity {
         name.setText(patient.getName());
 
         // UI styling
-        LineChart lineChart = (LineChart) findViewById(R.id.lineChart);
+        LineChart lineChart = findViewById(R.id.lineChart);
         lineChart.setNoDataText("Loading data ...");
         Paint p = lineChart.getPaint(Chart.PAINT_INFO);
         p.setColor(Color.BLACK);
 
         // Set initial start date
-        LocalDate localStart =  LocalDate.now().minusDays(5);
-        startDate = localStart.getYear() + "-" + localStart.getMonthValue() + "-" + localStart.getDayOfMonth()
-                + " " + "00:00:00.000";
-
-        Timestamp timestamp = Timestamp.valueOf(startDate);
-        startDate = timestamp.toString();
+        LocalDate localStart = LocalDate.now().minusDays(5);
+        ZoneId systemZone = ZoneId.systemDefault(); // my timezone
+        ZoneOffset currentOffsetForMyZone = systemZone.getRules().getOffset(Instant.now());
+        Timestamp startTimeStamp = new Timestamp(localStart.atStartOfDay().toInstant(currentOffsetForMyZone).toEpochMilli());
+        startDate = startTimeStamp.toString();
 
         // Set initial end date
-        LocalDate localEnd =  LocalDate.now();
-        endDate = localEnd.getYear() + "-" + localEnd.getMonthValue() + "-" + localEnd.getDayOfMonth()
-                + " " + "00:00:00.000";
+        Timestamp endTimeStamp = new Timestamp(System.currentTimeMillis());
+        endDate = endTimeStamp.toString();
 
-        timestamp = Timestamp.valueOf(endDate);
-        endDate = timestamp.toString();
-
-        getData(startDate,endDate);
+        getData(startTimeStamp.toString(), endTimeStamp.toString());
     }
 
     private void getData(String start, String end) {
         GetGraphingDataRequest graphRequest =
                 new GetGraphingDataRequest(patient.getPatientID(), start,
-                        end,patient.getBslUnit());
+                        end, patient.getBslUnit());
         graphRequest.makeRequest(getBaseContext(), new Consumer<GetGraphingDataResponse>() {
             @Override
             public void accept(GetGraphingDataResponse response) {
@@ -142,7 +139,7 @@ public class Info extends AppCompatActivity {
         Entry five = new Entry(4f, 4f);
         data1.add(five);
 
-        LineDataSet set1 = new LineDataSet(data1,null);
+        LineDataSet set1 = new LineDataSet(data1, null);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
         set1.setColors(Color.BLACK);
         set1.setHighLightColor(Color.BLACK);
@@ -153,7 +150,7 @@ public class Info extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
 
-        LineChart lineChart = (LineChart) findViewById(R.id.lineChart);
+        LineChart lineChart = findViewById(R.id.lineChart);
 
         lineChart.setNoDataText("Loading data ...");
         lineChart.setBackgroundColor(Color.WHITE);
@@ -168,12 +165,12 @@ public class Info extends AppCompatActivity {
         lineChart.getXAxis().setDrawGridLines(false);
 
 
-        String startLabel = startDate.substring(5,7) + "/" + startDate.substring(8,10);
-        final String[] labels = new String[] { startLabel, "Day 2", "Day 3", "Day 4", "Day 5"};
+        String startLabel = startDate.substring(5, 7) + "/" + startDate.substring(8, 10);
+        final String[] labels = new String[]{startLabel, "Day 2", "Day 3", "Day 4", "Day 5"};
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getAxisLabel(float value, AxisBase axis) {
-                return labels[(int)value];
+                return labels[(int) value];
             }
         };
         XAxis xAxis = lineChart.getXAxis();
@@ -194,12 +191,17 @@ public class Info extends AppCompatActivity {
                 finish();
             }
         });
-        dialogDelete.setNegativeButton("CANCEL",null);
+        dialogDelete.setNegativeButton("CANCEL", null);
         dialogDelete.show();
     }
 
     public void updateDate(View view) {
-        getData(startDate,endDate);
+        getData(startDate, endDate);
+    }
+
+    public void showDatePickerDialogStart(View v) {
+        DialogFragment newFragment = new DatePickerFragmentStart();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public static class DatePickerFragmentStart extends DialogFragment
@@ -222,24 +224,19 @@ public class Info extends AppCompatActivity {
             Timestamp timestamp;
 
             // Set the start date
-            startDate = year + "-" + (month+1) + "-" + day + " " + "00:00:00.000"; // Months are zero-indexed
+            startDate = year + "-" + (month + 1) + "-" + day + " " + "00:00:00.000"; // Months are zero-indexed
 
             timestamp = Timestamp.valueOf(startDate);
             startDate = timestamp.toString();
 
             // Set the end date
-            LocalDate endLocal = LocalDate.of(year, month+1, day).plusDays(5); // Months are zero indexed
+            LocalDate endLocal = LocalDate.of(year, month + 1, day).plusDays(5); // Months are zero indexed
             endDate = endLocal.getYear() + "-" + endLocal.getMonthValue() + "-" + endLocal.getDayOfMonth()
-                            + " " + "00:00:00.000";
+                    + " " + "00:00:00.000";
 
             timestamp = Timestamp.valueOf(endDate);
             endDate = timestamp.toString();
         }
-    }
-
-    public void showDatePickerDialogStart(View v) {
-        DialogFragment newFragment = new DatePickerFragmentStart();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
 }

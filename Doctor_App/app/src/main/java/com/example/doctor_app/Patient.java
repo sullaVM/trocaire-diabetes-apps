@@ -42,6 +42,7 @@ public class Patient implements Parcelable {
         photoDataUrl = in.readString();
         password = in.readString();
         bslUnit = in.readString();
+        patientID = in.readInt();
     }
 
     @Override
@@ -54,6 +55,7 @@ public class Patient implements Parcelable {
         dest.writeString(photoDataUrl);
         dest.writeString(password);
         dest.writeString(bslUnit);
+        dest.writeInt(patientID);
     }
 
     @Override
