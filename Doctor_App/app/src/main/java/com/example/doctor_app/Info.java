@@ -6,13 +6,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
 import androidx.fragment.app.DialogFragment;
 
@@ -30,6 +36,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.tabs.TabLayout;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -43,6 +50,7 @@ public class Info extends AppCompatActivity {
 
     private static String startDate;
     private static String endDate;
+    private static int type;
     private Patient patient;
 
     @Override
@@ -52,13 +60,37 @@ public class Info extends AppCompatActivity {
 
         patient = getIntent().getParcelableExtra("info");
 
-        // Get UI components
-        TextView name = findViewById(R.id.textView2);
-        name.setText(patient.getName());
+        // UI Components
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.getOverflowIcon().setColorFilter(ContextCompat.getColor(this, R.color.white),
+                PorterDuff.Mode.SRC_ATOP);
+        toolbar.setTitle("Patient " + patient.getName());
+        setSupportActionBar(toolbar);
 
-        // UI styling
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch(tab.getPosition()) {
+                    case 0:
+                        type = 0;
+                        getData(startDate, endDate, type);
+                        break;
+                    case 1:
+                        type = 1;
+                        getData(startDate, endDate,type);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+            });
+
         LineChart lineChart = findViewById(R.id.lineChart);
-        lineChart.setNoDataText("Loading data ...");
+        lineChart.setNoDataText("No data for date picked.");
         Paint p = lineChart.getPaint(Chart.PAINT_INFO);
         p.setColor(Color.BLACK);
 
@@ -73,10 +105,11 @@ public class Info extends AppCompatActivity {
         Timestamp endTimeStamp = new Timestamp(System.currentTimeMillis());
         endDate = endTimeStamp.toString();
 
-        getData(startTimeStamp.toString(), endTimeStamp.toString());
+        // Initially on the blood glucose tab, so display the blood glucose graph
+        getData(startTimeStamp.toString(), endTimeStamp.toString(), 0);
     }
 
-    private void getData(String start, String end) {
+    private void getData(String start, String end, final int type) {
         GetGraphingDataRequest graphRequest =
                 new GetGraphingDataRequest(patient.getPatientID(), start,
                         end, patient.getBslUnit());
@@ -85,7 +118,7 @@ public class Info extends AppCompatActivity {
             public void accept(GetGraphingDataResponse response) {
                 if (response != null && response.success) {
                     Log.println(Log.INFO, "GetGraphingData", "Request succeeded");
-                    success(response);
+                    success(response, type);
                 } else {
                     Log.println(Log.INFO, "GetGraphingData", "Request failed");
                     fail();
@@ -94,15 +127,19 @@ public class Info extends AppCompatActivity {
         });
     }
 
-    private void success(GetGraphingDataResponse response) {
+    private void success(GetGraphingDataResponse response, final int type) {
 
         try {
-            // Currently using dummy data
-            graph();
+            switch(type) {
+                case 0:
+                    graphBloodGlucose(response.BSL);
+                    break;
+                case 1:
+                    graphBloodPressure(response.RBP);
+                    break;
+            }
         } catch (Exception e) {
-            LineChart lineChart = findViewById(R.id.lineChart);
-            lineChart.setNoDataText("No data for time picked.");
-            Log.println(Log.INFO, "graph", "No graph data for time picked");
+            Log.println(Log.INFO, "graph", "No data for range picked.");
         }
     }
 
@@ -113,9 +150,29 @@ public class Info extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void graph() {
+    private void graphBloodPressure(RBPRecord[] RBP) {
+        TextView title = findViewById(R.id.textView6);
+        title.setText("Daily Average Blood Pressure");
 
-        BSLRecord[] BSL = dummyData();
+        TextView unit = findViewById(R.id.textView8);
+        unit.setText("TODO");
+
+        TextView daysAverage = findViewById(R.id.textView5);
+        daysAverage.setText("Average BP Since " + "_" + " = " + "_");
+
+        //TODO
+    }
+
+    private void graphBloodGlucose(BSLRecord[] BSL) {
+
+        TextView title = findViewById(R.id.textView6);
+        title.setText("Daily Average Blood Glucose");
+
+        TextView unit = findViewById(R.id.textView8);
+        unit.setText("mmol/L");
+
+        TextView daysAverage = findViewById(R.id.textView5);
+        daysAverage.setText("Average BG Since " + "_" + " = " + "_");
 
         String start = BSL[0].time.substring(5,7) + "/" + BSL[0].time.substring(8,10);
         int lastChange = 0;
@@ -167,7 +224,7 @@ public class Info extends AppCompatActivity {
             sum = sum + data1.get(i).getY();
         }
         average = sum / data1.size();
-        TextView daysAverage = findViewById(R.id.textView5);
+        daysAverage = findViewById(R.id.textView5);
         daysAverage.setText("Average BG Since " + start + " = " + average);
 
         // Graph
@@ -218,7 +275,7 @@ public class Info extends AppCompatActivity {
     }
 
     public void updateDate(View view) {
-        getData(startDate, endDate);
+        getData(startDate, endDate, type);
     }
 
     public void showDatePickerDialogStart(View v) {
@@ -261,6 +318,35 @@ public class Info extends AppCompatActivity {
         }
     }
 
+    // Top bar menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sign_out, menu);
+        return true;
+    }
+
+    // Top bar menu items
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.sign_out:
+                back();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // Return to login activity (i.e. sign out)
+    private void back() {
+        Intent intent = new Intent(getApplicationContext(), Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    // For test purposes
     private BSLRecord[] dummyData() {
 
         BSLRecord day0Morning = new BSLRecord();
@@ -292,7 +378,7 @@ public class Info extends AppCompatActivity {
         day2Evening.value = (float)1;
 
         BSLRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
-            day2Afternoon, day2Evening};
+                day2Afternoon, day2Evening};
 
         return result;
     }
