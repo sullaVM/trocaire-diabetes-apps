@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name=".Info"></activity>
+        <activity android:name=".InfoList"></activity>
+        <activity android:name=".Info" />
         <activity android:name=".PatientSignUpPass" />
         <activity
             android:name=".Dashboard"
@@ -24,7 +24,7 @@
         <activity android:name=".PatientSignUpDetails" />
         <activity
             android:name=".Login"
-            android:label="Doctor App" >
+            android:label="Doctor App">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +35,6 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
-
     </application>
 
 </manifest>

@@ -56,4 +56,5 @@
     <string name="username_hint">e.g. John</string>
     <string name="blood_pressure">Blood Pressure</string>
     <string name="all_readings">All Readings</string>
+    <string name="graph_list_view">Diary</string>
 </resources>

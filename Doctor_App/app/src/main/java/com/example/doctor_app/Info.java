@@ -26,7 +26,6 @@ import com.example.doctor_app.data.requests.GetGraphingDataRequest;
 import com.example.doctor_app.data.responses.BSLRecord;
 import com.example.doctor_app.data.responses.GetGraphingDataResponse;
 import com.example.doctor_app.data.responses.RBPRecord;
-import com.example.doctor_app.data.responses.WeightRecord;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -98,7 +97,8 @@ public class Info extends AppCompatActivity {
         LocalDate localStart = LocalDate.now().minusDays(5);
         ZoneId systemZone = ZoneId.systemDefault(); // my timezone
         ZoneOffset currentOffsetForMyZone = systemZone.getRules().getOffset(Instant.now());
-        Timestamp startTimeStamp = new Timestamp(localStart.atStartOfDay().toInstant(currentOffsetForMyZone).toEpochMilli());
+        Timestamp startTimeStamp =
+                new Timestamp(localStart.atStartOfDay().toInstant(currentOffsetForMyZone).toEpochMilli());
         startDate = startTimeStamp.toString();
 
         // Set initial end date
@@ -151,6 +151,9 @@ public class Info extends AppCompatActivity {
     }
 
     private void graphBloodPressure(RBPRecord[] RBP) {
+
+        RBP = dummyDataRBP(); // For testing
+
         TextView title = findViewById(R.id.textView6);
         title.setText("Daily Average Blood Pressure");
 
@@ -164,6 +167,8 @@ public class Info extends AppCompatActivity {
     }
 
     private void graphBloodGlucose(BSLRecord[] BSL) {
+
+        BSL = dummyData(); // For testing
 
         TextView title = findViewById(R.id.textView6);
         title.setText("Daily Average Blood Glucose");
@@ -274,6 +279,16 @@ public class Info extends AppCompatActivity {
         dialogDelete.show();
     }
 
+    public void graphListView(View view) {
+        // Go to a list view of the graph data
+        Intent intent = new Intent(getApplicationContext(), InfoList.class);
+        intent.putExtra("name", patient.getName());
+        intent.putExtra("id", patient.getPatientID());
+        intent.putExtra("unit", patient.getBslUnit());
+        intent.putExtra("type", type);
+        startActivity(intent);
+    }
+
     public void updateDate(View view) {
         getData(startDate, endDate, type);
     }
@@ -378,6 +393,50 @@ public class Info extends AppCompatActivity {
         day2Evening.value = (float)1;
 
         BSLRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
+                day2Afternoon, day2Evening};
+
+        return result;
+    }
+
+    // For test purposes
+    private RBPRecord[] dummyDataRBP() {
+
+        RBPRecord day0Morning = new RBPRecord();
+        day0Morning.time = "2020-02-10 13:10:02.047";
+        day0Morning.systole = (float)6.4;
+        day0Morning.diastole = (float)6.4;
+
+        RBPRecord day0Afternoon = new RBPRecord();
+        day0Afternoon.time = "2020-02-10 18:10:02.047";
+        day0Afternoon.systole = (float)7;
+        day0Afternoon.diastole = (float)7;
+
+        RBPRecord day1Morning = new RBPRecord();
+        day1Morning.time = "2020-02-11 12:10:02.047";
+        day1Morning.systole = (float)4;
+        day1Morning.diastole = (float)7;
+
+        RBPRecord day1Afternoon = new RBPRecord();
+        day1Afternoon.time = "2020-02-11 17:10:02.047";
+        day1Afternoon.systole = (float)7;
+        day1Afternoon.diastole = (float)7;
+
+        RBPRecord day2Morning = new RBPRecord();
+        day2Morning.time = "2020-02-12 09:10:02.047";
+        day2Morning.systole = (float)11;
+        day2Morning.diastole = (float)7;
+
+        RBPRecord day2Afternoon = new RBPRecord();
+        day2Afternoon.time = "2020-02-12 09:10:02.047";
+        day2Afternoon.systole = (float)11;
+        day2Afternoon.diastole = (float)7;
+
+        RBPRecord day2Evening = new RBPRecord();
+        day2Evening.time = "2020-02-12 09:10:02.047";
+        day2Evening.systole = (float)1;
+        day2Evening.diastole = (float)7;
+
+        RBPRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
                 day2Afternoon, day2Evening};
 
         return result;
