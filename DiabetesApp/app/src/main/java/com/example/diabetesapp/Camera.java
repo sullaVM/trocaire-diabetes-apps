@@ -240,7 +240,6 @@ public class Camera extends AppCompatActivity {
         Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
 
         Imgproc.matchTemplate(img, templ, result, match_method);
-        //Core.normalize(result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
 
         return mmr.maxVal;
@@ -289,6 +288,9 @@ public class Camera extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.nine);
         per[current_num] = singleMatching(match_method, bitmap, img);
 
+        if(per[0] >= 0.2) { per[7] = 0; per[1] = 0;}
+        if(per[7] >= 0.2) per[1] = 0;
+        if(per[9] >= 0.2) per[4] = 0;
         return per;
     }
 }
