@@ -80,8 +80,8 @@ public class InfoList extends AppCompatActivity {
 
     private void success(GetGraphingDataResponse response) {
 
-        response.BSL = dummyData(); // For testing
-        response.RBP = dummyDataRBP(); // For testing
+        //response.BSL = dummyData(); // For testing
+        //response.RBP = dummyDataRBP(); // For testing
 
         // Fill the list
         if(readingType == 0) { // BSL type
@@ -140,7 +140,7 @@ public class InfoList extends AppCompatActivity {
     }
 
     public void showDatePickerDialogStart(View v) {
-        DialogFragment newFragment = new Info.DatePickerFragmentStart();
+        DialogFragment newFragment = new DatePickerFragmentStart();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -221,38 +221,38 @@ public class InfoList extends AppCompatActivity {
 
         RBPRecord day0Morning = new RBPRecord();
         day0Morning.time = "2020-02-10 13:10:02.047";
-        day0Morning.systole = (float)6.4;
-        day0Morning.diastole = (float)6.4;
+        day0Morning.systole = (float)100;
+        day0Morning.diastole = (float)70;
 
         RBPRecord day0Afternoon = new RBPRecord();
         day0Afternoon.time = "2020-02-10 18:10:02.047";
-        day0Afternoon.systole = (float)7;
-        day0Afternoon.diastole = (float)7;
+        day0Afternoon.systole = (float)120;
+        day0Afternoon.diastole = (float)85;
 
         RBPRecord day1Morning = new RBPRecord();
         day1Morning.time = "2020-02-11 12:10:02.047";
-        day1Morning.systole = (float)4;
-        day1Morning.diastole = (float)7;
+        day1Morning.systole = (float)99;
+        day1Morning.diastole = (float)90;
 
         RBPRecord day1Afternoon = new RBPRecord();
         day1Afternoon.time = "2020-02-11 17:10:02.047";
-        day1Afternoon.systole = (float)7;
-        day1Afternoon.diastole = (float)7;
+        day1Afternoon.systole = (float)138;
+        day1Afternoon.diastole = (float)100;
 
         RBPRecord day2Morning = new RBPRecord();
         day2Morning.time = "2020-02-12 09:10:02.047";
-        day2Morning.systole = (float)11;
-        day2Morning.diastole = (float)7;
+        day2Morning.systole = (float)160;
+        day2Morning.diastole = (float)101;
 
         RBPRecord day2Afternoon = new RBPRecord();
         day2Afternoon.time = "2020-02-12 09:10:02.047";
-        day2Afternoon.systole = (float)11;
-        day2Afternoon.diastole = (float)7;
+        day2Afternoon.systole = (float)180;
+        day2Afternoon.diastole = (float)85;
 
         RBPRecord day2Evening = new RBPRecord();
         day2Evening.time = "2020-02-12 09:10:02.047";
         day2Evening.systole = (float)1;
-        day2Evening.diastole = (float)7;
+        day2Evening.diastole = (float)84;
 
         RBPRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
                 day2Afternoon, day2Evening};

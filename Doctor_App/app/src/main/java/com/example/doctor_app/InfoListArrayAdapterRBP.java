@@ -49,6 +49,36 @@ class InfoListArrayAdapterRBP extends ArrayAdapter<RBPRecord> {
         type.setText(TYPE + ": " + reading.time.substring(0,16));
         value.setText("Systole: " + reading.systole + ". Disastole: " + reading.diastole);
 
+        // Check systole and diastole and set flag
+
+        if(reading.systole < 120) {
+            // Optimal
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.design_default_color_secondary_variant));
+        } else if(reading.systole >= 120 && reading.systole <= 129) {
+            // Normal
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.design_default_color_secondary_variant));
+        } else if(reading.systole >= 130 && reading.systole <= 139) {
+            // High normal
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.pomegranate));
+        } else {
+            // Hypertension
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.design_default_color_error));
+        }
+
+        if(reading.diastole < 80) {
+            // Optimal
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.design_default_color_secondary_variant));
+        } else if(reading.diastole >= 80 && reading.diastole <= 84) {
+            // Normal
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.design_default_color_secondary_variant));
+        } else if(reading.diastole >= 85 && reading.diastole <= 89) {
+            // High normal
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.pomegranate));
+        } else {
+            // Hypertension
+            flag.setColorFilter(ContextCompat.getColor(getContext(), R.color.design_default_color_error));
+        }
+
         return v;
     }
 }

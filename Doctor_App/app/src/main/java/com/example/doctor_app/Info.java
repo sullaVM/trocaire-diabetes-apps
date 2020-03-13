@@ -89,7 +89,7 @@ public class Info extends AppCompatActivity {
             });
 
         LineChart lineChart = findViewById(R.id.lineChart);
-        lineChart.setNoDataText("No data for date picked.");
+        lineChart.setNoDataText("No data.");
         Paint p = lineChart.getPaint(Chart.PAINT_INFO);
         p.setColor(Color.BLACK);
 
@@ -110,6 +110,12 @@ public class Info extends AppCompatActivity {
     }
 
     private void getData(String start, String end, final int type) {
+
+        // Test info
+        Log.d("getData", "id = " + patient.getPatientID());
+        Log.d("getData", "start = " + start + " end = " + end);
+        Log.d("getData", "unit = " + patient.getBslUnit());
+
         GetGraphingDataRequest graphRequest =
                 new GetGraphingDataRequest(patient.getPatientID(), start,
                         end, patient.getBslUnit());
@@ -139,7 +145,9 @@ public class Info extends AppCompatActivity {
                     break;
             }
         } catch (Exception e) {
-            Log.println(Log.INFO, "graph", "No data for range picked.");
+            Log.println(Log.INFO, "graph", "No data.");
+            LineChart lineChart = findViewById(R.id.lineChart);
+            lineChart.clear();
         }
     }
 
@@ -152,23 +160,133 @@ public class Info extends AppCompatActivity {
 
     private void graphBloodPressure(RBPRecord[] RBP) {
 
-        RBP = dummyDataRBP(); // For testing
+        //RBP = dummyDataRBP(); // For testing
 
         TextView title = findViewById(R.id.textView6);
         title.setText("Daily Average Blood Pressure");
 
         TextView unit = findViewById(R.id.textView8);
-        unit.setText("TODO");
+        unit.setText("mmHg");
 
         TextView daysAverage = findViewById(R.id.textView5);
         daysAverage.setText("Average BP Since " + "_" + " = " + "_");
 
-        //TODO
+        String start = RBP[0].time.substring(5,7) + "/" + RBP[0].time.substring(8,10);
+        int lastChange = 0;
+
+        ArrayList<Entry> dataSystole = new ArrayList<Entry>();
+        ArrayList<Entry> dataDiastole = new ArrayList<Entry>();
+        int entryIndexSystole = 0;
+        int entryIndexDiastole = 0;
+
+        for(int i = 0; i < RBP.length; i++) {
+
+            String day = RBP[i].time.substring(5,7) + "/" + RBP[i].time.substring(8,10);
+
+            if(day.compareTo(start) != 0) {
+                // Found a new day
+
+                // Compute the average of the past day
+                Float sumSystole = (float)0;
+                Float sumDiastole = (float)0;
+                int count = 0;
+                for(int j = lastChange; j < i; j++) {
+
+                    // Note: Expecting systole and diastole arrays to be the same length
+                    sumSystole = sumSystole + RBP[j].systole;
+                    sumDiastole = sumDiastole + RBP[j].diastole;
+                    count++;
+                }
+                Float averageSystole = sumSystole / count;
+                Float averageDiastole = sumDiastole / count;
+
+                Entry entrySystole = new Entry(entryIndexSystole,averageSystole);
+                dataSystole.add(entrySystole);
+                entryIndexSystole++;
+
+                Entry entryDiastole = new Entry(entryIndexDiastole,averageDiastole);
+                dataDiastole.add(entryDiastole);
+                entryIndexDiastole++;
+
+                lastChange = i;
+                start = day;
+            }
+        }
+
+        // Compute the average of the last day
+        Float sumSystole = (float)0;
+        Float sumDiastole = (float)0;
+        int count = 0;
+        for(int j = lastChange; j < RBP.length; j++) {
+
+            sumSystole = sumSystole + RBP[j].systole;
+            sumDiastole = sumDiastole + RBP[j].diastole;
+            count++;
+        }
+        Float averageSystole = sumSystole / count;
+        Float averageDiastole = sumDiastole / count;
+
+        Entry entrySystole = new Entry(entryIndexSystole,averageSystole);
+        dataSystole.add(entrySystole);
+        Entry entryDiastole = new Entry(entryIndexDiastole,averageDiastole);
+        dataDiastole.add(entryDiastole);
+
+        // Compute the average of the days
+        sumSystole = (float)0;
+        sumDiastole = (float)0;
+        for(int i = 0; i < dataSystole.size(); i++) {
+            // Note: Expecting systole and diastole arrays to be the same length
+            sumSystole = sumSystole +  dataSystole.get(i).getY();
+            sumDiastole = sumDiastole +  dataDiastole.get(i).getY();
+        }
+        averageDiastole = sumDiastole / dataDiastole.size();
+        averageSystole = sumSystole / dataSystole.size();
+        daysAverage = findViewById(R.id.textView5);
+        start  = RBP[0].time.substring(5,7) + "/" + RBP[0].time.substring(8,10);
+        daysAverage.setText("Average BP Since " + start  + " = "
+                + averageSystole + " (systole) " + averageDiastole + " (diastole)");
+
+        // Graph
+        LineDataSet setSystole = new LineDataSet(dataSystole, null);
+        setSystole.setAxisDependency(YAxis.AxisDependency.LEFT);
+        setSystole.setColors(Color.BLACK);
+        setSystole.setHighLightColor(Color.BLACK);
+        setSystole.setCircleColor(Color.GRAY);
+
+        LineDataSet setDiastole = new LineDataSet(dataDiastole, null);
+        setDiastole.setAxisDependency(YAxis.AxisDependency.LEFT);
+        setDiastole.setColors(Color.RED);
+        setDiastole.setHighLightColor(Color.RED);
+        setDiastole.setCircleColor(Color.RED);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        dataSets.add(setSystole);
+        dataSets.add(setDiastole);
+
+        LineData graphs = new LineData(dataSets);
+
+        LineChart lineChart = findViewById(R.id.lineChart);
+        lineChart.setData(graphs);
+
+        lineChart.setNoDataText("No data.");
+        lineChart.setBackgroundColor(Color.WHITE);
+        lineChart.getLegend().setEnabled(false);
+        lineChart.getDescription().setText("");
+
+        lineChart.getAxisRight().setDrawGridLines(false);
+        lineChart.getAxisLeft().setDrawGridLines(false);
+        lineChart.getXAxis().setDrawGridLines(false);
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setGranularity(1);
+
+        lineChart.notifyDataSetChanged();
+        lineChart.invalidate();
     }
 
     private void graphBloodGlucose(BSLRecord[] BSL) {
 
-        BSL = dummyData(); // For testing
+        //BSL = dummyData(); // For testing
 
         TextView title = findViewById(R.id.textView6);
         title.setText("Daily Average Blood Glucose");
@@ -230,6 +348,7 @@ public class Info extends AppCompatActivity {
         }
         average = sum / data1.size();
         daysAverage = findViewById(R.id.textView5);
+        start  = BSL[0].time.substring(5,7) + "/" + BSL[0].time.substring(8,10);
         daysAverage.setText("Average BG Since " + start + " = " + average);
 
         // Graph
@@ -246,7 +365,6 @@ public class Info extends AppCompatActivity {
 
         LineChart lineChart = findViewById(R.id.lineChart);
 
-        lineChart.setNoDataText("Loading data ...");
         lineChart.setBackgroundColor(Color.WHITE);
         lineChart.getLegend().setEnabled(false);
 
@@ -392,8 +510,7 @@ public class Info extends AppCompatActivity {
         day2Evening.time = "2020-02-12 09:10:02.047";
         day2Evening.value = (float)1;
 
-        BSLRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
-                day2Afternoon, day2Evening};
+        BSLRecord[] result = {};
 
         return result;
     }
@@ -403,38 +520,38 @@ public class Info extends AppCompatActivity {
 
         RBPRecord day0Morning = new RBPRecord();
         day0Morning.time = "2020-02-10 13:10:02.047";
-        day0Morning.systole = (float)6.4;
-        day0Morning.diastole = (float)6.4;
+        day0Morning.systole = (float)100;
+        day0Morning.diastole = (float)70;
 
         RBPRecord day0Afternoon = new RBPRecord();
         day0Afternoon.time = "2020-02-10 18:10:02.047";
-        day0Afternoon.systole = (float)7;
-        day0Afternoon.diastole = (float)7;
+        day0Afternoon.systole = (float)120;
+        day0Afternoon.diastole = (float)85;
 
         RBPRecord day1Morning = new RBPRecord();
         day1Morning.time = "2020-02-11 12:10:02.047";
-        day1Morning.systole = (float)4;
-        day1Morning.diastole = (float)7;
+        day1Morning.systole = (float)99;
+        day1Morning.diastole = (float)90;
 
         RBPRecord day1Afternoon = new RBPRecord();
         day1Afternoon.time = "2020-02-11 17:10:02.047";
-        day1Afternoon.systole = (float)7;
-        day1Afternoon.diastole = (float)7;
+        day1Afternoon.systole = (float)138;
+        day1Afternoon.diastole = (float)100;
 
         RBPRecord day2Morning = new RBPRecord();
         day2Morning.time = "2020-02-12 09:10:02.047";
-        day2Morning.systole = (float)11;
-        day2Morning.diastole = (float)7;
+        day2Morning.systole = (float)160;
+        day2Morning.diastole = (float)101;
 
         RBPRecord day2Afternoon = new RBPRecord();
         day2Afternoon.time = "2020-02-12 09:10:02.047";
-        day2Afternoon.systole = (float)11;
-        day2Afternoon.diastole = (float)7;
+        day2Afternoon.systole = (float)180;
+        day2Afternoon.diastole = (float)85;
 
         RBPRecord day2Evening = new RBPRecord();
         day2Evening.time = "2020-02-12 09:10:02.047";
         day2Evening.systole = (float)1;
-        day2Evening.diastole = (float)7;
+        day2Evening.diastole = (float)84;
 
         RBPRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
                 day2Afternoon, day2Evening};
