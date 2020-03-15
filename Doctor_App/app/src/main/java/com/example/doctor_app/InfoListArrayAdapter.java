@@ -41,6 +41,7 @@ public class InfoListArrayAdapter extends ArrayAdapter<BSLRecord> {
         TextView type = v.findViewById(R.id.textView);
         TextView value = v.findViewById(R.id.textView2);
         ImageView flag = v.findViewById(R.id.imageView2);
+        ImageView emoji = v.findViewById(R.id.imageView8);
 
         // Get reading
         BSLRecord reading = BSLRecords.get(position);

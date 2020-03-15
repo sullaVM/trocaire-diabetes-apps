@@ -179,6 +179,8 @@ public class Info extends AppCompatActivity {
         int entryIndexSystole = 0;
         int entryIndexDiastole = 0;
 
+        String xAxisDescription = "";
+
         for(int i = 0; i < RBP.length; i++) {
 
             String day = RBP[i].time.substring(5,7) + "/" + RBP[i].time.substring(8,10);
@@ -199,6 +201,8 @@ public class Info extends AppCompatActivity {
                 }
                 Float averageSystole = sumSystole / count;
                 Float averageDiastole = sumDiastole / count;
+
+                xAxisDescription = xAxisDescription + " " + entryIndexSystole + ": " + start + " ";
 
                 Entry entrySystole = new Entry(entryIndexSystole,averageSystole);
                 dataSystole.add(entrySystole);
@@ -226,6 +230,9 @@ public class Info extends AppCompatActivity {
         Float averageSystole = sumSystole / count;
         Float averageDiastole = sumDiastole / count;
 
+        String day = RBP[RBP.length-1].time.substring(5,7) + "/" + RBP[RBP.length-1].time.substring(8,10);
+        xAxisDescription = xAxisDescription + " " + entryIndexSystole + ": " + day + " ";
+
         Entry entrySystole = new Entry(entryIndexSystole,averageSystole);
         dataSystole.add(entrySystole);
         Entry entryDiastole = new Entry(entryIndexDiastole,averageDiastole);
@@ -239,6 +246,7 @@ public class Info extends AppCompatActivity {
             sumSystole = sumSystole +  dataSystole.get(i).getY();
             sumDiastole = sumDiastole +  dataDiastole.get(i).getY();
         }
+
         averageDiastole = sumDiastole / dataDiastole.size();
         averageSystole = sumSystole / dataSystole.size();
         daysAverage = findViewById(R.id.textView5);
@@ -282,6 +290,9 @@ public class Info extends AppCompatActivity {
 
         lineChart.notifyDataSetChanged();
         lineChart.invalidate();
+
+        TextView axisDescription = findViewById(R.id.textView11);
+        axisDescription.setText(xAxisDescription);
     }
 
     private void graphBloodGlucose(BSLRecord[] BSL) {
@@ -303,6 +314,8 @@ public class Info extends AppCompatActivity {
         ArrayList<Entry> data1 = new ArrayList<Entry>();
         int entryIndex = 0;
 
+        String xAxisDescription = "";
+
         for(int i = 0; i < BSL.length; i++) {
 
             String day = BSL[i].time.substring(5,7) + "/" + BSL[i].time.substring(8,10);
@@ -322,6 +335,8 @@ public class Info extends AppCompatActivity {
 
                 Entry entry = new Entry(entryIndex,average);
                 data1.add(entry);
+                xAxisDescription = xAxisDescription + " " + entryIndex + ": " + start + " ";
+
                 entryIndex++;
 
                 lastChange = i;
@@ -340,6 +355,8 @@ public class Info extends AppCompatActivity {
         Float average = sum / count;
         Entry entry = new Entry(entryIndex,average);
         data1.add(entry);
+        String day = BSL[BSL.length-1].time.substring(5,7) + "/" + BSL[BSL.length-1].time.substring(8,10);
+        xAxisDescription = xAxisDescription + " " + entryIndex + ": " + day + " ";
 
         // Calculate the average of the days
         sum = (float)0;
@@ -381,6 +398,9 @@ public class Info extends AppCompatActivity {
 
         lineChart.notifyDataSetChanged();
         lineChart.invalidate();
+
+        TextView axisDescription = findViewById(R.id.textView11);
+        axisDescription.setText(xAxisDescription);
     }
 
     public void delete(View view) {
@@ -510,7 +530,8 @@ public class Info extends AppCompatActivity {
         day2Evening.time = "2020-02-12 09:10:02.047";
         day2Evening.value = (float)1;
 
-        BSLRecord[] result = {};
+        BSLRecord[] result = {day0Morning, day0Afternoon, day1Morning, day1Afternoon, day2Morning,
+                day2Afternoon, day2Evening};
 
         return result;
     }
