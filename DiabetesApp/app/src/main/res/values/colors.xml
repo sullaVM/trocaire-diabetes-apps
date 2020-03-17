@@ -9,4 +9,5 @@
     <color name="dark_gray">#A3BAC3</color>
     <color name="pattern_lock">#0083CC</color>
     <color name="darkest_gray">#626262</color>
+    <color name="red">#FF1111</color>
 </resources>

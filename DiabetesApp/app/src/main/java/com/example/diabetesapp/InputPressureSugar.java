@@ -18,10 +18,17 @@ import java.sql.Timestamp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Consumer;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import android.util.Log;
+
 public class InputPressureSugar extends AppCompatActivity {
 
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
+    private static final String filename = "StoredData.txt";
 
     ImageButton camera, camera2, back, done;
     EditText dataBox1, dataBox2;
@@ -135,34 +142,36 @@ public class InputPressureSugar extends AppCompatActivity {
     }
 
     private void saveData(int request) {
-        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
         if (request == REQUEST_SUGAR) {
             if(input==null) input = dataBox1.getText().toString();
             try {
-                StoreBSLRequest storeBSLRequest = new StoreBSLRequest(mPatientID, timestamp, Float.parseFloat(input), null);
-                storeBSLRequest.makeRequest(this, new Consumer<StoreBSLResponse>() {
-                    @Override
-                    public void accept(StoreBSLResponse storeBSLResponse) {
-                        finish();
-                    }
-                });
-            } catch (Exception e) {
-                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
+                File textFile = new File(this.getFilesDir(), filename);
+                if (!textFile.exists())
+                    textFile.createNewFile();
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true));
+
+                writer.write("BSL " + mPatientID + " " +  Float.parseFloat(input) + "\n");
+                writer.close();
+            } catch (IOException e) {
+                Log.e("ReadWriteFile", "Unable to write data.");
             }
         } else if (request == REQUEST_PRESSURE) {
             if(input==null) input = dataBox1.getText().toString();
             if(input2==null) input2 = dataBox2.getText().toString();
-            try {
-                StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(input), Float.parseFloat(input2));
-                storeRBPRequest.makeRequest(this, new Consumer<StoreRBPResponse>() {
-                    @Override
-                    public void accept(StoreRBPResponse storeRBPResponse) {
-                        finish();
-                    }
-                });
-            } catch (Exception e) {
-                Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
-            }
+                try {
+                    File textFile = new File(this.getFilesDir(), filename);
+                    if (!textFile.exists())
+                        textFile.createNewFile();
+
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true));
+
+                    writer.write("RBP " + mPatientID + " " +  Float.parseFloat(input) + " " +  Float.parseFloat(input2) + "\n");
+                    writer.close();
+                } catch (IOException e) {
+                    Log.e("ReadWriteFile", "Unable to write data.");
+                }
         }
+        finish();
     }
 }

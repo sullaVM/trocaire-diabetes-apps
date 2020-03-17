@@ -15,10 +15,18 @@ import com.example.diabetesapp.data.responses.StoreWeightResponse;
 
 import java.sql.Timestamp;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import android.util.Log;
+
 public class Manual extends AppCompatActivity {
     EditText data;
 
     int mPatientID;
+
+    private static final String filename = "StoredData.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +61,18 @@ public class Manual extends AppCompatActivity {
     }
 
     private void saveData() {
-
-        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
         try {
-            StoreWeightRequest storeWeightRequest = new StoreWeightRequest(mPatientID, timestamp, Float.parseFloat(data.getText().toString()));
-            storeWeightRequest.makeRequest(this, new Consumer<StoreWeightResponse>() {
-                @Override
-                public void accept(StoreWeightResponse storeWeightResponse) {
-                    finish();
-                }
-            });
-        } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
+            File textFile = new File(this.getFilesDir(), filename);
+            if (!textFile.exists())
+                textFile.createNewFile();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true /*append*/));
+
+            writer.write("W " + mPatientID + " " +  Float.parseFloat(data.getText().toString()) + "\n");
+            writer.close();
+        } catch (IOException e) {
+        Log.e("ReadWriteFile", "Unable to write data.");
         }
+        finish();
     }
 }
