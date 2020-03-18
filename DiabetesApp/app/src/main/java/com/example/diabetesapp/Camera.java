@@ -103,6 +103,15 @@ public class Camera extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == CheckImage.RESULT_OK) {
+            String str = data.getStringExtra("result");
+            saveAndReturn(str);
+        }
+    }
+
     private void back() {
         this.finish();
     }
@@ -159,7 +168,7 @@ public class Camera extends AppCompatActivity {
     }
 
     private void save() {
-        File photoFile = new File(this.getExternalFilesDir(null), "Image.jpg");
+        File photoFile = new File(this.getFilesDir(), "/Image.jpg");
         try {
             FileOutputStream out = new FileOutputStream(photoFile);
             image.compress(Bitmap.CompressFormat.JPEG, 90, out);
@@ -170,127 +179,25 @@ public class Camera extends AppCompatActivity {
         }
     }
 
+    private void nextScreen(){
+        Intent i = new Intent(this, CheckImage.class);
+        startActivityForResult(i, 0);
+    }
+
     private void takeImage() {
         cameraSource.takePicture(null, new CameraSource.PictureCallback() {
 
             @Override
             public void onPictureTaken(byte[] bytes) {
                 try {
-                    Bitmap loadedImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(90);
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(loadedImage, loadedImage.getWidth(), loadedImage.getHeight(), true);
-                    Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-                    Mat mat = new Mat(rotatedBitmap.getHeight(), rotatedBitmap.getWidth(), CvType.CV_8UC3);
-
-                    Utils.bitmapToMat(rotatedBitmap, mat);
-                    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2RGB);
-                    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY);
-                    Imgproc.threshold(mat, mat, 10, 255, Imgproc.THRESH_OTSU);
-                    Utils.matToBitmap(mat, rotatedBitmap);
-                    image = rotatedBitmap;
-
-                    int rect_h = (int)(mat.height() * 0.25);
-                    int rect_w = (int)(mat.width() * 0.8);
-                    Rect roi = new Rect(mat.width() / 2 - (rect_w / 2), mat.height() / 2 - (rect_h / 2), rect_w, rect_h);
-                    Mat crop = new Mat(mat, roi);
-                    Bitmap bmp = Bitmap.createBitmap(crop.width(), crop.height(), Bitmap.Config.ARGB_8888);
-                    Utils.matToBitmap(crop, bmp);
-                    image = bmp;
+                    image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     save();
-
-                    StringBuilder sb = new StringBuilder();
-
-                    int new_rect_h = crop.height();
-                    int new_rect_w = crop.width() / 3;
-
-                    for(int i = 0; i < 3; i++){
-                        roi = new Rect(new_rect_w*i, 0, new_rect_w, new_rect_h);
-                        Mat piece = new Mat(crop, roi);
-
-                        double[] result = matching(Imgproc.TM_CCOEFF_NORMED, piece);
-                        double value = Double.MIN_VALUE;
-                        int index = 0;
-                        for (int j = 0; j < 10; j++) {
-                            if (result[j] > value) {
-                                value = result[j];
-                                index = j;
-                            }
-                        }
-                        if (value > .2) sb.append(index);
-                    }
-                    saveAndReturn(sb.toString());
+                    nextScreen();
 
                 } catch (Exception ex) {
                     Log.w("Camera", "Detector dependencies are not yet available");
                 }
             }
         });
-    }
-
-    public double singleMatching(int match_method, Bitmap bitmap, Mat img){
-        Mat templ = new Mat();
-        Utils.bitmapToMat(bitmap, templ);
-        Imgproc.cvtColor(templ, templ, Imgproc.COLOR_RGBA2GRAY);
-        Imgproc.resize(templ, templ, new Size(img.width(), img.height()), 0, 0);
-
-        int result_cols = img.cols() - templ.cols() + 1;
-        int result_rows = img.rows() - templ.rows() + 1;
-        Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-
-        Imgproc.matchTemplate(img, templ, result, match_method);
-        Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-
-        return mmr.maxVal;
-    }
-
-    public double[] matching(int match_method, Mat img) {
-        double[] per = new double[10];
-
-        int current_num = 0;
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.zero);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.one);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.two);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.three);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.four);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.five);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.six);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.seven);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.eight);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        current_num++;
-        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.nine);
-        per[current_num] = singleMatching(match_method, bitmap, img);
-
-        if(per[0] >= 0.2) { per[7] = 0; per[1] = 0;}
-        if(per[7] >= 0.2) per[1] = 0;
-        if(per[9] >= 0.2) per[4] = 0;
-        return per;
     }
 }

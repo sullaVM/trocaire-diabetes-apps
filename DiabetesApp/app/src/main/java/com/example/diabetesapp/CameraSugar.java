@@ -25,6 +25,8 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
@@ -34,9 +36,9 @@ import androidx.core.app.ActivityCompat;
 public class CameraSugar extends AppCompatActivity {
 
     final int RequestCameraPermissionID = 1001;
-    String data;
     SurfaceView cameraView;
     CameraSource cameraSource;
+    Bitmap image;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -81,7 +83,7 @@ public class CameraSugar extends AppCompatActivity {
         });
     }
 
-    private void saveData() {
+    private void saveData(String data) {
         Intent resultIntent = new Intent();
         resultIntent.putExtra("input1", data);
         setResult(InputPressureSugar.RESULT_OK, resultIntent);
@@ -169,14 +171,43 @@ public class CameraSugar extends AppCompatActivity {
         }
     }
 
+    private void save() {
+        File photoFile = new File(this.getFilesDir(), "/Image.jpg");
+        try {
+            FileOutputStream out = new FileOutputStream(photoFile);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == CheckImage.RESULT_OK) {
+            String str = data.getStringExtra("result");
+            saveData(str);
+        }
+    }
+
+    private void nextScreen(){
+        Intent i = new Intent(this, CheckSugarImage.class);
+        startActivityForResult(i, 0);
+    }
+
     private void takeImage() {
         cameraSource.takePicture(null, new CameraSource.PictureCallback() {
 
             @Override
             public void onPictureTaken(byte[] bytes) {
                 try {
-                    Bitmap loadedImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    save();
+                    nextScreen();
 
+                    /*
                     Matrix matrix = new Matrix();
                     matrix.postRotate(90);
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(loadedImage, loadedImage.getWidth(), loadedImage.getHeight(), true);
@@ -212,10 +243,11 @@ public class CameraSugar extends AppCompatActivity {
                         }
                     }
 
+                     */
+
                 } catch (Exception ex) {
                     Log.w("Camera", "Detector dependencies are not yet available");
                 }
-                saveData();
             }
         });
     }
