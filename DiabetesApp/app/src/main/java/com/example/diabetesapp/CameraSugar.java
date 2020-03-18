@@ -38,6 +38,7 @@ public class CameraSugar extends AppCompatActivity {
     final int RequestCameraPermissionID = 1001;
     SurfaceView cameraView;
     CameraSource cameraSource;
+    ImageButton done, back;
     Bitmap image;
 
     @Override
@@ -67,17 +68,19 @@ public class CameraSugar extends AppCompatActivity {
 
         cameraView = findViewById(R.id.surface_view);
 
-        ImageButton done = findViewById(R.id.enter);
+        done = findViewById(R.id.enter);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                done.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 takeImage();
             }
         });
-        ImageButton back = findViewById(R.id.back);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });

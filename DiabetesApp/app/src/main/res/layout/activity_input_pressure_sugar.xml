@@ -8,6 +8,29 @@
     tools:context=".InputPressureSugar">
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <ImageView
+        android:id="@+id/appNameLogo"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:textColor="@android:color/background_light"
+        android:textColorHighlight="@android:color/background_light"
+        android:textColorHint="@android:color/background_light"
+        android:textColorLink="@android:color/background_light"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.982"
+        app:srcCompat="@drawable/logo_white" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -27,14 +50,12 @@
         android:id="@+id/enterData"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        app:boxBackgroundColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@id/guidelineHorizontal"
+        app:boxBackgroundColor="@color/appWhite"
+        app:layout_constraintBottom_toBottomOf="@+id/camera"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintTop_toTopOf="@+id/camera"
         app:layout_constraintWidth_percent="0.4">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -50,14 +71,12 @@
         android:id="@+id/enterData2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        app:boxBackgroundColor="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:boxBackgroundColor="@color/appWhite"
+        app:layout_constraintBottom_toBottomOf="@+id/camera2"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guidelineHorizontal"
-        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintTop_toTopOf="@+id/camera2"
         app:layout_constraintWidth_percent="0.4">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -76,12 +95,12 @@
         android:background="@drawable/button_background_96dp"
         android:padding="20dp"
         android:src="@drawable/ic_camera_alt_black_96dp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
+        app:layout_constraintBottom_toTopOf="@+id/camera2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintVertical_bias="0.9" />
 
     <ImageButton
         android:id="@+id/camera2"
@@ -95,7 +114,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
         app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.4" />
 
     <ImageButton
         android:id="@+id/done"
@@ -103,11 +122,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/button_background_48dp"
         android:padding="10dp"
         android:src="@drawable/ic_check_black_48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
         android:id="@+id/back"
@@ -115,10 +135,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/button_background_48dp"
         android:padding="10dp"
         android:src="@drawable/ic_arrow_back_black_48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

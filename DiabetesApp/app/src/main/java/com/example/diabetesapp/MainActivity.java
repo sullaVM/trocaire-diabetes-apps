@@ -90,9 +90,16 @@ public class MainActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                done.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 checkLogin();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        done.setBackground(getDrawable(R.drawable.button_background_48dp));
     }
 
     private void submitData(){
@@ -181,14 +188,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        done.setBackground(getDrawable(R.drawable.button_background_48dp));
 
         amount.setText(Integer.toString(findNumber()));
 
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
-        }
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) { /*we are connected to a network*/ }
         else {
             submit.setImageResource(R.drawable.baseline_wifi_off_black_48dp);
         }

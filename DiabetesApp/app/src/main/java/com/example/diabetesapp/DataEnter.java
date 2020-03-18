@@ -13,6 +13,8 @@ public class DataEnter extends AppCompatActivity {
     static final int REQUEST_PRESSURE = 1;
     static final int REQUEST_WEIGHT = 2;
 
+    ImageButton back, blood_sugar, blood_pressure, kg;
+
     int mPatientID;
 
     @Override
@@ -22,37 +24,49 @@ public class DataEnter extends AppCompatActivity {
 
         mPatientID = getIntent().getIntExtra("tag", -1);
 
-        ImageButton back = findViewById(R.id.back);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
 
-        ImageButton blood_sugar = findViewById(R.id.blood_sugar);
+        blood_sugar = findViewById(R.id.blood_sugar);
         blood_sugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                blood_sugar.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 goTo(REQUEST_SUGAR);
             }
         });
 
-        ImageButton blood_pressure = findViewById(R.id.blood_pressure);
+        blood_pressure = findViewById(R.id.blood_pressure);
         blood_pressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                blood_pressure.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 goTo(REQUEST_PRESSURE);
             }
         });
 
-        ImageButton kg = findViewById(R.id.kg);
+        kg = findViewById(R.id.kg);
         kg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                kg.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 goTo(REQUEST_WEIGHT);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        blood_sugar.setBackground(getDrawable(R.drawable.button_background_48dp));
+        blood_pressure.setBackground(getDrawable(R.drawable.button_background_48dp));
+        kg.setBackground(getDrawable(R.drawable.button_background_48dp));
     }
 
     private void goTo(int id) {

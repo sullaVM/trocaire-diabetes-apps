@@ -22,8 +22,9 @@ import java.io.FileWriter;
 import android.util.Log;
 
 public class Manual extends AppCompatActivity {
-    EditText data;
 
+    EditText data;
+    ImageButton enter, back;
     int mPatientID;
 
     private static final String filename = "StoredData.txt";
@@ -33,8 +34,8 @@ public class Manual extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
 
-        ImageButton enter = findViewById(R.id.enter);
-        ImageButton back = findViewById(R.id.back);
+        enter = findViewById(R.id.enter);
+        back = findViewById(R.id.back);
 
         data = findViewById(R.id.enterData);
         data.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -44,13 +45,15 @@ public class Manual extends AppCompatActivity {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveData();
+                if(data.getText().toString().equals("")) data.setBackgroundColor(getResources().getColor(R.color.light_red));
+                else saveData();
             }
         });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
@@ -61,6 +64,7 @@ public class Manual extends AppCompatActivity {
     }
 
     private void saveData() {
+        enter.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
         try {
             File textFile = new File(this.getFilesDir(), filename);
             if (!textFile.exists())
