@@ -61,9 +61,7 @@ export interface IGetGraphingData {
 }
 
 export interface IGetPatientID {
-  doctorID: number;
-  firstName: string;
-  lastName: string;
+  userName: number;
 }
 
 /**

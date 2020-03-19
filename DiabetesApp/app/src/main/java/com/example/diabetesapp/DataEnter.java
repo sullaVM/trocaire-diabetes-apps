@@ -13,6 +13,8 @@ public class DataEnter extends AppCompatActivity {
     static final int REQUEST_PRESSURE = 1;
     static final int REQUEST_WEIGHT = 2;
 
+    ImageButton back, blood_sugar, blood_pressure, kg;
+
     int mPatientID;
 
     @Override
@@ -22,37 +24,49 @@ public class DataEnter extends AppCompatActivity {
 
         mPatientID = getIntent().getIntExtra("tag", -1);
 
-        ImageButton back = findViewById(R.id.back);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
 
-        ImageButton blood_sugar = findViewById(R.id.blood_sugar);
+        blood_sugar = findViewById(R.id.blood_sugar);
         blood_sugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                blood_sugar.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 goTo(REQUEST_SUGAR);
             }
         });
 
-        ImageButton blood_pressure = findViewById(R.id.blood_pressure);
+        blood_pressure = findViewById(R.id.blood_pressure);
         blood_pressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                blood_pressure.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 goTo(REQUEST_PRESSURE);
             }
         });
 
-        ImageButton kg = findViewById(R.id.kg);
+        kg = findViewById(R.id.kg);
         kg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                kg.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 goTo(REQUEST_WEIGHT);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        blood_sugar.setBackground(getDrawable(R.drawable.button_background_48dp));
+        blood_pressure.setBackground(getDrawable(R.drawable.button_background_48dp));
+        kg.setBackground(getDrawable(R.drawable.button_background_48dp));
     }
 
     private void goTo(int id) {
@@ -73,62 +87,6 @@ public class DataEnter extends AppCompatActivity {
             startActivity(i);
         }
     }
-
-    /*
-    private void enterData() {
-        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
-        try {
-            StoreWeightRequest storeWeightRequest = new StoreWeightRequest(mPatientID, timestamp, Float.parseFloat(weight.getText().toString()));
-            storeWeightRequest.makeRequest(this, new Response.Listener<StoreWeightResponse>() {
-                @Override
-                public void onResponse(StoreWeightResponse response) {
-                    Log.println(Log.INFO, "StoreWeightRequest", response.success.toString());
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.println(Log.ERROR, "StoreWeightRequest", error.getMessage());
-                }
-            });
-        } catch (Exception e) {
-
-        }
-        try {
-            StoreBSLRequest storeBSLRequest = new StoreBSLRequest(mPatientID, timestamp, Float.parseFloat(sugar_data), null);
-            storeBSLRequest.makeRequest(this, new Response.Listener<StoreBSLResponse>() {
-                @Override
-                public void onResponse(StoreBSLResponse response) {
-                    Log.println(Log.INFO, "StoreBSLRequest", response.success.toString());
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.println(Log.ERROR, "StoreBSLRequest", error.getMessage());
-                }
-            });
-        } catch (Exception e) {
-
-        }
-        try {
-            StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(pressure_data), Float.parseFloat(pressure_data));
-            storeRBPRequest.makeRequest(this, new Response.Listener<StoreRBPResponse>() {
-                @Override
-                public void onResponse(StoreRBPResponse response) {
-                    Log.println(Log.INFO, "StoreRBPRequest", response.success.toString());
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.println(Log.ERROR, "StoreRBPRequest", error.getMessage());
-
-                }
-            });
-        } catch (Exception e) {
-
-        }
-    }
-
-     */
 
     private void back() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

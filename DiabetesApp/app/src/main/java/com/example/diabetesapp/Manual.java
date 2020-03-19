@@ -15,18 +15,27 @@ import com.example.diabetesapp.data.responses.StoreWeightResponse;
 
 import java.sql.Timestamp;
 
-public class Manual extends AppCompatActivity {
-    EditText data;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import android.util.Log;
 
+public class Manual extends AppCompatActivity {
+
+    EditText data;
+    ImageButton enter, back;
     int mPatientID;
+
+    private static final String filename = "StoredData.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
 
-        ImageButton enter = findViewById(R.id.enter);
-        ImageButton back = findViewById(R.id.back);
+        enter = findViewById(R.id.enter);
+        back = findViewById(R.id.back);
 
         data = findViewById(R.id.enterData);
         data.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -36,13 +45,15 @@ public class Manual extends AppCompatActivity {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveData();
+                if(data.getText().toString().equals("")) data.setBackgroundColor(getResources().getColor(R.color.light_red));
+                else saveData();
             }
         });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
@@ -53,18 +64,19 @@ public class Manual extends AppCompatActivity {
     }
 
     private void saveData() {
-
-        String timestamp = new Timestamp(System.currentTimeMillis()).toString();
+        enter.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
         try {
-            StoreWeightRequest storeWeightRequest = new StoreWeightRequest(mPatientID, timestamp, Float.parseFloat(data.getText().toString()));
-            storeWeightRequest.makeRequest(this, new Consumer<StoreWeightResponse>() {
-                @Override
-                public void accept(StoreWeightResponse storeWeightResponse) {
-                    finish();
-                }
-            });
-        } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
+            File textFile = new File(this.getFilesDir(), filename);
+            if (!textFile.exists())
+                textFile.createNewFile();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true /*append*/));
+
+            writer.write("W " + mPatientID + " " +  Float.parseFloat(data.getText().toString()) + "\n");
+            writer.close();
+        } catch (IOException e) {
+        Log.e("ReadWriteFile", "Unable to write data.");
         }
+        finish();
     }
 }

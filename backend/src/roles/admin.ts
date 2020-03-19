@@ -64,6 +64,7 @@ export const createDoctor = async (request: Request, response: Response) => {
     }
 
     const genHash: string = await new Promise((resolve, reject) => {
+      // tslint:disable-next-line: no-shadowed-variable
       hash(password, pwEncryptSaltRounds, (error, hash) => {
         if (error) {
           reject(error);

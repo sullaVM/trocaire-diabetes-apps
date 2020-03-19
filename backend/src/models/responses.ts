@@ -4,6 +4,7 @@
 
 export interface ICreatePatient {
   success: boolean;
+  message?: string;
   patientID?: number;
 }
 
@@ -16,6 +17,7 @@ export interface IGetPatientProfile {
   doctorID?: number;
   firstName?: string;
   lastName?: string;
+  userName?: string;
   height?: string;
   pregnant?: number;
   mobileNumber?: number;

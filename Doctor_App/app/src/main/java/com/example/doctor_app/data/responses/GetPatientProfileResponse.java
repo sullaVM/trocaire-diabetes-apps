@@ -10,6 +10,8 @@ public class GetPatientProfileResponse extends PatientResponse {
     @Nullable
     public String lastName;
     @Nullable
+    public String userName;
+    @Nullable
     public String height;
     @Nullable
     public Integer mobileNumber;

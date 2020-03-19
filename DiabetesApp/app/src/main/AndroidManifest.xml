@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,28 +14,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CameraSugar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".InputPressureSugar"
+        <activity android:name=".CheckSugarImage"></activity>
+        <activity android:name=".CheckImage" />
+        <activity
+            android:name=".CameraSugar"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".DataSubmit"
+        <activity
+            android:name=".InputPressureSugar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DataSubmit"
             android:configChanges="orientation"
             android:screenOrientation="portrait" /> <!-- TEMPORARY!!! -->
-        <activity android:name=".DataEnter"
+        <activity
+            android:name=".DataEnter"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".Manual"
+        <activity
+            android:name=".Manual"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".InputPassword"
+        <activity
+            android:name=".InputPassword"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".Camera"
+        <activity
+            android:name=".Camera"
             android:configChanges="orientation"
             android:screenOrientation="portrait" /> <!-- TEMPORARY!!! -->
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>

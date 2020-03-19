@@ -18,6 +18,8 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const createPatient = async (
   request: requests.ICreatePatient
 ): Promise<responses.ICreatePatient> => {
+  const userNameExistsQuery = `SELECT UserName FROM Patients WHERE UserName='${request.userName}';`;
+
   const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, UserName, Height, Pregnant, MobileNumber, PhotoDataUrl, Password, BslUnit)
   VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${
     request.userName
@@ -26,13 +28,29 @@ export const createPatient = async (
   }','${request.password}','${request.bslUnit === 'mgDL' ? 1 : 0}');`;
 
   const result = await new Promise<responses.ICreatePatient>(resolve => {
-    db.query(query, (error, results, fields) => {
-      if (error) {
-        console.error(error);
-        resolve({ success: false });
+    db.query(
+      userNameExistsQuery,
+      (userNameError, userNameResults, userNameFields) => {
+        if (userNameError) {
+          console.error(userNameError);
+          resolve({ success: false });
+        }
+        if (!userNameResults[0]) {
+          db.query(query, (error, results, fields) => {
+            if (error) {
+              console.error(error);
+              resolve({ success: false });
+            }
+            resolve({ patientID: results.insertId, success: true });
+          });
+        } else {
+          resolve({
+            success: false,
+            message: 'Username already exists',
+          });
+        }
       }
-      resolve({ patientID: results.insertId, success: true });
-    });
+    );
   });
 
   return result;
@@ -52,7 +70,6 @@ export const getPatientPassword = async (
         if (!results[0]) {
           reject(error);
         } else {
-          console.log(results[0]);
           resolve({
             success: true,
             password: results[0].Password,
@@ -128,6 +145,7 @@ export const getPatientProfile = async (
           doctorID: results[0].DoctorID,
           firstName: results[0].FirstName,
           lastName: results[0].LastName,
+          userName: results[0].UserName,
           height: results[0].Height,
           pregnant: results[0].Pregnant,
           mobileNumber: results[0].MobileNumber,
@@ -347,7 +365,7 @@ export const getGraphingData = async (
 export const getPatientID = async (
   request: requests.IGetPatientID
 ): Promise<responses.IGetPatientID> => {
-  const query = `SELECT PatientID FROM Patients WHERE DoctorID='${request.doctorID}' AND FirstName='${request.firstName}' AND LastName='${request.lastName}';`;
+  const query = `SELECT PatientID FROM Patients WHERE UserName='${request.userName}';`;
 
   const result = await new Promise<responses.IGetPatientID>(resolve => {
     db.query(query, (error, results, fields) => {

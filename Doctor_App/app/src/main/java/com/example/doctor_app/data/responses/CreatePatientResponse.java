@@ -5,4 +5,6 @@ import androidx.annotation.Nullable;
 public class CreatePatientResponse extends DoctorResponse {
     @Nullable
     public Integer patientID;
+    @Nullable
+    public String message;
 }
