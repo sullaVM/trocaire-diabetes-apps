@@ -22,7 +22,7 @@ public class StoreBSLRequest extends PatientRequest<StoreBSLResponse> {
 
     @Override
     public String requestRoute() {
-        return "storeRBP";
+        return "storeBSL";
     }
 
     @Override
