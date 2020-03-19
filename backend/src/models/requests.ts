@@ -137,3 +137,7 @@ export interface ISetPatientToken {
   sessionToken: string;
   patientID: number;
 }
+
+export interface IClearPatientToken {
+  tokenID: string;
+}

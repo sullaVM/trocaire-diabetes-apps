@@ -124,6 +124,17 @@ export const updatePatientToken = async (
   }
 };
 
+export const clearPatientToken = async (
+  patientID: number
+): Promise<boolean> => {
+  try {
+    return await updatePatientToken(patientID, '');
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 export const verifyPatientToken = async (
   patientID: number,
   token: string

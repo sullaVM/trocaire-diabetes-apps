@@ -11,6 +11,7 @@ import express, {
   Response,
   NextFunction,
   Router,
+  response,
 } from 'express';
 
 import {
@@ -39,6 +40,7 @@ import {
   storeWeight,
   verifyPatientToken,
   getPatientID,
+  clearPatientToken,
 } from './roles/patient';
 
 import {
@@ -55,6 +57,7 @@ import {
   generateToken,
   updatePatientToken,
 } from './roles/patient';
+import { resolveContent } from 'nodemailer/lib/shared';
 
 const apiPort = 8081;
 const app = express();
@@ -127,6 +130,16 @@ const registerPatient = (_request: Request, response: Response) => {
 
     helpers: {
       title: 'Register a Patient',
+    },
+  });
+};
+
+const editProfile = (_request: Request, response: Response) => {
+  response.render('editProfile', {
+    layout: 'main',
+
+    helpers: {
+      title: 'Edit Profile',
     },
   });
 };
@@ -226,6 +239,17 @@ const patientLogin = async (request: Request, response: Response) => {
   }
 };
 
+const patientLogout = async (request: Request, respose: Response) => {
+  const patientID = request.body.patientID;
+  if (clearPatientToken(patientID)) {
+    response.status(200).send({
+      message: 'logged out',
+    });
+  } else {
+    response.status(403);
+  }
+};
+
 app.use('/api', router);
 app.disable('etag');
 
@@ -236,6 +260,7 @@ const initRoutes = (app: Express) => {
   app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
   app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinics);
   app.get('/registerPatient', isDoctorLoggedIn, registerPatient);
+  app.get('/editProfile', isDoctorLoggedIn, editProfile);
 
   app.get('/login', login);
   app.get('/signup', doctorSignup);
@@ -243,6 +268,7 @@ const initRoutes = (app: Express) => {
 
   app.post('/sessionLogin', sessionLogin);
   app.post('/patientLogin', patientLogin);
+  app.post('/patientLogout', patientLogout);
 };
 
 // tslint:disable-next-line: no-shadowed-variable
@@ -256,20 +282,20 @@ const initApi = (router: Router) => {
   router.post('/inviteUser', isAdminLoggedIn, inviteDoctor);
 
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
-  router.post('/getPatientID', getPatientID);
-  router.post('/getPatientProfile', getPatientProfile);
+  router.post('/getPatientID', isDoctorLoggedIn, getPatientID);
+  router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.post('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
-
   router.post(
     '/getAllDoctorsAtClinic',
     isDoctorLoggedIn,
     getAllDoctorsAtClinic
   );
   router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);
-  router.get('/admin/getAllClinics', isAdminLoggedIn, getAllClinics);
   router.post('/getDoctorID', isDoctorLoggedIn, getDoctorID);
+
+  router.get('/admin/getAllClinics', isAdminLoggedIn, getAllClinics);
 
   router.post('/storeRBP', isPatientLoggedIn, storeRBP);
   router.post('/storeBSL', isPatientLoggedIn, storeBSL);

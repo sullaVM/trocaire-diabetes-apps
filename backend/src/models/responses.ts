@@ -133,3 +133,6 @@ export interface IGetPatientToken {
 export interface ISetPatientToken {
   success: boolean;
 }
+export interface IClearPatientToken {
+  success: boolean;
+}

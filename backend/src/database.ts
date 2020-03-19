@@ -87,7 +87,6 @@ export const getPatientToken = async (
       });
     }
   );
-
   return result;
 };
 
