@@ -18,7 +18,7 @@ export const storeRBP = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
@@ -38,7 +38,7 @@ export const storeBSL = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
@@ -57,7 +57,7 @@ export const storeWeight = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
@@ -74,7 +74,7 @@ export const getPatientID = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });

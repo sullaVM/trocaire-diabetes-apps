@@ -34,7 +34,7 @@ export const createPatient = async (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
@@ -51,7 +51,7 @@ export const getPatientProfile = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
@@ -68,7 +68,7 @@ export const getDoctorsPatients = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error:' + error,
       });
@@ -88,7 +88,7 @@ export const getGraphingData = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error:' + error,
       });
@@ -105,7 +105,7 @@ export const getDoctorProfile = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error:' + error,
       });
@@ -122,7 +122,7 @@ export const getAllDoctorsAtClinic = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
@@ -139,7 +139,7 @@ export const getAllClinics = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
@@ -156,7 +156,7 @@ export const getDoctorID = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });

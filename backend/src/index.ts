@@ -256,47 +256,63 @@ app.disable('etag');
 // tslint:disable-next-line: no-shadowed-variable
 const initRoutes = (app: Express) => {
   app.get('/', isAdminLoggedIn, dashboard);
-  app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
-  app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
-  app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinics);
-  app.get('/registerPatient', isDoctorLoggedIn, registerPatient);
-  app.get('/editProfile', isDoctorLoggedIn, editProfile);
 
+  // Public Pages
   app.get('/login', login);
   app.get('/signup', doctorSignup);
+
+  // Admin and Doctor Login/Logout
+  app.post('/sessionLogin', sessionLogin);
   app.get('/sessionLogout', sessionLogout);
 
-  app.post('/sessionLogin', sessionLogin);
+  // Patient Login/Logout
   app.post('/patientLogin', patientLogin);
   app.post('/patientLogout', patientLogout);
+
+  // Admin/Doctor Actions
+  app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
+  app.get('/registerPatient', isDoctorLoggedIn, registerPatient);
+
+  // Clinic Pages
+  app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
+  app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinics);
+
+  // Doctor Profile Edit Request
+  app.get('/editProfile', isDoctorLoggedIn, editProfile);
 };
 
 // tslint:disable-next-line: no-shadowed-variable
 const initApi = (router: Router) => {
   router.post('/createDoctor', createDoctor);
 
+  // Doctor Account Requests
+  router.post('/inviteUser', isAdminLoggedIn, inviteDoctor);
   router.post('/updateDoctor', isAdminLoggedIn, updateDoctor);
   router.post('/deleteDoctor', isAdminLoggedIn, deleteDoctor);
+  router.post('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
+  router.post('/getDoctorID', isDoctorLoggedIn, getDoctorID);
+
+  // Clinic Creation and Assignment
   router.post('/createClinic', isAdminLoggedIn, createClinic);
   router.post('/addDoctorToClinics', isAdminLoggedIn, addDoctorToMultClinics);
-  router.post('/inviteUser', isAdminLoggedIn, inviteDoctor);
 
+  // Doctor's Patient Requests
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
   router.post('/getPatientID', isDoctorLoggedIn, getPatientID);
   router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
-  router.post('/getDoctorProfile', isDoctorLoggedIn, getDoctorProfile);
+
+  // Clinic Requests
+  router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);
   router.post(
     '/getAllDoctorsAtClinic',
     isDoctorLoggedIn,
     getAllDoctorsAtClinic
   );
-  router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);
-  router.post('/getDoctorID', isDoctorLoggedIn, getDoctorID);
-
   router.get('/admin/getAllClinics', isAdminLoggedIn, getAllClinics);
 
+  // Patient Records Requests
   router.post('/storeRBP', isPatientLoggedIn, storeRBP);
   router.post('/storeBSL', isPatientLoggedIn, storeBSL);
   router.post('/storeWeight', isPatientLoggedIn, storeWeight);

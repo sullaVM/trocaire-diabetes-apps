@@ -21,7 +21,7 @@ export const inviteDoctor = async (request: Request, response: Response) => {
     });
 
     // TODO(sulla): Clean this up
-    const emailBody = `Hi ${firstName}, \nYou have been invited by Dr. ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
+    const emailBody = `Hi Dr. ${firstName}, ${lastName} \nYou have been invited by Dr. ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
 
     const addDoctorToInvitedDoctorsRequest: requests.IAddDoctorToInvitedDoctors = {
       email,
@@ -31,7 +31,9 @@ export const inviteDoctor = async (request: Request, response: Response) => {
 
     sendMail(email, emailBody);
 
-    response.sendStatus(200);
+    response.status(200).send({
+      message: 'Successfully invited doctor to signup for the app',
+    });
   } catch (error) {
     console.log('Error sending invite: ', error);
 
@@ -60,7 +62,7 @@ export const createDoctor = async (request: Request, response: Response) => {
     );
 
     if (!verifyInvitedDoctorResult.success) {
-      throw new Error('Your email is not authorized to use this app.');
+      throw new Error('Your email is not authorized to use this app');
     }
 
     const genHash: string = await new Promise((resolve, reject) => {
@@ -102,7 +104,9 @@ export const createDoctor = async (request: Request, response: Response) => {
       throw new Error('Creating Firebase account for doctor failed');
     }
 
-    response.sendStatus(200);
+    response.status(200).send({
+      message: 'Welcome to the Korta Diabetes Management App',
+    });
   } catch (error) {
     console.log('Error creating doctor account: ', error);
     response.status(500).send({
@@ -158,10 +162,12 @@ export const updateDoctor = (request: Request, response: Response) => {
 
   db.updateDoctor(updateDoctorRequest)
     .then(result => {
-      response.status(200).send(result);
+      response.status(200).send({
+        message: 'Successfully updated you profile',
+      });
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error:' + error,
       });
@@ -178,7 +184,7 @@ export const deleteDoctor = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error:' + error,
       });
@@ -195,7 +201,7 @@ export const createClinic = (request: Request, response: Response) => {
       response.status(200).send(result);
     })
     .catch(error => {
-      response.status(200).send({
+      response.status(500).send({
         success: false,
         message: 'Request unsuccessful, Error: ' + error,
       });
