@@ -27,7 +27,8 @@ import java.sql.Timestamp;
 public class InternetService extends Service {
 
     static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-    private static final String filename = "StoredData.txt";
+    private static final String filename = "/StoredData.txt";
+    BroadcastReceiver receiver;
 
     public InternetService() {
         super();
@@ -47,7 +48,7 @@ public class InternetService extends Service {
         //Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
@@ -89,15 +90,14 @@ public class InternetService extends Service {
     public void onDestroy() {
         super.onDestroy();
         //Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
-
+        this.unregisterReceiver(receiver);
         Intent broadcastIntent = new Intent(this, SensorRestarterBroadcastReceiver.class);
-
         sendBroadcast(broadcastIntent);
     }
 
     private void submitData() {
         File testFile = new File(this.getFilesDir(), filename);
-        if (testFile != null) {
+        if (testFile.exists()){
             BufferedReader reader;
             try {
                 reader = new BufferedReader(new FileReader(testFile));
@@ -114,7 +114,7 @@ public class InternetService extends Service {
                 testFile.delete();
                 reader.close();
             } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TextFile.txt file.");
+                Log.e("ReadWriteFile", "Unable to read " + filename);
             }
         }
     }

@@ -30,7 +30,7 @@ public class InputPressureSugar extends AppCompatActivity {
 
     static final int REQUEST_SUGAR = 0;
     static final int REQUEST_PRESSURE = 1;
-    private static final String filename = "StoredData.txt";
+    private static final String filename = "/StoredData.txt";
 
     ImageButton camera, camera2, back, done;
     EditText dataBox1, dataBox2;

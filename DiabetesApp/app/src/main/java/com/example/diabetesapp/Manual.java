@@ -32,7 +32,7 @@ public class Manual extends AppCompatActivity {
     ImageButton enter, back;
     int mPatientID;
 
-    private static final String filename = "StoredData.txt";
+    private static final String filename = "/StoredData.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

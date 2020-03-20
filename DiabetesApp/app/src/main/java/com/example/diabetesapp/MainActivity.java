@@ -3,6 +3,8 @@ package com.example.diabetesapp;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -87,20 +89,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLogin() {
-        GetPatientIDRequest getPatientIDRequest = new GetPatientIDRequest(username.getText().toString());
-        getPatientIDRequest.makeRequest(getBaseContext(), new Consumer<GetPatientIDResponse>() {
-            @Override
-            public void accept(GetPatientIDResponse getPatientIDResponse) {
-                if (getPatientIDResponse.success != null && getPatientIDResponse.success) {
-                    Intent intent = new Intent(getBaseContext(), InputPassword.class);
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            GetPatientIDRequest getPatientIDRequest = new GetPatientIDRequest(username.getText().toString());
+            getPatientIDRequest.makeRequest(getBaseContext(), new Consumer<GetPatientIDResponse>() {
+                @Override
+                public void accept(GetPatientIDResponse getPatientIDResponse) {
+                    if (getPatientIDResponse.success != null && getPatientIDResponse.success) {
+                        Intent intent = new Intent(getBaseContext(), InputPassword.class);
 
-                    intent.putExtra("tag", getPatientIDResponse.patientID);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT).show();
+                        intent.putExtra("tag", getPatientIDResponse.patientID);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getBaseContext(), "User not found", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
