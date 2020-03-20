@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="oval">
-            <stroke android:color="@color/appWhite" android:width="5dp" />
-            <solid android:color="@color/appWhite"/>
-            <size android:width="96dp" android:height="96dp"/>
-        </shape>
-    </item>
+    <item android:drawable="@drawable/button_background_pressed_96dp"
+        android:state_pressed="true" />
+    <item android:drawable="@drawable/button_background_focused_96dp"
+        android:state_focused="true" />
+    <item android:drawable="@drawable/button_background_default_96dp" />
 </selector>

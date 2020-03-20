@@ -5,33 +5,25 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
-
-import org.opencv.android.Utils;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 public class CameraSugar extends AppCompatActivity {
 
@@ -72,7 +64,6 @@ public class CameraSugar extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                done.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 takeImage();
             }
         });
@@ -80,7 +71,6 @@ public class CameraSugar extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
@@ -195,7 +185,7 @@ public class CameraSugar extends AppCompatActivity {
         }
     }
 
-    private void nextScreen(){
+    private void nextScreen() {
         Intent i = new Intent(this, CheckSugarImage.class);
         startActivityForResult(i, 0);
     }

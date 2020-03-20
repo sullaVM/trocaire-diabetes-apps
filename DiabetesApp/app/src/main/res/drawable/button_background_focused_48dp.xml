@@ -3,8 +3,8 @@
     android:shape="oval">
     <stroke
         android:width="5dp"
-        android:color="@color/darkest_gray" />
-    <solid android:color="@color/darkest_gray" />
+        android:color="@color/dark_gray" />
+    <solid android:color="@color/dark_gray" />
     <size
         android:width="48dp"
         android:height="48dp" />

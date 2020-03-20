@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.diabetesapp.GsonRequest;
 import com.example.diabetesapp.R;
+import com.example.diabetesapp.login.User;
 import com.google.gson.Gson;
 
 public abstract class PatientRequest<T> {
@@ -22,7 +23,7 @@ public abstract class PatientRequest<T> {
         Gson gson = new Gson();
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.session), Context.MODE_PRIVATE);
 
-        String tokenID = sharedPreferences.getString(context.getString(R.string.session), null);
+        String tokenID = sharedPreferences.getString(context.getString(R.string.session), User.DEFAULT_SESSION);
         setTokenID(tokenID);
 
         String jsonString = gson.toJson(this);

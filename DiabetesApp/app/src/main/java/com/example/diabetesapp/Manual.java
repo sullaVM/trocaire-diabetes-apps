@@ -58,7 +58,6 @@ public class Manual extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
@@ -69,7 +68,6 @@ public class Manual extends AppCompatActivity {
     }
 
     private void saveData() {
-        enter.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
 
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();

@@ -31,7 +31,6 @@ public class PatientLoginRequest {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         Gson gson = new Gson();
         final SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.session), Context.MODE_PRIVATE);
-
         String jsonString = gson.toJson(this);
 
         GsonRequest<PatientLoginResponse> gsonRequest = new GsonRequest(Request.Method.POST, API_BASE_URL, jsonString, PatientLoginResponse.class, new Response.Listener<PatientLoginResponse>() {
@@ -40,6 +39,7 @@ public class PatientLoginRequest {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (response.success != null && response.success && response.tokenID != null) {
                     editor.putString(context.getString(R.string.session), response.tokenID);
+                    editor.putInt(context.getString(R.string.patient_id), patientID);
                     editor.apply();
                 }
                 callback.accept(response);

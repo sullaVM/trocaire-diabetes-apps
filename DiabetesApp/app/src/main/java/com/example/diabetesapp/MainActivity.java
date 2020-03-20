@@ -1,11 +1,12 @@
 package com.example.diabetesapp;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -14,24 +15,11 @@ import androidx.core.util.Consumer;
 
 import com.example.diabetesapp.data.requests.GetPatientIDRequest;
 import com.example.diabetesapp.data.responses.GetPatientIDResponse;
+import com.example.diabetesapp.login.User;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-
-import android.net.ConnectivityManager;
-import android.content.Context;
-import android.net.NetworkInfo;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.sql.Timestamp;
-
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-
-import android.app.ActivityManager;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -66,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        username = findViewById(R.id.username);
+        setContentView(R.layout.activity_splash);
 
         mInternetService = new InternetService();
         mServiceIntent = new Intent(this, mInternetService.getClass());
@@ -76,11 +62,20 @@ public class MainActivity extends AppCompatActivity {
             startService(mServiceIntent);
         }
 
+        User loggedInUser = User.getLoggedInUser(this);
+        if (loggedInUser != null) {
+            Intent intent = new Intent(getBaseContext(), DataEnter.class);
+            intent.putExtra("tag", loggedInUser.patientID);
+            startActivity(intent);
+        }
+        setContentView(R.layout.activity_main);
+
+        username = findViewById(R.id.username);
+
         done = findViewById(R.id.button2);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                done.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 checkLogin();
             }
         });
@@ -89,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        done.setBackground(getDrawable(R.drawable.button_background_48dp));
     }
 
     private void checkLogin() {
@@ -112,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        done.setBackground(getDrawable(R.drawable.button_background_48dp));
 
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
@@ -127,11 +120,11 @@ public class MainActivity extends AppCompatActivity {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("isServiceRunning?", true+"");
+                Log.i("isServiceRunning?", true + "");
                 return true;
             }
         }
-        Log.i ("isServiceRunning?", false+"");
+        Log.i("isServiceRunning?", false + "");
         return false;
     }
 

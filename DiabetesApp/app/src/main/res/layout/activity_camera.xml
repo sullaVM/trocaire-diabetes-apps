@@ -7,12 +7,12 @@
     android:background="#C8E6C9"
     tools:context=".Camera">
 
-        <SurfaceView
-            android:id="@+id/surface_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <SurfaceView
+        android:id="@+id/surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/myLineView2"
@@ -23,9 +23,9 @@
         android:background="@drawable/rect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/myLineView3"
+        app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="@id/myRectangleView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.25" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/myLineView3"
@@ -36,9 +36,9 @@
         android:background="@drawable/rect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/myRectangleView"
+        app:layout_constraintHeight_percent="0.25"
         app:layout_constraintStart_toStartOf="@id/myLineView2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.25" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/myRectangleView"

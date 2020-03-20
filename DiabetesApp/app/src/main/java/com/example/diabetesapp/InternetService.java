@@ -1,17 +1,16 @@
 package com.example.diabetesapp;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import androidx.annotation.Nullable;
-import androidx.core.util.Consumer;
-
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.util.Consumer;
 
 import com.example.diabetesapp.data.requests.StoreBSLRequest;
 import com.example.diabetesapp.data.requests.StoreRBPRequest;
@@ -21,17 +20,13 @@ import com.example.diabetesapp.data.responses.StoreRBPResponse;
 import com.example.diabetesapp.data.responses.StoreWeightResponse;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Timestamp;
 
 public class InternetService extends Service {
 
     static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-    NotificationManager manager ;
     private static final String filename = "StoredData.txt";
 
     public InternetService() {
@@ -73,12 +68,12 @@ public class InternetService extends Service {
 
                             if (show && ConnectionHelper.isOnline) {
                                 ConnectionHelper.isOnline = false;
-                                Log.i("NETWORK123","Connection lost");
+                                Log.i("NETWORK123", "Connection lost");
                                 //manager.cancelAll();
                             }
                         }
                     } else {
-                        Log.i("NETWORK123","Connected");
+                        Log.i("NETWORK123", "Connected");
                         submitData();
 
                         ConnectionHelper.isOnline = true;
@@ -86,7 +81,7 @@ public class InternetService extends Service {
                 }
             }
         };
-        registerReceiver(receiver,filter);
+        registerReceiver(receiver, filter);
         return START_STICKY;
     }
 
@@ -100,7 +95,7 @@ public class InternetService extends Service {
         sendBroadcast(broadcastIntent);
     }
 
-    private void submitData(){
+    private void submitData() {
         File testFile = new File(this.getFilesDir(), filename);
         if (testFile != null) {
             BufferedReader reader;
@@ -109,9 +104,12 @@ public class InternetService extends Service {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] text = line.split(" ");
-                    if(text[0].equals("BSL")) storeBSL(Integer.parseInt(text[1]), Float.parseFloat(text[2]));
-                    else if(text[0].equals("RBP")) storeRBP(Integer.parseInt(text[1]), Float.parseFloat(text[2]), Float.parseFloat(text[3]));
-                    else if(text[0].equals("W")) storeWeight(Integer.parseInt(text[1]), Float.parseFloat(text[2]));
+                    if (text[0].equals("BSL"))
+                        storeBSL(Integer.parseInt(text[1]), Float.parseFloat(text[2]));
+                    else if (text[0].equals("RBP"))
+                        storeRBP(Integer.parseInt(text[1]), Float.parseFloat(text[2]), Float.parseFloat(text[3]));
+                    else if (text[0].equals("W"))
+                        storeWeight(Integer.parseInt(text[1]), Float.parseFloat(text[2]));
                 }
                 testFile.delete();
                 reader.close();
@@ -121,7 +119,7 @@ public class InternetService extends Service {
         }
     }
 
-    private void storeBSL(int mPatientID, float data){
+    private void storeBSL(int mPatientID, float data) {
         String timestamp = new Timestamp(System.currentTimeMillis()).toString();
         try {
             StoreBSLRequest storeBSLRequest = new StoreBSLRequest(mPatientID, timestamp, data, null);
@@ -136,7 +134,7 @@ public class InternetService extends Service {
         }
     }
 
-    private void storeRBP(int mPatientID, float data1, float data2){
+    private void storeRBP(int mPatientID, float data1, float data2) {
         String timestamp = new Timestamp(System.currentTimeMillis()).toString();
         try {
             StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, data1, data2);
@@ -151,7 +149,7 @@ public class InternetService extends Service {
         }
     }
 
-    private void storeWeight(int mPatientID, float data){
+    private void storeWeight(int mPatientID, float data) {
         String timestamp = new Timestamp(System.currentTimeMillis()).toString();
         try {
             StoreWeightRequest storeWeightRequest = new StoreWeightRequest(mPatientID, timestamp, data);

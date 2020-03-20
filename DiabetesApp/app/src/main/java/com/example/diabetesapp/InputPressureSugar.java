@@ -1,32 +1,30 @@
 package com.example.diabetesapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 
 import com.example.diabetesapp.data.requests.StoreBSLRequest;
 import com.example.diabetesapp.data.requests.StoreRBPRequest;
 import com.example.diabetesapp.data.responses.StoreBSLResponse;
 import com.example.diabetesapp.data.responses.StoreRBPResponse;
 
-import android.net.ConnectivityManager;
-import android.content.Context;
-import android.net.NetworkInfo;
-
-import java.sql.Timestamp;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
-
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.io.FileWriter;
-import android.util.Log;
+import java.io.IOException;
+import java.sql.Timestamp;
 
 public class InputPressureSugar extends AppCompatActivity {
 
@@ -55,7 +53,6 @@ public class InputPressureSugar extends AppCompatActivity {
             camera.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    camera.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                     Intent i = getIntent();
                     int id = i.getIntExtra("tag", 0);
                     OCRNormal(id);
@@ -66,15 +63,13 @@ public class InputPressureSugar extends AppCompatActivity {
 
             dataBox1 = findViewById(R.id.data1);
             dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        }
-        else {
+        } else {
             setContentView(R.layout.activity_input_pressure_sugar);
 
             camera = findViewById(R.id.camera);
             camera.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    camera.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                     Intent i = getIntent();
                     int id = i.getIntExtra("tag", 0);
                     OCRSevenDigit(id, true);
@@ -85,7 +80,6 @@ public class InputPressureSugar extends AppCompatActivity {
             camera2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    camera2.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                     Intent i = getIntent();
                     int id = i.getIntExtra("tag", 0);
                     OCRSevenDigit(id, false);
@@ -104,7 +98,6 @@ public class InputPressureSugar extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
@@ -115,24 +108,22 @@ public class InputPressureSugar extends AppCompatActivity {
             public void onClick(View view) {
                 if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) {
                     input = dataBox1.getText().toString();
-                    if(input.equals("")) dataBox1.setBackgroundColor(getResources().getColor(R.color.light_red));
+                    if (input.equals(""))
+                        dataBox1.setBackgroundColor(getResources().getColor(R.color.light_red));
                     else saveData(REQUEST_SUGAR);
-                }
-                else {
+                } else {
                     input = dataBox1.getText().toString();
                     input2 = dataBox2.getText().toString();
                     boolean check = true;
-                    if(input.equals("")) {
+                    if (input.equals("")) {
                         dataBox1.setBackgroundColor(getResources().getColor(R.color.light_red));
                         check = false;
-                    }
-                    else dataBox1.setBackgroundColor(getResources().getColor(R.color.appWhite));
-                    if(input2.equals("")) {
+                    } else dataBox1.setBackgroundColor(getResources().getColor(R.color.appWhite));
+                    if (input2.equals("")) {
                         dataBox2.setBackgroundColor(getResources().getColor(R.color.light_red));
                         check = false;
-                    }
-                    else dataBox2.setBackgroundColor(getResources().getColor(R.color.appWhite));
-                    if(check) saveData(REQUEST_PRESSURE);
+                    } else dataBox2.setBackgroundColor(getResources().getColor(R.color.appWhite));
+                    if (check) saveData(REQUEST_PRESSURE);
                 }
             }
         });
@@ -142,8 +133,9 @@ public class InputPressureSugar extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        camera.setBackground(getDrawable(R.drawable.button_background_48dp));
-        if(intentTag == REQUEST_PRESSURE) camera2.setBackground(getDrawable(R.drawable.button_background_48dp));
+        camera.setBackground(getDrawable(R.drawable.button_background_default_96dp));
+        if (intentTag == REQUEST_PRESSURE)
+            camera2.setBackground(getDrawable(R.drawable.button_background_default_96dp));
     }
 
     private void OCRNormal(int code) {
@@ -162,11 +154,10 @@ public class InputPressureSugar extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == InputPressureSugar.RESULT_OK) {
             if (getIntent().getIntExtra("tag", 0) == REQUEST_PRESSURE) {
-                if(data.getBooleanExtra("diastole", true) == true){
+                if (data.getBooleanExtra("diastole", true) == true) {
                     input = data.getStringExtra("input");
                     if (input != null) dataBox1.setText(input);
-                }
-                else {
+                } else {
                     input2 = data.getStringExtra("input");
                     if (input2 != null) dataBox2.setText(input2);
                 }
@@ -182,8 +173,6 @@ public class InputPressureSugar extends AppCompatActivity {
     }
 
     private void saveData(int request) {
-        done.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
-
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) {
@@ -200,8 +189,7 @@ public class InputPressureSugar extends AppCompatActivity {
                 } catch (Exception e) {
                     Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
                 }
-            }
-            else{
+            } else {
                 try {
                     StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(input), Float.parseFloat(input2));
                     storeRBPRequest.makeRequest(this, new Consumer<StoreRBPResponse>() {
@@ -214,8 +202,7 @@ public class InputPressureSugar extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
                 }
             }
-        }
-        else {
+        } else {
             if (request == REQUEST_SUGAR) {
                 if (input == null) input = dataBox1.getText().toString();
                 try {

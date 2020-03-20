@@ -69,6 +69,7 @@ public class InputPassword extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), DataEnter.class);
                     intent.putExtra("tag", mPatientID);
                     startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(getBaseContext(), "Login Failed", Toast.LENGTH_SHORT).show();
                 }

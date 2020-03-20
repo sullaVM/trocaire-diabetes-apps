@@ -82,7 +82,6 @@ public class Camera extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                done.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 takeImage();
             }
         });
@@ -91,7 +90,6 @@ public class Camera extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
                 back();
             }
         });
