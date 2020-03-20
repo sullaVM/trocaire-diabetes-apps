@@ -13,6 +13,10 @@ import com.example.diabetesapp.data.requests.StoreRBPRequest;
 import com.example.diabetesapp.data.responses.StoreBSLResponse;
 import com.example.diabetesapp.data.responses.StoreRBPResponse;
 
+import android.net.ConnectivityManager;
+import android.content.Context;
+import android.net.NetworkInfo;
+
 import java.sql.Timestamp;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -179,23 +183,41 @@ public class InputPressureSugar extends AppCompatActivity {
 
     private void saveData(int request) {
         done.setBackground(getDrawable(R.drawable.button_background_pressed_48dp));
-        if (request == REQUEST_SUGAR) {
-            if(input==null) input = dataBox1.getText().toString();
-            try {
-                File textFile = new File(this.getFilesDir(), filename);
-                if (!textFile.exists())
-                    textFile.createNewFile();
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true));
-
-                writer.write("BSL " + mPatientID + " " +  Float.parseFloat(input) + "\n");
-                writer.close();
-            } catch (IOException e) {
-                Log.e("ReadWriteFile", "Unable to write data.");
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            String timestamp = new Timestamp(System.currentTimeMillis()).toString();
+            if (request == REQUEST_SUGAR) {
+                try {
+                    StoreBSLRequest storeBSLRequest = new StoreBSLRequest(mPatientID, timestamp, Float.parseFloat(input), null);
+                    storeBSLRequest.makeRequest(this, new Consumer<StoreBSLResponse>() {
+                        @Override
+                        public void accept(StoreBSLResponse storeBSLResponse) {
+                            Log.d("Upload", "BSL request submitted successfully");
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
+                }
             }
-        } else if (request == REQUEST_PRESSURE) {
-            if(input==null) input = dataBox1.getText().toString();
-            if(input2==null) input2 = dataBox2.getText().toString();
+            else{
+                try {
+                    StoreRBPRequest storeRBPRequest = new StoreRBPRequest(mPatientID, timestamp, Float.parseFloat(input), Float.parseFloat(input2));
+                    storeRBPRequest.makeRequest(this, new Consumer<StoreRBPResponse>() {
+                        @Override
+                        public void accept(StoreRBPResponse storeRBPResponse) {
+                            Log.d("Upload", "RBP request submitted successfully");
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), "Trouble Parsing Float", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        else {
+            if (request == REQUEST_SUGAR) {
+                if (input == null) input = dataBox1.getText().toString();
                 try {
                     File textFile = new File(this.getFilesDir(), filename);
                     if (!textFile.exists())
@@ -203,11 +225,27 @@ public class InputPressureSugar extends AppCompatActivity {
 
                     BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true));
 
-                    writer.write("RBP " + mPatientID + " " +  Float.parseFloat(input) + " " +  Float.parseFloat(input2) + "\n");
+                    writer.write("BSL " + mPatientID + " " + Float.parseFloat(input) + "\n");
                     writer.close();
                 } catch (IOException e) {
                     Log.e("ReadWriteFile", "Unable to write data.");
                 }
+            } else if (request == REQUEST_PRESSURE) {
+                if (input == null) input = dataBox1.getText().toString();
+                if (input2 == null) input2 = dataBox2.getText().toString();
+                try {
+                    File textFile = new File(this.getFilesDir(), filename);
+                    if (!textFile.exists())
+                        textFile.createNewFile();
+
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true));
+
+                    writer.write("RBP " + mPatientID + " " + Float.parseFloat(input) + " " + Float.parseFloat(input2) + "\n");
+                    writer.close();
+                } catch (IOException e) {
+                    Log.e("ReadWriteFile", "Unable to write data.");
+                }
+            }
         }
         finish();
     }

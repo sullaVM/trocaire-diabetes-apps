@@ -14,7 +14,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CheckSugarImage"></activity>
+        <service android:name=".InternetService"
+            android:enabled="true"
+            />
+        <receiver
+            android:name=".SensorRestarterBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+        </receiver>
+        <activity android:name=".CheckSugarImage" />
         <activity android:name=".CheckImage" />
         <activity
             android:name=".CameraSugar"

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DataEnter extends AppCompatActivity {
@@ -92,5 +94,11 @@ public class DataEnter extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        back();
     }
 }
