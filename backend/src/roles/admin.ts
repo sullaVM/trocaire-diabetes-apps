@@ -215,6 +215,8 @@ export const addDoctorToMultClinics = (
   try {
     const doctorID = request.body.doctorID;
 
+    console.log(doctorID);
+
     if (request.body.clinicIDs) {
       const clinicIDs = [...request.body.clinicIDs];
       clinicIDs.forEach((id: number) => {

@@ -1,14 +1,16 @@
 <p>Only doctors can join a clinic. If you have an administrator account, your request will be denied.</p>
 <p>Can't find the clinic you're looking for? Register them <a href="/clinicSignup">here</a>.</p>
-<form action="/api/addDoctorToClinics" method="post">
+
+<form action="/api/addDoctorToClinics" method="post" id="add-doctor-clinic">
   <label for="clinic-list">Clinics:</label>
   <select name="clinics" id="clinic-list" onchange="addToChosen()">
     <option value="" disabled selected>Select clinic/s</option>
   </select>
+
   <ul id="chosen-clinics">
   </ul>
 
-  <input type="hidden" name="doctorID" value="0" required>
+  <input type="hidden" name="doctorID" id="doctorID" required>
 
-  <input type="submit" id="doctor-sign-up" class="action-submit" value="Submit" />
+  <input type="submit" class="action-submit" value="Submit" />
 </form>

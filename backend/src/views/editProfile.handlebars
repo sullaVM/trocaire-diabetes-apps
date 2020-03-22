@@ -2,7 +2,7 @@
   Edit your details.
 </p>
 
-<form action="/api/updateDoctor" method="post">
+<form action="/api/updateDoctor" method="post" id="editProfile">
   <label for="firstName">First Name:</label>
   <input type="text" name="firstName"><br>
 
@@ -19,7 +19,12 @@
   <input type="number" name="username"><br>
 
   <label for="password">Password:</label>
-  <input type="password" name="password" id="change-password">
+  <input type="password" id="password" name="password" pattern=".{6,}" title="Six or more characters is required."
+    onkeyup="validatePassword()" required /><br />
+
+  <label for="confirmPassword">Confirm Password:</label>
+  <input type="password" id="confirmPassword" name="confirmPassword" pattern=".{6,}"
+    title="Six or more characters is required." required onkeyup="validatePassword()" />
 
   <input type="hidden" name="doctorID" id="inviteUser" required>
 

@@ -16,7 +16,7 @@
   <div id="body-wrap">
     <h1>Register a Doctor</h1>
     <p>You must have been sent an invitation email to join. Invalid emails will be blocked.</p>
-    <form action="/api/createDoctor" method="post">
+    <form action="/api/createDoctor" method="post" id="doctor-sign-up">
       <label for="firstName">First Name:</label>
       <input type="text" name="firstName" required /><br />
 
@@ -33,9 +33,14 @@
       <input type="text" name="username" required /><br />
 
       <label for="password">Password:</label>
-      <input type="password" name="password" pattern=".{6,}" title="Six or more characters is required." required />
+      <input type="password" id="password" name="password" pattern=".{6,}" title="Six or more characters is required."
+        onkeyup="validatePassword()" required /><br />
 
-      <input type="submit" id="doctor-sign-up" class="action-submit" value="Submit" />
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" pattern=".{6,}"
+        title="Six or more characters is required." required onkeyup="validatePassword()" />
+
+      <input type="submit" class="action-submit" value="Submit" />
     </form>
   </div>
 

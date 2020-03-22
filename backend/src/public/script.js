@@ -91,9 +91,9 @@ async function initApp() {
       signout.addEventListener('click', signOut, false);
     }
 
-    const invite = document.getElementById('inviteUser');
-    if (invite) {
-      invite.value = localStorage.getItem('doctorID');
+    const doctorIDInput = document.getElementById('doctorID');
+    if (doctorIDInput) {
+      doctorIDInput.value = localStorage.getItem('doctorID');
     }
 
     const user = await new Promise((resolve, reject) => {
@@ -111,16 +111,18 @@ async function initApp() {
         signInStatus.textContent = 'Signed in';
       }
 
-      const doctorSignUpForm = document.getElementById('doctor-sign-up');
-      if (doctorSignUpForm) {
-        initDoctorSignup();
-      }
-
       const accountDetails = document.getElementById(
         'quickstart-account-details'
       );
       if (accountDetails) {
         accountDetails.textContent = JSON.stringify(user, null, '  ');
+      }
+
+      const addDoctorToClinicForm = document.getElementById(
+        'add-doctor-clinic'
+      );
+      if (addDoctorToClinicForm) {
+        initClinics();
       }
     } else {
       const signInStatus = document.getElementById('sign-in-status');
@@ -140,7 +142,18 @@ async function initApp() {
   }
 }
 
-async function initDoctorSignup() {
+function validatePassword() {
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+
+  if (password.value != confirmPassword.value) {
+    confirmPassword.setCustomValidity("Passwords don't match.");
+  } else {
+    confirmPassword.setCustomValidity('');
+  }
+}
+
+async function initClinics() {
   const clinicsRes = await axios.get('/api/admin/getAllClinics');
   const clinicList = document.getElementById('clinic-list');
 
