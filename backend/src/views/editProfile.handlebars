@@ -2,31 +2,31 @@
   Edit your details.
 </p>
 
-<form action="/api/updateDoctor" method="post" id="editProfile">
+<form action="/api/updateDoctor" method="post" id="edit-profile">
   <label for="firstName">First Name:</label>
-  <input type="text" name="firstName"><br>
+  <input type="text" id="first-name" name="firstName"><br>
 
   <label for="lastName">Last Name:</label>
-  <input type="text" name="lastName"><br>
+  <input type="text" id="last-name" name="lastName"><br>
 
   <label for="licenseNumber">License Number:</label>
-  <input type="number" name="licenseNumber"><br>
+  <input type="number" id="license-number" name="licenseNumber"><br>
 
   <label for="email">Email: </label>
-  <input type="text" name="email"><br>
+  <input type="text" id="email" name="email"><br>
 
   <label for="username">Username:</label>
-  <input type="number" name="username"><br>
+  <input type="text" id="username" name="username"><br>
 
   <label for="password">Password:</label>
   <input type="password" id="password" name="password" pattern=".{6,}" title="Six or more characters is required."
-    onkeyup="validatePassword()" required /><br />
+    onkeyup="validatePassword()" /><br />
 
   <label for="confirmPassword">Confirm Password:</label>
   <input type="password" id="confirmPassword" name="confirmPassword" pattern=".{6,}"
-    title="Six or more characters is required." required onkeyup="validatePassword()" />
+    title="Six or more characters is required." onkeyup="validatePassword()" />
 
-  <input type="hidden" name="doctorID" id="inviteUser" required>
+  <input type="hidden" name="doctorID" id="doctor-id" required>
 
   <input type="submit" class="action-submit" name="submit">
 </form>

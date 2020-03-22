@@ -20,6 +20,11 @@ h1 {
   font-size: 21px;
 }
 
+h2 {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
 #left-nav {
   width: 25%;
   height: 100vh;

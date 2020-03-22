@@ -57,7 +57,6 @@ import {
   generateToken,
   updatePatientToken,
 } from './roles/patient';
-import { resolveContent } from 'nodemailer/lib/shared';
 
 const apiPort = 8081;
 const app = express();

@@ -16,11 +16,13 @@ export const inviteDoctor = async (request: Request, response: Response) => {
     const inviterID = request.body.inviterID;
     const originUrl = request.headers.host;
 
+    console.log(inviterID);
+
     const doctorProfileResponse = await db.getDoctorProfile({
       doctorID: inviterID,
     });
 
-    const emailBody = `Hi ${firstName} ${lastName}, \nYou have been invited by ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
+    const emailBody = `Hi ${firstName} ${lastName}, \n\nYou have been invited by ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to sign up to the Trocaire Diabetes Management App. \n\nTo sign up and learn more, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
 
     const addDoctorToInvitedDoctorsRequest: requests.IAddDoctorToInvitedDoctors = {
       email,

@@ -68,8 +68,6 @@ async function signIn() {
     } else {
       alert(errorMessage);
     }
-
-    console.log(error);
   }
 }
 
@@ -79,6 +77,69 @@ async function signOut() {
   window.location.assign('/');
 }
 
+function validatePassword() {
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+
+  if (password.value != confirmPassword.value) {
+    confirmPassword.setCustomValidity("Passwords don't match.");
+  } else {
+    confirmPassword.setCustomValidity('');
+  }
+}
+
+async function initClinics() {
+  const clinicsRes = await axios.get('/api/admin/getAllClinics');
+  const clinicList = document.getElementById('clinic-list');
+
+  clinicsRes.data.clinics.forEach(clinic => {
+    const option = document.createElement('option');
+    option.innerHTML = clinic.clinicName;
+    option.value = clinic.clinicID;
+    clinicList.options.add(option);
+  });
+}
+
+function addToChosenClinics() {
+  const clinicList = document.getElementById('clinic-list');
+  const clinicValue = clinicList.options[clinicList.selectedIndex].value;
+  const clinicName = clinicList.options[clinicList.selectedIndex].textContent;
+
+  const chosenClinics = document.getElementById('chosen-clinics');
+
+  const item = document.createElement('li');
+  const input = document.createElement('input');
+  const textNode = document.createTextNode(clinicName);
+
+  input.name = 'clinicIDs';
+  input.type = 'hidden';
+  input.value = clinicValue;
+
+  item.value = clinicValue;
+  item.appendChild(input);
+  item.appendChild(textNode);
+
+  chosenClinics.appendChild(item);
+
+  item.addEventListener('click', elem => {
+    const target = elem.target;
+    target.parentNode.removeChild(target);
+  });
+}
+
+async function initEditProfile() {
+  const response = await axios.post('/api/getDoctorProfile', {
+    doctorID: localStorage.getItem('doctorID'),
+  });
+  const userProfile = response.data;
+
+  document.getElementById('first-name').value = userProfile.firstName;
+  document.getElementById('last-name').value = userProfile.lastName;
+  document.getElementById('license-number').value = userProfile.licenseNumber;
+  document.getElementById('email').value = userProfile.email;
+  document.getElementById('username').value = userProfile.userName;
+}
+
 async function initApp() {
   try {
     const signin = document.getElementById('sign-in');
@@ -86,12 +147,21 @@ async function initApp() {
       signin.addEventListener('click', signIn, false);
     }
 
+    const passwordInput = document.getElementById('password');
+    if (passwordInput) {
+      passwordInput.addEventListener('keydown', event => {
+        if (event.keyCode == 13) {
+          signIn();
+        }
+      });
+    }
+
     const signout = document.getElementById('sign-out');
     if (signout) {
       signout.addEventListener('click', signOut, false);
     }
 
-    const doctorIDInput = document.getElementById('doctorID');
+    const doctorIDInput = document.getElementById('doctor-id');
     if (doctorIDInput) {
       doctorIDInput.value = localStorage.getItem('doctorID');
     }
@@ -124,6 +194,11 @@ async function initApp() {
       if (addDoctorToClinicForm) {
         initClinics();
       }
+
+      const editProfileForm = document.getElementById('edit-profile');
+      if (editProfileForm) {
+        initEditProfile();
+      }
     } else {
       const signInStatus = document.getElementById('sign-in-status');
       if (signInStatus) {
@@ -140,56 +215,6 @@ async function initApp() {
   } catch (error) {
     console.log('Error initialising app: ', error);
   }
-}
-
-function validatePassword() {
-  const password = document.getElementById('password');
-  const confirmPassword = document.getElementById('confirmPassword');
-
-  if (password.value != confirmPassword.value) {
-    confirmPassword.setCustomValidity("Passwords don't match.");
-  } else {
-    confirmPassword.setCustomValidity('');
-  }
-}
-
-async function initClinics() {
-  const clinicsRes = await axios.get('/api/admin/getAllClinics');
-  const clinicList = document.getElementById('clinic-list');
-
-  clinicsRes.data.clinics.forEach(clinic => {
-    const option = document.createElement('option');
-    option.innerHTML = clinic.clinicName;
-    option.value = clinic.clinicID;
-    clinicList.options.add(option);
-  });
-}
-
-function addToChosen() {
-  const clinicList = document.getElementById('clinic-list');
-  const clinicValue = clinicList.options[clinicList.selectedIndex].value;
-  const clinicName = clinicList.options[clinicList.selectedIndex].textContent;
-
-  const chosenClinics = document.getElementById('chosen-clinics');
-
-  const item = document.createElement('li');
-  const input = document.createElement('input');
-  const textNode = document.createTextNode(clinicName);
-
-  input.name = 'clinicIDs';
-  input.type = 'hidden';
-  input.value = clinicValue;
-
-  item.value = clinicValue;
-  item.appendChild(input);
-  item.appendChild(textNode);
-
-  chosenClinics.appendChild(item);
-
-  item.addEventListener('click', elem => {
-    const target = elem.target;
-    target.parentNode.removeChild(target);
-  });
 }
 
 window.onload = function() {

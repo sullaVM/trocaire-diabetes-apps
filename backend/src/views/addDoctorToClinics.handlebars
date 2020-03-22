@@ -3,14 +3,14 @@
 
 <form action="/api/addDoctorToClinics" method="post" id="add-doctor-clinic">
   <label for="clinic-list">Clinics:</label>
-  <select name="clinics" id="clinic-list" onchange="addToChosen()">
+  <select name="clinics" id="clinic-list" onchange="addToChosenClinics()">
     <option value="" disabled selected>Select clinic/s</option>
   </select>
 
   <ul id="chosen-clinics">
   </ul>
 
-  <input type="hidden" name="doctorID" id="doctorID" required>
+  <input type="hidden" name="doctorID" id="doctor-id" required>
 
   <input type="submit" class="action-submit" value="Submit" />
 </form>
