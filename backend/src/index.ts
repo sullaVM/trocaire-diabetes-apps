@@ -80,24 +80,22 @@ const login = (_request: Request, response: Response) => {
   response.sendFile(join(__dirname + '/../src/private/login.html'));
 };
 
-const doctorSignup = (_request: Request, response: Response) => {
+const doctorSignupPage = (_request: Request, response: Response) => {
   response.sendFile(join(__dirname + '/../src/private/signup.html'));
 };
 
 const dashboard = (_request: Request, response: Response) => {
   response.render('dashboard', {
     layout: 'main',
-
     helpers: {
       title: 'Dashboard',
     },
   });
 };
 
-const clinicSignup = (_request: Request, response: Response) => {
+const clinicSignupPage = (_request: Request, response: Response) => {
   response.render('registerClinic', {
     layout: 'main',
-
     helpers: {
       title: 'Register a Clinic',
     },
@@ -107,37 +105,33 @@ const clinicSignup = (_request: Request, response: Response) => {
 const inviteDoctorPage = (_request: Request, response: Response) => {
   response.render('inviteDoctor', {
     layout: 'main',
-
     helpers: {
       title: 'Invite a Doctor',
     },
   });
 };
 
-const addDoctorToClinics = (_request: Request, response: Response) => {
+const addDoctorToClinicsPage = (_request: Request, response: Response) => {
   response.render('addDoctorToClinics', {
     layout: 'main',
-
     helpers: {
       title: 'Add a Doctor to Clinics',
     },
   });
 };
 
-const registerPatient = (_request: Request, response: Response) => {
+const registerPatientPage = (_request: Request, response: Response) => {
   response.render('registerPatient', {
     layout: 'main',
-
     helpers: {
       title: 'Register a Patient',
     },
   });
 };
 
-const editProfile = (_request: Request, response: Response) => {
+const editProfilePage = (_request: Request, response: Response) => {
   response.render('editProfile', {
     layout: 'main',
-
     helpers: {
       title: 'Edit Profile',
     },
@@ -259,7 +253,7 @@ const initRoutes = (app: Express) => {
 
   // Public Pages
   app.get('/login', login);
-  app.get('/signup', doctorSignup);
+  app.get('/signup', doctorSignupPage);
 
   // Admin and Doctor Login/Logout
   app.post('/sessionLogin', sessionLogin);
@@ -271,14 +265,14 @@ const initRoutes = (app: Express) => {
 
   // Admin/Doctor Actions
   app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
-  app.get('/registerPatient', isDoctorLoggedIn, registerPatient);
+  app.get('/registerPatient', isDoctorLoggedIn, registerPatientPage);
 
   // Clinic Pages
-  app.get('/clinicSignup', isAdminLoggedIn, clinicSignup);
-  app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinics);
+  app.get('/clinicSignup', isAdminLoggedIn, clinicSignupPage);
+  app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinicsPage);
 
   // Doctor Profile Edit Request
-  app.get('/editProfile', isDoctorLoggedIn, editProfile);
+  app.get('/editProfile', isDoctorLoggedIn, editProfilePage);
 };
 
 // tslint:disable-next-line: no-shadowed-variable

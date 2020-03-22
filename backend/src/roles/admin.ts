@@ -20,8 +20,7 @@ export const inviteDoctor = async (request: Request, response: Response) => {
       doctorID: inviterID,
     });
 
-    // TODO(sulla): Clean this up
-    const emailBody = `Hi Dr. ${firstName}, ${lastName} \nYou have been invited by Dr. ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
+    const emailBody = `Hi ${firstName} ${lastName}, \nYou have been invited by ${doctorProfileResponse.firstName}  ${doctorProfileResponse.lastName} to signup to the Trocaire Diabetes Management App. \n\nTo sign up, please go to http://${originUrl}. \n\nKind regards, \nThe Trocaire Diabetes Management Team`;
 
     const addDoctorToInvitedDoctorsRequest: requests.IAddDoctorToInvitedDoctors = {
       email,
@@ -31,15 +30,18 @@ export const inviteDoctor = async (request: Request, response: Response) => {
 
     sendMail(email, emailBody);
 
-    response.status(200).send({
-      message: 'Successfully invited doctor to signup for the app',
+    response.render('callback', {
+      helpers: {
+        body: 'Success! You have invited a user.',
+      },
     });
   } catch (error) {
     console.log('Error sending invite: ', error);
 
-    response.status(500).send({
-      success: false,
-      message: error,
+    response.status(500).render('callback', {
+      helpers: {
+        body: `Failed to invite user: ${error.toString()}`,
+      },
     });
   }
 };
@@ -104,14 +106,20 @@ export const createDoctor = async (request: Request, response: Response) => {
       throw new Error('Creating Firebase account for doctor failed');
     }
 
-    response.status(200).send({
-      message: 'Welcome to the Korta Diabetes Management App',
+    response.render('callback', {
+      layout: 'simple',
+      helpers: {
+        message:
+          'Welcome to the Korta Diabetes Management App! Sign in to continue.',
+      },
     });
   } catch (error) {
     console.log('Error creating doctor account: ', error);
-    response.status(500).send({
-      success: false,
-      message: error.toString(),
+    response.render('callback', {
+      layout: 'simple',
+      helpers: {
+        message: error.toString(),
+      },
     });
   }
 };
@@ -161,15 +169,18 @@ export const updateDoctor = (request: Request, response: Response) => {
   };
 
   db.updateDoctor(updateDoctorRequest)
-    .then(result => {
-      response.status(200).send({
-        message: 'Successfully updated you profile',
+    .then(_result => {
+      response.render('callback', {
+        helpers: {
+          body: 'Success! You have updated your profile.',
+        },
       });
     })
     .catch(error => {
-      response.status(500).send({
-        success: false,
-        message: 'Request unsuccessful, Error:' + error,
+      response.status(500).render('callback', {
+        helpers: {
+          body: `Error: ${error.toString()}`,
+        },
       });
     });
 };
@@ -186,24 +197,29 @@ export const deleteDoctor = (request: Request, response: Response) => {
     .catch(error => {
       response.status(500).send({
         success: false,
-        message: 'Request unsuccessful, Error:' + error,
+        message: `Request unsuccessful, Error: ${error.toString()}`,
       });
     });
 };
 
 export const createClinic = (request: Request, response: Response) => {
+  const clinicName = request.body.clinicName;
   const createClinicRequest: requests.ICreateClinic = {
-    clinicName: request.body.clinicName,
+    clinicName: clinicName,
   };
 
   db.createClinic(createClinicRequest)
     .then(result => {
-      response.status(200).send(result);
+      response.render('callback', {
+        helpers: {
+          body: `Success! You have added a ${clinicName}.`,
+        },
+      });
     })
     .catch(error => {
       response.status(500).send({
         success: false,
-        message: 'Request unsuccessful, Error: ' + error,
+        message: `Request unsuccessful, Error: ${error.toString()}`,
       });
     });
 };
@@ -224,10 +240,18 @@ export const addDoctorToMultClinics = (
       });
     }
 
-    response.sendStatus(200);
+    response.render('callback', {
+      helpers: {
+        body: 'Success!',
+      },
+    });
   } catch (error) {
     console.log(error);
-    response.sendStatus(500);
+    response.status(500).render('callback', {
+      helpers: {
+        body: `Error: ${error.toString()}`,
+      },
+    });
   }
 };
 

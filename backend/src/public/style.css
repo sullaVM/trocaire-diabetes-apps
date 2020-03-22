@@ -229,3 +229,11 @@ textarea {
 #chosen-clinics li:before {
   content: '╳ ';
 }
+
+/* ----------------------------------- */
+
+#callback {
+  width: 300px;
+  margin: 20px auto;
+  text-align: center;
+}
