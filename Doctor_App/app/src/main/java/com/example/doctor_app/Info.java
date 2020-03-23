@@ -148,6 +148,8 @@ public class Info extends AppCompatActivity {
             Log.println(Log.INFO, "graph", "No data.");
             LineChart lineChart = findViewById(R.id.lineChart);
             lineChart.clear();
+            TextView axisDescription = findViewById(R.id.textView11);
+            axisDescription.setText("");
         }
     }
 

@@ -33,8 +33,8 @@ public class InfoList extends AppCompatActivity {
 
     private int patientID;
     private String patientBSLUnit;
-    private static String startDate = "1";
-    private static String endDate = "2";
+    private static String startDate = ""; // Set by the date picker
+    private static String endDate = ""; // Set by the date picker
     private int readingType;
 
     @Override
@@ -165,17 +165,12 @@ public class InfoList extends AppCompatActivity {
 
             // Set the start date
             startDate = year + "-" + (month + 1) + "-" + day + " " + "00:00:00.000"; // Months are zero-indexed
-
             timestamp = Timestamp.valueOf(startDate);
             startDate = timestamp.toString();
 
             // Set the end date
-            LocalDate endLocal = LocalDate.of(year, month + 1, day).plusDays(5); // Months are zero indexed
-            endDate = endLocal.getYear() + "-" + endLocal.getMonthValue() + "-" + endLocal.getDayOfMonth()
-                    + " " + "00:00:00.000";
-
-            timestamp = Timestamp.valueOf(endDate);
-            endDate = timestamp.toString();
+            Timestamp endTimeStamp = new Timestamp(System.currentTimeMillis());
+            endDate = endTimeStamp.toString();
         }
     }
 
