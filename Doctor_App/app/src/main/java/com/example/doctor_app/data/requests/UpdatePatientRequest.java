@@ -1,7 +1,5 @@
 package com.example.doctor_app.data.requests;
 
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 
 import com.example.doctor_app.data.responses.UpdatePatientResponse;

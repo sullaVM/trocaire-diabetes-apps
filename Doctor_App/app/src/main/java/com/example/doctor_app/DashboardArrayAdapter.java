@@ -3,15 +3,13 @@ package com.example.doctor_app;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,16 +51,34 @@ public class DashboardArrayAdapter extends ArrayAdapter<Patient> {
         // Fill UI components
 
         name.setText(patient.getName());
-
-        Bitmap image;
-        File file = new File(filesDir + "/Image" + patient.getPhotoDataUrl() + ".jpg");
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        image = BitmapFactory.decodeFile(file.getAbsolutePath(),o);
-        Bitmap thumbnail = extractThumbnail(image,80,80);
-        profilePhoto.setImageBitmap(thumbnail);
-
         mobileNumber.setText(Integer.toString(patient.getNumber()));
 
+        Bitmap image;
+        // Check if saved locally (older versions of the app saved locally)
+        File file = new File(filesDir + "/Image" + patient.getPhotoDataUrl() + ".jpg");
+        if(file.exists()) {
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            image = BitmapFactory.decodeFile(file.getAbsolutePath(), o);
+            Bitmap thumbnail = extractThumbnail(image,80,80);
+            profilePhoto.setImageBitmap(thumbnail);
+        } else {
+            //If not saved locally, it is saved on the server
+            image = stringToBitmap(patient.getPhotoDataUrl());
+            Bitmap thumbnail = extractThumbnail(image,80,80);
+            profilePhoto.setImageBitmap(thumbnail);
+        }
+
         return v;
+    }
+
+    public Bitmap stringToBitmap(String string){
+        try {
+            byte[] encodeByte = Base64.decode(string,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 }
