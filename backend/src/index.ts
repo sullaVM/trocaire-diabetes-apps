@@ -32,6 +32,7 @@ import {
   getAllClinics,
   getDoctorID,
   getDoctorIDFromLogin,
+  updatePatient,
 } from './roles/doctor';
 
 import {
@@ -295,6 +296,7 @@ const initApi = (router: Router) => {
   router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
+  router.post('/updatePatient', isDoctorLoggedIn, updatePatient);
 
   // Clinic Requests
   router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);

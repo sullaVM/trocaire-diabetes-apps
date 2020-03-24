@@ -58,6 +58,31 @@ export const getPatientProfile = (request: Request, response: Response) => {
     });
 };
 
+export const updatePatient = (request: Request, response: Response) => {
+  const updatePatientRequest: requests.IUpdatePatient = {
+    patientID: request.body.patientID,
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    userName: request.body.userName,
+    height: request.body.height,
+    pregnant: request.body.pregnant,
+    mobileNumber: request.body.mobileNumber,
+    photoDataUrl: request.body.photoDataUrl,
+    bslUnit: request.body.bslUnit,
+  };
+
+  db.updatePatient(updatePatientRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(500).send({
+        success: false,
+        message: 'Request unsuccessful, Error: ' + error,
+      });
+    });
+};
+
 export const getDoctorsPatients = (request: Request, response: Response) => {
   const getDoctorsPatientsRequest: requests.IListDoctorsPatients = {
     doctorID: request.body.doctorID,

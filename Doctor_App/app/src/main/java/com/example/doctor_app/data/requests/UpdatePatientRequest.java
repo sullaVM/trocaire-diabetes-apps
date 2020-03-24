@@ -1,8 +1,8 @@
 package com.example.doctor_app.data.requests;
 
-import com.example.doctor_app.data.responses.UpdatePatientResponse;
-
 import androidx.annotation.Nullable;
+
+import com.example.doctor_app.data.responses.UpdatePatientResponse;
 
 public class UpdatePatientRequest extends Request<UpdatePatientResponse> {
     @Nullable
@@ -26,7 +26,7 @@ public class UpdatePatientRequest extends Request<UpdatePatientResponse> {
     private Integer patientID;
 
     public UpdatePatientRequest(@Nullable Integer doctorID, @Nullable String firstName,
-                                @Nullable String lastName,  @Nullable String username, @Nullable String height,
+                                @Nullable String lastName, @Nullable String username, @Nullable String height,
                                 @Nullable String pregnant, @Nullable Integer mobileNumber,
                                 @Nullable String photoDataUrl, @Nullable String bslUnit, Integer patientID) {
         this.doctorID = doctorID;
