@@ -53,8 +53,12 @@ public class InfoList extends AppCompatActivity {
                 PorterDuff.Mode.SRC_ATOP);
         toolbar.setTitle("Patient " + patientName);
         setSupportActionBar(toolbar);
+    }
 
-        getData(startDate,endDate);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
     }
 
     private void getData(String start, String end) {

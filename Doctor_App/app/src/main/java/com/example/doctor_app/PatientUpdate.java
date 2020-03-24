@@ -1,10 +1,17 @@
 package com.example.doctor_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
 
+import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -46,6 +53,13 @@ public class PatientUpdate extends AppCompatActivity {
         pregnant = findViewById(R.id.checkBox);
         username = findViewById(R.id.editText6);
         doctorID = findViewById(R.id.editText7);
+
+        // Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.getOverflowIcon().setColorFilter(ContextCompat.getColor(this, R.color.white),
+                PorterDuff.Mode.SRC_ATOP);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
         patientID = getIntent().getIntExtra("id", 0);
         getProfile(patientID);
@@ -97,11 +111,10 @@ public class PatientUpdate extends AppCompatActivity {
         String use = username.getText().toString();
         String hei = height.getText().toString();
         String wei = weight.getText().toString();
-        Integer pre= pregnant.isChecked() ? 1 : 0;
-
+        Integer pre = pregnant.isChecked() ? 1 : 0;
         Integer mob = Integer.parseInt(mobileNumber.getText().toString());
 
-        Log.println(Log.INFO,"updatePatient", doc + " " + fir + " " + las + " " +
+        Log.println(Log.INFO,"UpdatePatient", doc + " " + fir + " " + las + " " +
                 use + " " + hei + " " + pre + " " + mob + " " + photoDataUrl + " " +
                 bslUnit + " " + patientID);
 
@@ -118,9 +131,43 @@ public class PatientUpdate extends AppCompatActivity {
                 }
             }
         });
+
+       // Return to the patient profile
+
+        Patient patient = new Patient(doc, fir, las,
+                hei, mob, photoDataUrl, password,
+                pre, bslUnit, patientID);
+
+        Intent intent = new Intent(getApplicationContext(), Info.class);
+        intent.putExtra("info", patient);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     public void back(View view) {
         finish();
+    }
+
+    // Top bar menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sign_out, menu);
+        return true;
+    }
+
+    // Top bar menu items
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.sign_out:
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return false;
+        }
     }
 }
