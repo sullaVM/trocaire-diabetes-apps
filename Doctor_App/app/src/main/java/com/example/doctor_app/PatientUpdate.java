@@ -97,7 +97,7 @@ public class PatientUpdate extends AppCompatActivity {
         String use = username.getText().toString();
         String hei = height.getText().toString();
         String wei = weight.getText().toString();
-        String pre= pregnant.isChecked() ? "1" : "0";
+        Integer pre= pregnant.isChecked() ? 1 : 0;
 
         Integer mob = Integer.parseInt(mobileNumber.getText().toString());
 
@@ -106,7 +106,7 @@ public class PatientUpdate extends AppCompatActivity {
                 bslUnit + " " + patientID);
 
        UpdatePatientRequest updateRequest = new UpdatePatientRequest(doc, fir, las, use, hei,
-               wei, mob, photoDataUrl, bslUnit, patientID);
+               pre, mob, photoDataUrl, bslUnit, patientID);
 
        updateRequest.makeRequest(getBaseContext(), new Consumer<UpdatePatientResponse>() {
             @Override
