@@ -405,6 +405,12 @@ public class Info extends AppCompatActivity {
         axisDescription.setText(xAxisDescription);
     }
 
+    public void edit(View view) {
+        Intent intent = new Intent(getApplicationContext(), PatientUpdate.class);
+        intent.putExtra("id", patient.getPatientID());
+        startActivity(intent);
+    }
+
     public void delete(View view) {
         MaterialAlertDialogBuilder dialogDelete = new MaterialAlertDialogBuilder(this);
         dialogDelete.setTitle("Delete patient?");

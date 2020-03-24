@@ -5,7 +5,6 @@ import com.example.doctor_app.data.responses.UpdatePatientResponse;
 import androidx.annotation.Nullable;
 
 public class UpdatePatientRequest extends Request<UpdatePatientResponse> {
-    private Integer patientID;
     @Nullable
     private Integer doctorID;
     @Nullable
@@ -13,26 +12,33 @@ public class UpdatePatientRequest extends Request<UpdatePatientResponse> {
     @Nullable
     private String lastName;
     @Nullable
+    private String username;
+    @Nullable
     private String height;
+    @Nullable
+    private String pregnant;
     @Nullable
     private Integer mobileNumber;
     @Nullable
     private String photoDataUrl;
     @Nullable
-    private String password;
-    @Nullable
     private String bslUnit;
+    private Integer patientID;
 
-    public UpdatePatientRequest(Integer patientID, @Nullable Integer doctorID, @Nullable String firstName, @Nullable String lastName, @Nullable String height, @Nullable Integer mobileNumber, @Nullable String photoDataUrl, @Nullable String password, @Nullable String bslUnit) {
-        this.patientID = patientID;
+    public UpdatePatientRequest(@Nullable Integer doctorID, @Nullable String firstName,
+                                @Nullable String lastName,  @Nullable String username, @Nullable String height,
+                                @Nullable String pregnant, @Nullable Integer mobileNumber,
+                                @Nullable String photoDataUrl, @Nullable String bslUnit, Integer patientID) {
         this.doctorID = doctorID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.username = username;
         this.height = height;
+        this.pregnant = pregnant;
         this.mobileNumber = mobileNumber;
         this.photoDataUrl = photoDataUrl;
-        this.password = password;
         this.bslUnit = bslUnit;
+        this.patientID = patientID;
     }
 
     @Override

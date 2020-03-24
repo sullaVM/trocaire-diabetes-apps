@@ -57,4 +57,8 @@
     <string name="blood_pressure">Blood Pressure</string>
     <string name="all_readings">All Readings</string>
     <string name="graph_list_view">Diary</string>
+    <string name="update_patient">Update Patient</string>
+    <string name="update_details">Edit Details</string>
+    <string name="edit">Edit</string>
+    <string name="doctor_id">Doctor ID</string>
 </resources>
