@@ -4,6 +4,19 @@ import * as requests from './models/requests';
 import * as responses from './models/responses';
 
 let db: mysql.Connection;
+import {
+  BlobService,
+  common,
+  createBlobService,
+  ErrorOrResponse,
+  ErrorOrResult,
+} from 'azure-storage';
+
+import {
+  BlobServiceClient,
+  StorageSharedKeyCredential,
+  BlobDownloadResponseModel,
+} from '@azure/storage-blob';
 
 fs.readFile('dbconfig.json', 'utf8', (error, data) => {
   if (error) {
@@ -14,6 +27,60 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
   db = mysql.createConnection(mysqlConfig);
   db.connect();
 });
+
+export const takePhoto = async (
+  request: requests.ITakePhoto
+): Promise<responses.ITakePhoto> => {
+  const account = process.env.ACCOUNT_NAME || 'accountnameofblobstorage';
+  const accountKey = process.env.ACCOUNT_KEY || 'accountkeyhereforblobstorage';
+  const sharedKeyCredential = new StorageSharedKeyCredential(
+    account,
+    accountKey
+  );
+
+  const blobServiceClient = new BlobServiceClient(
+    // When using AnonymousCredential, following url should include a valid SAS or support public access
+    `https://${account}.blob.core.windows.net`,
+    sharedKeyCredential
+  );
+
+  const containerName = 'images';
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+
+  const content = 'hello, 11';
+
+  const blobName = 'newblob' + new Date().getTime();
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  const uploadBlobResponse = await blockBlobClient.upload(
+    content,
+    Buffer.byteLength(content)
+  );
+  console.log(
+    `Upload block blob ${blobName} successfully`,
+    uploadBlobResponse.requestId
+  );
+
+  const str1 = 'https://';
+  const photoDataUrl = str1.concat(
+    account,
+    '.blob.core.windows.net/images/',
+    blobName
+  );
+
+  const query = `UPDATE Patients SET PhotoDataUrl = '${photoDataUrl}' WHERE PatientID = '${request.patientID}';`;
+
+  const result = await new Promise<responses.ITakePhoto>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
 
 export const createPatient = async (
   request: requests.ICreatePatient

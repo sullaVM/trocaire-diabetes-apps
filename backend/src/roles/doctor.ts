@@ -5,6 +5,23 @@ import { pwEncryptSaltRounds } from '../roles/admin';
 import { hash } from 'bcrypt';
 import { Request, Response } from 'express';
 
+export const takePhoto = async (request: Request, response: Response) => {
+  const takePhotoRequest: requests.ITakePhoto = {
+    patientID: request.body.patientID,
+  };
+
+  db.takePhoto(takePhotoRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(500).send({
+        success: false,
+        message: 'Request unsuccessful, Error: ' + error,
+      });
+    });
+};
+
 export const createPatient = async (request: Request, response: Response) => {
   const genHash: string = await new Promise((resolve, reject) => {
     // tslint:disable-next-line: no-shadowed-variable

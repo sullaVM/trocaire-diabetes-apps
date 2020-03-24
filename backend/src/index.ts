@@ -33,6 +33,7 @@ import {
   getDoctorID,
   getDoctorIDFromLogin,
   updatePatient,
+  takePhoto,
 } from './roles/doctor';
 
 import {
@@ -62,7 +63,10 @@ import {
 const apiPort = 8081;
 const app = express();
 const router = express.Router();
+const containerName = 'images';
+const storageAccountName = 'aa';
 
+// import { createBlobService } from '@azure/storage-blob';
 config();
 initFirebase();
 
@@ -277,6 +281,8 @@ const initRoutes = (app: Express) => {
 
 // tslint:disable-next-line: no-shadowed-variable
 const initApi = (router: Router) => {
+  router.post('/takePhoto', takePhoto);
+
   router.post('/createDoctor', createDoctor);
 
   // Doctor Account Requests

@@ -2,6 +2,10 @@
  * Patient requests
  */
 
+export interface ITakePhoto {
+  patientID: number;
+}
+
 export interface ICreatePatient {
   doctorID: number;
   firstName: string;
