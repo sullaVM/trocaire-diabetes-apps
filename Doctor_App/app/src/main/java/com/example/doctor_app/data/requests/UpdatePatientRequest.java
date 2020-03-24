@@ -16,7 +16,7 @@ public class UpdatePatientRequest extends Request<UpdatePatientResponse> {
     @Nullable
     private String height;
     @Nullable
-    private String pregnant;
+    private Integer pregnant;
     @Nullable
     private Integer mobileNumber;
     @Nullable
@@ -27,7 +27,7 @@ public class UpdatePatientRequest extends Request<UpdatePatientResponse> {
 
     public UpdatePatientRequest(@Nullable Integer doctorID, @Nullable String firstName,
                                 @Nullable String lastName, @Nullable String username, @Nullable String height,
-                                @Nullable String pregnant, @Nullable Integer mobileNumber,
+                                @Nullable Integer pregnant, @Nullable Integer mobileNumber,
                                 @Nullable String photoDataUrl, @Nullable String bslUnit, Integer patientID) {
         this.doctorID = doctorID;
         this.firstName = firstName;
