@@ -297,6 +297,8 @@ const initApi = (router: Router) => {
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.post('/updatePatient', isDoctorLoggedIn, updatePatient);
+  router.post('/getPatientLogs', isDoctorLoggedIn, getPatientProfile);
+  router.post('/storePatientLog', isDoctorLoggedIn, getPatientProfile);
 
   // Clinic Requests
   router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);

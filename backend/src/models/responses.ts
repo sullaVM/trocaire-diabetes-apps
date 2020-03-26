@@ -44,6 +44,16 @@ export interface IGetGraphingData {
   Weight?: { time: string; value: number }[];
 }
 
+export interface IStorePatientLog {
+  success: boolean;
+  message?: string;
+}
+
+export interface IGetPatientLogs {
+  success: boolean;
+  logs?: { time: string; note: string }[];
+}
+
 export interface IGetPatientID {
   success: boolean;
   patientID?: number;
