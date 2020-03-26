@@ -51,6 +51,9 @@ public class PatientComment extends AppCompatActivity {
         Timestamp timetamp = new Timestamp(System.currentTimeMillis());
         String time = timetamp.toString();
 
+        Log.println(Log.INFO, "StorePatientLog", "patientID: " + patientID +
+                " time: " + time + " note: " + comment);
+
         StorePatientLogRequest log = new StorePatientLogRequest(patientID,time,comment);
 
         log.makeRequest(getBaseContext(), new Consumer<StorePatientLogResponse>() {

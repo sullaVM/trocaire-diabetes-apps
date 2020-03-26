@@ -64,6 +64,9 @@ public class LogList extends AppCompatActivity {
     }
 
     private void getData(String start, String end) {
+        Log.println(Log.INFO, "GetPatientLog", "patientID: " + patientID +
+                " start: " + start + " end: " + end);
+
         GetPatientLogsRequest logRequest = new GetPatientLogsRequest(patientID, start, end);
 
         logRequest.makeRequest(getBaseContext(), new Consumer<GetPatientLogsResponse>() {
