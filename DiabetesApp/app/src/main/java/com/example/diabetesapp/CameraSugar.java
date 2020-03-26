@@ -67,6 +67,7 @@ public class CameraSugar extends AppCompatActivity {
                 takeImage();
             }
         });
+
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,45 +200,6 @@ public class CameraSugar extends AppCompatActivity {
                     image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     save();
                     nextScreen();
-
-                    /*
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(90);
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(loadedImage, loadedImage.getWidth(), loadedImage.getHeight(), true);
-                    Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-                    Mat mat = new Mat(rotatedBitmap.getHeight(), rotatedBitmap.getWidth(), CvType.CV_8UC3);
-
-                    Utils.bitmapToMat(rotatedBitmap, mat);
-
-                    double rect_h = mat.height() * 0.2;
-                    double rect_w = mat.width() * 0.6;
-                    int w = (int) Math.round(mat.width() / 2 - (rect_w / 2));
-                    int h = (int) Math.round(mat.height() / 2 - (rect_h / 2));
-                    Rect roi = new Rect(w, h, (int) rect_w, (int) rect_h);
-                    Mat crop = new Mat(mat, roi);
-
-                    TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-                    if (!textRecognizer.isOperational()) {
-                        Log.w("Camera", "Detector dependencies are not yet available");
-                    } else {
-                        Bitmap image = Bitmap.createBitmap(crop.width(), crop.height(), Bitmap.Config.ARGB_8888);
-                        Utils.matToBitmap(crop, image);
-
-                        Frame frame = new Frame.Builder().setBitmap(image).build();
-
-                        SparseArray<TextBlock> items = textRecognizer.detect(frame);
-
-                        StringBuilder sb = new StringBuilder();
-
-                        if (items.size() != 0) {
-                            TextBlock myItems = items.valueAt(0);
-                            sb.append(myItems.getValue());
-                            data = sb.toString();
-                        }
-                    }
-
-                     */
-
                 } catch (Exception ex) {
                     Log.w("Camera", "Detector dependencies are not yet available");
                 }
