@@ -369,8 +369,6 @@ export const storePatientLog = async (
   VALUES ('${request.time}','${request.patientID}','${request.note}');`;
 
   const result = await new Promise<responses.IStorePatientLog>(resolve => {
-    console.log(request);
-    console.log(request.note.length);
     if (request.note.length > 255) {
       resolve({
         success: false,

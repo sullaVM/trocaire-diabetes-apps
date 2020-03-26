@@ -32,6 +32,8 @@ import {
   getAllClinics,
   getDoctorID,
   getDoctorIDFromLogin,
+  getPatientLogs,
+  storePatientLog,
   updatePatient,
 } from './roles/doctor';
 
@@ -296,8 +298,8 @@ const initApi = (router: Router) => {
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.post('/updatePatient', isDoctorLoggedIn, updatePatient);
-  router.post('/getPatientLogs', isDoctorLoggedIn, getPatientProfile);
-  router.post('/storePatientLog', isDoctorLoggedIn, getPatientProfile);
+  router.post('/getPatientLogs', isDoctorLoggedIn, getPatientLogs);
+  router.post('/storePatientLog', isDoctorLoggedIn, storePatientLog);
 
   // Clinic Requests
   router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);
