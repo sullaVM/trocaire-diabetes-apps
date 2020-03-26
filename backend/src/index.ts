@@ -292,7 +292,6 @@ const initApi = (router: Router) => {
 
   // Doctor's Patient Requests
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
-  router.post('/getPatientID', isDoctorLoggedIn, getPatientID);
   router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
@@ -313,6 +312,9 @@ const initApi = (router: Router) => {
   router.post('/storeRBP', isPatientLoggedIn, storeRBP);
   router.post('/storeBSL', isPatientLoggedIn, storeBSL);
   router.post('/storeWeight', isPatientLoggedIn, storeWeight);
+
+  // Request does not need to be authenticated
+  router.post('/getPatientID', getPatientID);
 };
 
 initRoutes(app);
