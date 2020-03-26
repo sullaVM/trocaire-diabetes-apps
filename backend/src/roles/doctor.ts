@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 export const takePhoto = async (request: Request, response: Response) => {
   const takePhotoRequest: requests.ITakePhoto = {
     patientID: request.body.patientID,
+    photo: request.body.photo,
   };
 
   db.takePhoto(takePhotoRequest)

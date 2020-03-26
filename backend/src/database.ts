@@ -3,6 +3,9 @@ import fs from 'fs';
 import * as requests from './models/requests';
 import * as responses from './models/responses';
 
+import * as blobUtil from 'blob-util';
+import * as sharedBlobService from '@azure/storage-blob';
+
 let db: mysql.Connection;
 import {
   BlobService,
@@ -31,8 +34,10 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 export const takePhoto = async (
   request: requests.ITakePhoto
 ): Promise<responses.ITakePhoto> => {
-  const account = process.env.ACCOUNT_NAME || 'accountnameofblobstorage';
-  const accountKey = process.env.ACCOUNT_KEY || 'accountkeyhereforblobstorage';
+  const account = process.env.ACCOUNT_NAME || 'sdgsg300009a7cc167';
+  const accountKey =
+    process.env.ACCOUNT_KEY ||
+    'WdgBu0e4t8xaiucsyCnczuCXvYaWZIPZYtR4bhBMbHVu7AmbEhilH9vID02SSw7qeEZrvXQqrj6PXO8LVorCdg==';
   const sharedKeyCredential = new StorageSharedKeyCredential(
     account,
     accountKey
@@ -47,18 +52,62 @@ export const takePhoto = async (
   const containerName = 'images';
   const containerClient = blobServiceClient.getContainerClient(containerName);
 
-  const content = 'hello, 11';
+  // store request.photo in container
+  // const size1 = 0;
+  const content = request.photo;
 
-  const blobName = 'newblob' + new Date().getTime();
+  const blobName = request.patientID + 'patient' + new Date().getTime();
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+  const buf = Buffer.from(request.photo);
+  const blob2 = buf.toString('base64');
+
+  // const blob2 = Buffer.from(request.photo).toString('base64');
+  console.log('1');
+  const uploadOptions = {
+    container: containerName,
+    blob1: blobName,
+    text: blob2,
+  };
   const uploadBlobResponse = await blockBlobClient.upload(
-    content,
-    Buffer.byteLength(content)
+    Buffer.from(request.photo).toString('base64'),
+    blob2.length
+    // content.size
   );
-  console.log(
-    `Upload block blob ${blobName} successfully`,
-    uploadBlobResponse.requestId
-  );
+  // const blobService = createBlobService();
+  // blobService.createBlockBlobFromText(
+  //   uploadOptions.container,
+  //   uploadOptions.blob1,
+  //   uploadOptions.text,
+  //   // {
+  //   //   contentType: 'image/jpeg',
+  //   //   contentEncoding: 'base64',
+  //   // },
+  //   function(error, result, response) {
+  //     if (error) {
+  //       console.log(error);
+  //     }
+  //     console.log('result', result);
+  //     console.log('response', response);
+  //   }
+  // );
+
+  // console.log(
+  //   `Upload block blob ${blobName} successfully`,
+  //   uploadBlobResponse.requestId
+  // );
+
+  // this.blobState.getStorageOptionsWithContainer().pipe(
+  //   switchMap(options =>
+  //     this.blobStorage
+  //       .uploadToBlobStorage(file, {
+  //         ...options,
+  //         filename: file.name + new Date().getTime()
+  //       })
+  //       .pipe(
+  //         this.blobState.finaliseBlobChange(options.containerName)
+  //       )
+  //   )
 
   const str1 = 'https://';
   const photoDataUrl = str1.concat(

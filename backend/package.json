@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/express-handlebars": "^3.1.0",
+    "@types/jquery": "^3.3.34",
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
     "prettier": "^1.19.1",
@@ -43,6 +44,7 @@
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
     "bcrypt": "^3.0.8",
+    "blob-util": "^2.0.2",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "crypto-random-string": "^3.2.0",
@@ -52,6 +54,7 @@
     "express-validator": "^6.4.0",
     "firebase-admin": "^8.9.2",
     "generate-password": "^1.5.1",
+    "jquery": "^3.4.1",
     "morgan": "^1.9.1",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.3"
