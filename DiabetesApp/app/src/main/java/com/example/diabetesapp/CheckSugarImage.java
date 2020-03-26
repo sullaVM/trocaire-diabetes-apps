@@ -35,7 +35,7 @@ public class CheckSugarImage extends AppCompatActivity {
         setContentView(R.layout.activity_check_sugar_image);
 
         bmp = getImage("/Image");
-        CheckSugarImage.AsyncTaskExample asyncTask=new CheckSugarImage.AsyncTaskExample();
+        AsyncTaskExample asyncTask=new AsyncTaskExample();
         asyncTask.execute("");
     }
 

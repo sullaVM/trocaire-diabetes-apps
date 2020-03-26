@@ -3,15 +3,22 @@ package com.example.doctor_app;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Consumer;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.example.doctor_app.data.requests.StorePatientLogRequest;
+import com.example.doctor_app.data.responses.StorePatientLogResponse;
+
+import java.sql.Timestamp;
 
 public class PatientComment extends AppCompatActivity {
 
@@ -41,7 +48,21 @@ public class PatientComment extends AppCompatActivity {
     public void submit(View view) {
         String comment = commentInput.getText().toString();
 
-        //TODO: Submit the comment using the API
+        Timestamp timetamp = new Timestamp(System.currentTimeMillis());
+        String time = timetamp.toString();
+
+        StorePatientLogRequest log = new StorePatientLogRequest(patientID,time,comment);
+
+        log.makeRequest(getBaseContext(), new Consumer<StorePatientLogResponse>() {
+            @Override
+            public void accept(StorePatientLogResponse response) {
+                if (response != null && response.success) {
+                    Log.println(Log.INFO, "StorePatientLog", "Request succeeded");
+                } else {
+                    Log.println(Log.INFO, "StorePatientLog", "Request failed");
+                }
+            }
+        });
 
         this.finish();
     }
