@@ -368,8 +368,10 @@ export const storePatientLog = async (
   const query = `INSERT INTO Patient_Logs (TimeTaken, PatientID, Note)
   VALUES ('${request.time}','${request.patientID}','${request.note}');`;
 
+  console.log(query);
   const result = await new Promise<responses.IStorePatientLog>(resolve => {
     if (request.note.length > 255) {
+      console.log('Note too long');
       resolve({
         success: false,
         message: 'Note too long, must be less than 255 characters',
