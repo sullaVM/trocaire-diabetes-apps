@@ -138,6 +138,44 @@ export const getGraphingData = (request: Request, response: Response) => {
     });
 };
 
+export const storePatientLog = (request: Request, response: Response) => {
+  const storePatientLogRequest: requests.IStorePatientLog = {
+    patientID: request.body.patientID,
+    time: request.body.time,
+    note: request.body.note,
+  };
+
+  db.storePatientLog(storePatientLogRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(500).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+};
+
+export const getPatientLogs = (request: Request, response: Response) => {
+  const getPatientLogsRequest: requests.IGetPatientLogs = {
+    patientID: request.body.patientID,
+    intervalStart: request.body.intervalStart,
+    intervalEnd: request.body.intervalEnd,
+  };
+
+  db.getPatientLogs(getPatientLogsRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(500).send({
+        success: false,
+        message: 'Request unsuccessful, Error:' + error,
+      });
+    });
+};
+
 export const getDoctorProfile = (request: Request, response: Response) => {
   const getDoctorProfileRequest: requests.IGetDoctorProfile = {
     doctorID: request.body.doctorID,

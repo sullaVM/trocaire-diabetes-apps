@@ -4,20 +4,22 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import static android.media.ThumbnailUtils.extractThumbnail;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.doctor_app.data.requests.CreatePatientRequest;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 
 public class PatientSignUpDetails extends AppCompatActivity {
@@ -123,8 +125,6 @@ public class PatientSignUpDetails extends AppCompatActivity {
     }
 
     private void enterData() {
-        Intent intent = new Intent(this, PatientSignUpPass.class);
-
         // Get the inputs
         String fName = firstName.getText().toString();
         String lName = lastName.getText().toString();
@@ -133,7 +133,11 @@ public class PatientSignUpDetails extends AppCompatActivity {
         String w = weight.getText().toString();
         int p = pregnant.isChecked() ? CreatePatientRequest.PREGNANT : CreatePatientRequest.NOT_PREGNANT;
 
+        Bitmap bitmap = extractThumbnail(photo,5,5);
+        photoDataUrl = bitmapToString(bitmap);
+
         // Put into the intent
+        Intent intent = new Intent(this, PatientSignUpPass.class);
         intent.putExtra("firstName", fName);
         intent.putExtra("lastName", lName);
         intent.putExtra("mobileNumber", pNumber);
@@ -143,21 +147,15 @@ public class PatientSignUpDetails extends AppCompatActivity {
         intent.putExtra("photoDataUrl", photoDataUrl);
         intent.putExtra("doctorID", doctorID);
 
-        // Save the profile photo locally
-        File photoFile = new File(this.getFilesDir(), "Image" + photoDataUrl + ".jpg");
-        try {
-            FileOutputStream out = new FileOutputStream(photoFile);
-
-            Bitmap bitmap = photo.copy(photo.getConfig(), true);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         // Start the intent (goes to the next stage of patient sign up: setting the password)
         startActivity(intent);
+    }
+
+    public String bitmapToString(Bitmap bitmap){
+        ByteArrayOutputStream os = new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,90, os);
+        byte[] bytes = os.toByteArray();
+        String result = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return result;
     }
 }

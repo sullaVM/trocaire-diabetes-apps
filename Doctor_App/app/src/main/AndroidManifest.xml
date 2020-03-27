@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PatientUpdate"></activity>
+        <activity android:name=".PatientComment"></activity>
+        <activity android:name=".LogList" />
+        <activity android:name=".PatientUpdate" />
         <activity android:name=".InfoList" />
         <activity android:name=".Info" />
         <activity android:name=".PatientSignUpPass" />

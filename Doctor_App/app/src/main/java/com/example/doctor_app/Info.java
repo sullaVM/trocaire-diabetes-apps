@@ -435,6 +435,14 @@ public class Info extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void log(View view) {
+        // Go to the comments log
+        Intent intent = new Intent(getApplicationContext(), LogList.class);
+        intent.putExtra("name", patient.getName());
+        intent.putExtra("id", patient.getPatientID());
+        startActivity(intent);
+    }
+
     public void updateDate(View view) {
         getData(startDate, endDate, type);
     }

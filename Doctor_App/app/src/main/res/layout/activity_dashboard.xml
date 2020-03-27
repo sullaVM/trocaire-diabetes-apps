@@ -33,7 +33,7 @@
         android:onClick="addPatient"
         android:text="@string/patient_caps"
         android:textColor="@color/white"
-        app:backgroundTint="?attr/actionMenuTextColor"
+        app:backgroundTint="?attr/colorPrimary"
         app:elevation="16dp"
         app:icon="@drawable/baseline_add_white_18dp"
         app:iconTint="@color/white"
@@ -57,7 +57,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
     </ListView>
 
 

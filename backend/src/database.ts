@@ -467,6 +467,60 @@ export const getGraphingData = async (
   return result;
 };
 
+export const storePatientLog = async (
+  request: requests.IStorePatientLog
+): Promise<responses.IStorePatientLog> => {
+  const query = `INSERT INTO Patient_Logs (TimeTaken, PatientID, Note)
+  VALUES ('${request.time}','${request.patientID}','${request.note}');`;
+
+  console.log(query);
+  const result = await new Promise<responses.IStorePatientLog>(resolve => {
+    if (request.note.length > 255) {
+      console.log('Note too long');
+      resolve({
+        success: false,
+        message: 'Note too long, must be less than 255 characters',
+      });
+    }
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
+export const getPatientLogs = async (
+  request: requests.IGetPatientLogs
+): Promise<responses.IGetPatientLogs> => {
+  const query = `SELECT TimeTaken, Note FROM Patient_Logs WHERE
+  PatientID='${request.patientID}' AND
+  TimeTaken BETWEEN '${request.intervalStart}' AND '${request.intervalEnd}'
+  ORDER BY TimeTaken ASC;`;
+
+  const result = await new Promise<responses.IGetPatientLogs>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      const logs: { time: string; note: string }[] = [];
+      for (const entry of results) {
+        logs.push({
+          time: entry.TimeTaken,
+          note: entry.Note,
+        });
+      }
+      resolve({ success: true, logs });
+    });
+  });
+  return result;
+};
+
 export const getPatientID = async (
   request: requests.IGetPatientID
 ): Promise<responses.IGetPatientID> => {

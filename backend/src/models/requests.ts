@@ -65,6 +65,18 @@ export interface IGetGraphingData {
   bslUnit?: string;
 }
 
+export interface IStorePatientLog {
+  patientID: number;
+  time: string;
+  note: string;
+}
+
+export interface IGetPatientLogs {
+  patientID: number;
+  intervalStart: string;
+  intervalEnd: string;
+}
+
 export interface IGetPatientID {
   userName: number;
 }

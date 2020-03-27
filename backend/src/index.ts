@@ -32,6 +32,8 @@ import {
   getAllClinics,
   getDoctorID,
   getDoctorIDFromLogin,
+  getPatientLogs,
+  storePatientLog,
   updatePatient,
   updatePhoto,
 } from './roles/doctor';
@@ -298,12 +300,15 @@ const initApi = (router: Router) => {
   router.post('/addDoctorToClinics', isAdminLoggedIn, addDoctorToMultClinics);
 
   // Doctor's Patient Requests
-  router.post('/createPatient', createPatient);
-  router.post('/getPatientID', isDoctorLoggedIn, getPatientID);
+
+  router.post('/createPatient', isDoctorLoggedIn, createPatient);
+
   router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.post('/updatePatient', isDoctorLoggedIn, updatePatient);
+  router.post('/getPatientLogs', isDoctorLoggedIn, getPatientLogs);
+  router.post('/storePatientLog', isDoctorLoggedIn, storePatientLog);
 
   // Clinic Requests
   router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);
@@ -318,6 +323,9 @@ const initApi = (router: Router) => {
   router.post('/storeRBP', isPatientLoggedIn, storeRBP);
   router.post('/storeBSL', isPatientLoggedIn, storeBSL);
   router.post('/storeWeight', isPatientLoggedIn, storeWeight);
+
+  // Request does not need to be authenticated
+  router.post('/getPatientID', getPatientID);
 };
 
 initRoutes(app);
