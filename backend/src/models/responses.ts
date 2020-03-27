@@ -2,6 +2,10 @@
  * User responses
  */
 
+export interface IUpdatePhoto {
+  success: boolean;
+}
+
 export interface ICreatePatient {
   success: boolean;
   message?: string;

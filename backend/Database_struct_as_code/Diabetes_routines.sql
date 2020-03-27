@@ -18,6 +18,10 @@
 --
 -- Dumping events for database 'Diabetes'
 --
+
+--
+-- Dumping routines for database 'Diabetes'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -28,4 +32,4 @@
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-16 14:47:28
+-- Dump completed on 2020-03-27 14:22:34
