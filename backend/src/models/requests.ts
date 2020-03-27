@@ -4,7 +4,7 @@
 
 export interface ITakePhoto {
   patientID: number;
-  photo: File;
+  photo: string;
 }
 
 export interface ICreatePatient {
