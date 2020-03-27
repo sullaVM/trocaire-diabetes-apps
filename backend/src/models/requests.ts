@@ -2,9 +2,9 @@
  * Patient requests
  */
 
-export interface ITakePhoto {
+export interface IUpdatePhoto {
   patientID: number;
-  photo: string;
+  base64encodedstring: string;
 }
 
 export interface ICreatePatient {
@@ -15,7 +15,7 @@ export interface ICreatePatient {
   height: string;
   pregnant: number;
   mobileNumber: number;
-  photoDataUrl: string;
+  base64encodedstring: string;
   password: string;
   bslUnit: string;
 }

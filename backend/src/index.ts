@@ -33,7 +33,7 @@ import {
   getDoctorID,
   getDoctorIDFromLogin,
   updatePatient,
-  takePhoto,
+  updatePhoto,
 } from './roles/doctor';
 
 import {
@@ -281,7 +281,8 @@ const initRoutes = (app: Express) => {
 
 // tslint:disable-next-line: no-shadowed-variable
 const initApi = (router: Router) => {
-  router.post('/takePhoto', takePhoto);
+  // not deployed yet
+  // router.post('/takePhoto', isDoctorLoggedIn, updatePhoto);
 
   router.post('/createDoctor', createDoctor);
 
@@ -297,7 +298,7 @@ const initApi = (router: Router) => {
   router.post('/addDoctorToClinics', isAdminLoggedIn, addDoctorToMultClinics);
 
   // Doctor's Patient Requests
-  router.post('/createPatient', isDoctorLoggedIn, createPatient);
+  router.post('/createPatient', createPatient);
   router.post('/getPatientID', isDoctorLoggedIn, getPatientID);
   router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);

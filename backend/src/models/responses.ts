@@ -2,7 +2,7 @@
  * User responses
  */
 
-export interface ITakePhoto {
+export interface IUpdatePhoto {
   success: boolean;
 }
 
