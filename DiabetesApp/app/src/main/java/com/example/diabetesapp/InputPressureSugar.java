@@ -32,7 +32,7 @@ public class InputPressureSugar extends AppCompatActivity {
     static final int REQUEST_PRESSURE = 1;
     private static final String filename = "/StoredData.txt";
 
-    ImageButton camera, camera2, back, done;
+    ImageButton camera, camera2, back, done, help;
     EditText dataBox1, dataBox2;
     String input;
     String input2;
@@ -47,6 +47,14 @@ public class InputPressureSugar extends AppCompatActivity {
         input = "";
         input2 = "";
         intentTag = getIntent().getIntExtra("tag", 0);
+
+        help = findViewById(R.id.help);
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helpScreen("sugar_entry");
+            }
+        });
 
         if (getIntent().getIntExtra("tag", 0) == REQUEST_SUGAR) {
             camera = findViewById(R.id.camera);
@@ -65,6 +73,14 @@ public class InputPressureSugar extends AppCompatActivity {
             dataBox1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         } else {
             setContentView(R.layout.activity_input_pressure_sugar);
+
+            help = findViewById(R.id.help);
+            help.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    helpScreen("pressure_entry");
+                }
+            });
 
             camera = findViewById(R.id.camera);
             camera.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +144,12 @@ public class InputPressureSugar extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void helpScreen(String str){
+        Intent intent = new Intent(getBaseContext(), VideoActivity.class);
+        intent.putExtra("video", str);
+        startActivity(intent);
     }
 
     @Override

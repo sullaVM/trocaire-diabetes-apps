@@ -1,6 +1,7 @@
 package com.example.diabetesapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -29,7 +30,7 @@ import android.util.Log;
 public class Manual extends AppCompatActivity {
 
     EditText data;
-    ImageButton enter, back;
+    ImageButton enter, back, help;
     int mPatientID;
 
     private static final String filename = "/StoredData.txt";
@@ -61,6 +62,7 @@ public class Manual extends AppCompatActivity {
                 back();
             }
         });
+
     }
 
     public void back() {
