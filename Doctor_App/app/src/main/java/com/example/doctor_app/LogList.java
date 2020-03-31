@@ -3,6 +3,7 @@ package com.example.doctor_app;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Consumer;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
@@ -10,12 +11,17 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ListView;
+
+import com.example.doctor_app.data.requests.GetPatientLogsRequest;
+import com.example.doctor_app.data.responses.GetPatientLogsResponse;
+import com.example.doctor_app.data.responses.LogRecord;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -58,12 +64,32 @@ public class LogList extends AppCompatActivity {
     }
 
     private void getData(String start, String end) {
-        //TODO: Get comments by making a request using the API
+        Log.println(Log.INFO, "GetPatientLog", "patientID: " + patientID +
+                " start: " + start + " end: " + end);
 
-        // Using dummy data for now
-        ArrayList<String> comments = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            comments.add("Test comment " + i);
+        GetPatientLogsRequest logRequest = new GetPatientLogsRequest(patientID, start, end);
+
+        logRequest.makeRequest(getBaseContext(), new Consumer<GetPatientLogsResponse>() {
+            @Override
+            public void accept(GetPatientLogsResponse response) {
+                if (response != null && response.success) {
+                    Log.println(Log.INFO, "GetPatientLog", "Request succeeded");
+                    try {
+                        success(response);
+                    } catch (Exception e) {
+                       Log.println(Log.INFO, "GetPatientLog", "No entries for range picked.");
+                   }
+                } else {
+                    Log.println(Log.INFO, "GetPatientLog", "Request failed");
+                }
+            }
+        });
+    }
+
+    private void success(GetPatientLogsResponse response) {
+        ArrayList<LogRecord> comments = new ArrayList<>();
+        for (int i = 0; i < response.logs.length; i++) {
+            comments.add(response.logs[i]);
         }
         LogListArrayAdapter adapter = new LogListArrayAdapter(this,
                 R.layout.log_list_item, comments);

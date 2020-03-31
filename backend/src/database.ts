@@ -3,7 +3,23 @@ import fs from 'fs';
 import * as requests from './models/requests';
 import * as responses from './models/responses';
 
+import * as blobUtil from 'blob-util';
+import * as sharedBlobService from '@azure/storage-blob';
+
 let db: mysql.Connection;
+import {
+  BlobService,
+  common,
+  createBlobService,
+  ErrorOrResponse,
+  ErrorOrResult,
+} from 'azure-storage';
+
+import {
+  BlobServiceClient,
+  StorageSharedKeyCredential,
+  BlobDownloadResponseModel,
+} from '@azure/storage-blob';
 
 fs.readFile('dbconfig.json', 'utf8', (error, data) => {
   if (error) {
@@ -15,17 +31,103 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
   db.connect();
 });
 
+export const updatePhoto = async (
+  request: requests.IUpdatePhoto
+): Promise<responses.IUpdatePhoto> => {
+  const account = process.env.AZURE_ACCOUNT_NAME || '';
+  const accountKey = process.env.AZURE_ACCOUNT_KEY || '';
+  const sharedKeyCredential = new StorageSharedKeyCredential(
+    account,
+    accountKey
+  );
+
+  const blobServiceClient = new BlobServiceClient(
+    // When using AnonymousCredential, following url should include a valid SAS or support public access
+    `https://${account}.blob.core.windows.net`,
+    sharedKeyCredential
+  );
+
+  const containerName = 'images';
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+
+  const base64encodedstring = request.base64encodedstring;
+
+  const blobName = request.patientID + 'patient' + new Date().getTime();
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+  const uploadBlobResponse = await blockBlobClient.upload(
+    base64encodedstring,
+    base64encodedstring.length
+  );
+
+  const urlstart = 'https://';
+  const photoDataUrl = urlstart.concat(
+    account,
+    '.blob.core.windows.net/images/',
+    blobName
+  );
+
+  const query = `UPDATE Patients SET PhotoDataUrl = '${photoDataUrl}' WHERE PatientID = '${request.patientID}';`;
+
+  const result = await new Promise<responses.IUpdatePhoto>(resolve => {
+    db.query(query, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        resolve({ success: false });
+      }
+      resolve({ success: true });
+    });
+  });
+
+  return result;
+};
+
 export const createPatient = async (
   request: requests.ICreatePatient
 ): Promise<responses.ICreatePatient> => {
+  const account = process.env.AZURE_ACCOUNT_NAME || '';
+  const accountKey = process.env.AZURE_ACCOUNT_KEY || '';
+  const sharedKeyCredential = new StorageSharedKeyCredential(
+    account,
+    accountKey
+  );
+
+  const blobServiceClient = new BlobServiceClient(
+    // When using AnonymousCredential, following url should include a valid SAS or support public access
+    `https://${account}.blob.core.windows.net`,
+    sharedKeyCredential
+  );
+
+  const containerName = 'images';
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+
+  const base64encodedstring = request.base64encodedstring;
+
+  const blobName = request.userName + 'patient' + new Date().getTime();
+  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+  const uploadBlobResponse = await blockBlobClient.upload(
+    base64encodedstring,
+    base64encodedstring.length
+  );
+
+  const urlstart = 'https://';
+  const photoBlobUrl = urlstart.concat(
+    account,
+    '.blob.core.windows.net/images/',
+    blobName
+  );
+
   const userNameExistsQuery = `SELECT UserName FROM Patients WHERE UserName='${request.userName}';`;
 
   const query = `INSERT INTO Patients (DoctorID, FirstName, LastName, UserName, Height, Pregnant, MobileNumber, PhotoDataUrl, Password, BslUnit)
   VALUES ('${request.doctorID}','${request.firstName}','${request.lastName}','${
     request.userName
-  }','${request.height}', '${request.pregnant}', '${request.mobileNumber}','${
-    request.photoDataUrl
-  }','${request.password}','${request.bslUnit === 'mgDL' ? 1 : 0}');`;
+  }','${request.height}', '${request.pregnant}', '${
+    request.mobileNumber
+  }','${photoBlobUrl}','${request.password}','${
+    request.bslUnit === 'mgDL' ? 1 : 0
+  }');`;
 
   const result = await new Promise<responses.ICreatePatient>(resolve => {
     db.query(
@@ -33,17 +135,20 @@ export const createPatient = async (
       (userNameError, userNameResults, userNameFields) => {
         if (userNameError) {
           console.error(userNameError);
+          blockBlobClient.delete();
           resolve({ success: false });
         }
         if (!userNameResults[0]) {
           db.query(query, (error, results, fields) => {
             if (error) {
+              blockBlobClient.delete();
               console.error(error);
               resolve({ success: false });
             }
             resolve({ patientID: results.insertId, success: true });
           });
         } else {
+          blockBlobClient.delete();
           resolve({
             success: false,
             message: 'Username already exists',
@@ -368,8 +473,10 @@ export const storePatientLog = async (
   const query = `INSERT INTO Patient_Logs (TimeTaken, PatientID, Note)
   VALUES ('${request.time}','${request.patientID}','${request.note}');`;
 
+  console.log(query);
   const result = await new Promise<responses.IStorePatientLog>(resolve => {
     if (request.note.length > 255) {
+      console.log('Note too long');
       resolve({
         success: false,
         message: 'Note too long, must be less than 255 characters',

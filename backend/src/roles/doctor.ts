@@ -5,6 +5,24 @@ import { pwEncryptSaltRounds } from '../roles/admin';
 import { hash } from 'bcrypt';
 import { Request, Response } from 'express';
 
+export const updatePhoto = async (request: Request, response: Response) => {
+  const updatePhotoRequest: requests.IUpdatePhoto = {
+    patientID: request.body.patientID,
+    base64encodedstring: request.body.base64encodedstring,
+  };
+
+  db.updatePhoto(updatePhotoRequest)
+    .then(result => {
+      response.status(200).send(result);
+    })
+    .catch(error => {
+      response.status(500).send({
+        success: false,
+        message: 'Request unsuccessful, Error: ' + error,
+      });
+    });
+};
+
 export const createPatient = async (request: Request, response: Response) => {
   const genHash: string = await new Promise((resolve, reject) => {
     // tslint:disable-next-line: no-shadowed-variable
@@ -24,7 +42,7 @@ export const createPatient = async (request: Request, response: Response) => {
     height: request.body.height,
     pregnant: request.body.pregnant,
     mobileNumber: request.body.mobileNumber,
-    photoDataUrl: request.body.photoDataUrl,
+    base64encodedstring: request.body.base64encodedstring,
     password: genHash,
     bslUnit: request.body.bslUnit,
   };

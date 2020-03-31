@@ -7,17 +7,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.doctor_app.data.responses.LogRecord;
+
 import java.util.ArrayList;
 
-public class LogListArrayAdapter extends ArrayAdapter<String> {
+public class LogListArrayAdapter extends ArrayAdapter<LogRecord> {
 
-    private ArrayList<String> comments; // Todo: Update to API response type
+    private ArrayList<LogRecord> LogRecords;
 
     public LogListArrayAdapter(Context context,
                                 int resource,
-                                ArrayList<String> objects) {
+                                ArrayList<LogRecord> objects) {
         super(context, resource, objects);
-        this.comments = objects;
+        this.LogRecords = objects;
     }
 
     @Override
@@ -37,11 +39,11 @@ public class LogListArrayAdapter extends ArrayAdapter<String> {
         TextView comment = v.findViewById(R.id.textView2);
 
         // Get reading
-        String entry = comments.get(position);
+        LogRecord entry = LogRecords.get(position);
 
         // Fill components
-        date.setText("Date: " + "");
-        comment.setText(comments.get(position));
+        date.setText("Date: " + entry.time);
+        comment.setText(entry.note);
 
         return v;
     }
