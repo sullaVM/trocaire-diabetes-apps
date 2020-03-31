@@ -18,7 +18,7 @@ public class DataEnter extends AppCompatActivity {
     static final int REQUEST_PRESSURE = 1;
     static final int REQUEST_WEIGHT = 2;
 
-    ImageButton logOut, blood_sugar, blood_pressure, kg;
+    ImageButton logOut, blood_sugar, blood_pressure, kg, help_weight, help_pressure, help_sugar;
 
     int mPatientID;
 
@@ -60,6 +60,36 @@ public class DataEnter extends AppCompatActivity {
                 goTo(REQUEST_WEIGHT);
             }
         });
+
+        help_sugar = findViewById(R.id.help_sugar);
+        help_sugar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helpScreen("sugar");
+            }
+        });
+
+        help_pressure = findViewById(R.id.help_pressure);
+        help_pressure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helpScreen("pressure");
+            }
+        });
+
+        help_weight = findViewById(R.id.help_weight);
+        help_weight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helpScreen("weight");
+            }
+        });
+    }
+
+    private void helpScreen(String info){
+        Intent intent = new Intent(getBaseContext(), VideoActivity.class);
+        intent.putExtra("video", info);
+        startActivity(intent);
     }
 
     @Override

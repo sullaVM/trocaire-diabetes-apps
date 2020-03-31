@@ -100,4 +100,43 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <ImageButton
+        android:id="@+id/help_sugar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_background_48dp"
+        android:padding="10dp"
+        app:layout_constraintVertical_bias="0.6"
+        android:src="@drawable/ic_help_black_48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/blood_sugar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/help_pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_background_48dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_help_black_48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/blood_sugar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <ImageButton
+        android:id="@+id/help_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background_48dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_help_black_48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/kg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/kg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

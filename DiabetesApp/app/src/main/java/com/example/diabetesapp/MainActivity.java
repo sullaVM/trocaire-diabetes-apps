@@ -26,7 +26,7 @@ import org.opencv.android.OpenCVLoader;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    ImageButton done;
+    ImageButton done, help;
     EditText username;
 
     Intent mServiceIntent;
@@ -81,6 +81,20 @@ public class MainActivity extends AppCompatActivity {
                 checkLogin();
             }
         });
+
+        help = findViewById(R.id.help);
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helpScreen();
+            }
+        });
+    }
+
+    private void helpScreen(){
+        Intent intent = new Intent(getBaseContext(), VideoActivity.class);
+        intent.putExtra("video", "login");
+        startActivity(intent);
     }
 
     @Override
