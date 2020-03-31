@@ -104,9 +104,6 @@ public class CheckImage extends AppCompatActivity {
         bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.nine);
         per[current_num] = singleMatching(match_method, bitmap, img);
 
-        if(per[0] >= 0.2) { per[7] = 0; per[1] = 0;}
-        if(per[7] >= 0.2) per[1] = 0;
-        if(per[9] >= 0.2) per[4] = 0;
         return per;
     }
 
