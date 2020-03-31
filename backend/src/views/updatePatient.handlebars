@@ -1,8 +1,11 @@
 <p>
-  Register a new patient.
+  Edit a patient's account.
 </p>
 
-<form action="/api/createPatient" method="post">
+<form action="/api/updatePatient" method="post">
+  <label for="patientID">Patient ID:</label>
+  <input type="number" name="patientID" required><br>
+
   <label for="firstName">First Name:</label>
   <input type="text" name="firstName" required><br>
 
@@ -23,8 +26,6 @@
 
   <label for="password">Password:</label>
   <input type="password" name="password" required>
-
-  <input type="hidden" name="doctorID" id="doctor-id" required>
 
   <input type="submit" class="action-submit" name="submit">
 </form>

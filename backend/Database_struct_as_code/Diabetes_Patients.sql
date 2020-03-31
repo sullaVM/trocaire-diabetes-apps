@@ -35,6 +35,8 @@ CREATE TABLE `Patients` (
   `Password` char(90) DEFAULT NULL,
   `BslUnit` tinyint NOT NULL DEFAULT '0',
   `SessionToken` varchar(255) DEFAULT NULL,
+  'NextVisit' timestamp DEFAULT NULL,
+  'VisitFrequencyInWeeks' int DEFAULT 4,
   PRIMARY KEY (`PatientID`),
   UNIQUE KEY `uniqueun` (`UserName`),
   KEY `FK_Patients_1` (`DoctorID`),

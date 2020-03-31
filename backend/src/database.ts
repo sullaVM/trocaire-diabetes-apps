@@ -106,10 +106,12 @@ export const createPatient = async (
   const blobName = request.userName + 'patient' + new Date().getTime();
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-  const uploadBlobResponse = await blockBlobClient.upload(
-    base64encodedstring,
-    base64encodedstring.length
-  );
+  if (base64encodedstring) {
+    await blockBlobClient.upload(
+      base64encodedstring,
+      base64encodedstring.length
+    );
+  }
 
   const urlstart = 'https://';
   const photoBlobUrl = urlstart.concat(
@@ -267,58 +269,16 @@ export const getPatientProfile = async (
 export const updatePatient = async (
   request: requests.IUpdatePatient
 ): Promise<responses.IUpdatePatient> => {
-  let updateCount = 0;
-
-  const query = `UPDATE Patients 
-  SET
-  ${
-    request.doctorID
-      ? `${updateCount++ ? ',' : ''}DoctorID='${request.doctorID}'`
-      : ''
-  }
-  ${
-    request.firstName
-      ? `${updateCount++ ? ',' : ''}FirstName='${request.firstName}'`
-      : ''
-  }
-  ${
-    request.lastName
-      ? `${updateCount++ ? ',' : ''}LastName='${request.lastName}'`
-      : ''
-  }
-  ${
-    request.userName
-      ? `${updateCount++ ? ',' : ''}UserName='${request.userName}'`
-      : ''
-  }
-  ${
-    request.height
-      ? `${updateCount++ ? ',' : ''}Height='${request.height}'`
-      : ''
-  }
-  ${
-    request.pregnant
-      ? `${updateCount++ ? ',' : ''}Pregnant='${request.pregnant}'`
-      : ''
-  }
-  ${
-    request.mobileNumber
-      ? `${updateCount++ ? ',' : ''}MobileNumber='${request.mobileNumber}'`
-      : ''
-  }
-  ${
-    request.photoDataUrl
-      ? `${updateCount++ ? ',' : ''}PhotoDataUrl='${request.photoDataUrl}'`
-      : ''
-  }
-  ${
-    request.bslUnit
-      ? `${updateCount++ ? ',' : ''}BslUnit='${
-          request.bslUnit === 'mgDL' ? 1 : 0
-        }'`
-      : ''
-  }
-  WHERE PatientID='${request.patientID}';`;
+  const values: string[] = [];
+  Object.entries(request).forEach(([key, value]) => {
+    if (value) {
+      key.charAt(0).toUpperCase(); // The database names are UpperCamelCase.
+      values.push(`${key}='${value}'`);
+    }
+  });
+  const query = `UPDATE Patients SET ${values.join(',')} WHERE PatientID='${
+    request.patientID
+  }';`;
 
   const result = await new Promise<responses.IUpdatePatient>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -646,37 +606,15 @@ export const listDoctorsPatients = async (
 export const updateDoctor = async (
   request: requests.IUpdateDoctor
 ): Promise<responses.IUpdateDoctor> => {
-  let updateCount = 0;
-
-  const query = `UPDATE Doctors
-  SET
-  ${
-    request.firstName
-      ? `${updateCount++ ? ',' : ''}FirstName='${request.firstName}'`
-      : ''
-  }
-  ${
-    request.lastName
-      ? `${updateCount++ ? ',' : ''}LastName='${request.lastName}'`
-      : ''
-  }
-  ${
-    request.licenseNumber
-      ? `${updateCount++ ? ',' : ''}MobileNumber='${request.licenseNumber}'`
-      : ''
-  }
-  ${request.email ? `${updateCount++ ? ',' : ''}Email='${request.email}'` : ''}
-  ${
-    request.userName
-      ? `${updateCount++ ? ',' : ''}UserName='${request.userName}'`
-      : ''
-  }
-  ${
-    request.password
-      ? `${updateCount++ ? ',' : ''}Password='${request.password}'`
-      : ''
-  }
-  WHERE DoctorID='${request.doctorID}';`;
+  const values: string[] = [];
+  Object.entries(request).forEach(([key, value]) => {
+    if (value) {
+      values.push(`${key}='${value}'`);
+    }
+  });
+  const query = `UPDATE Doctors SET ${values.join(',')} WHERE DoctorID='${
+    request.doctorID
+  }';`;
 
   const result = await new Promise<responses.IUpdateDoctor>(resolve => {
     db.query(query, (error, results, fields) => {

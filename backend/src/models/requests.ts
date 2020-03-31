@@ -18,6 +18,8 @@ export interface ICreatePatient {
   base64encodedstring: string;
   password: string;
   bslUnit: string;
+  VisitFrequencyInWeeks?: number;
+  NextVisit?: string;
 }
 
 export interface IUpdatePatient {
@@ -32,6 +34,8 @@ export interface IUpdatePatient {
   photoDataUrl?: string;
   password?: string;
   bslUnit?: string;
+  visitFrequencyInWeeks?: number;
+  nextVisit?: string;
 }
 
 export interface IGetPatientProfile {
@@ -102,7 +106,7 @@ export interface IUpdateDoctor {
   doctorID: number;
   firstName?: string;
   lastName?: string;
-  licenseNumber?: number;
+  licenseNo?: number;
   email?: string;
   userName?: string;
   password?: string;

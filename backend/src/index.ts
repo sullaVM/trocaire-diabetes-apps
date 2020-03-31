@@ -135,6 +135,15 @@ const registerPatientPage = (_request: Request, response: Response) => {
   });
 };
 
+const updatePatientPage = (_request: Request, response: Response) => {
+  response.render('updatePatient', {
+    layout: 'main',
+    helpers: {
+      title: 'Update a Patient',
+    },
+  });
+};
+
 const editProfilePage = (_request: Request, response: Response) => {
   response.render('editProfile', {
     layout: 'main',
@@ -272,6 +281,7 @@ const initRoutes = (app: Express) => {
   // Admin/Doctor Actions
   app.get('/inviteDoctor', isAdminLoggedIn, inviteDoctorPage);
   app.get('/registerPatient', isDoctorLoggedIn, registerPatientPage);
+  app.get('/updatePatient', isDoctorLoggedIn, updatePatientPage);
 
   // Clinic Pages
   app.get('/clinicSignup', isAdminLoggedIn, clinicSignupPage);
@@ -300,7 +310,6 @@ const initApi = (router: Router) => {
   router.post('/addDoctorToClinics', isAdminLoggedIn, addDoctorToMultClinics);
 
   // Doctor's Patient Requests
-
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
 
   router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);

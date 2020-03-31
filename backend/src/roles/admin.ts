@@ -164,7 +164,7 @@ export const updateDoctor = (request: Request, response: Response) => {
     doctorID: request.body.doctorID,
     firstName: request.body.firstName,
     lastName: request.body.lastName,
-    licenseNumber: request.body.licenseNumber,
+    licenseNo: request.body.licenseNumber,
     email: request.body.email,
     userName: request.body.username,
     password: request.body.password,
