@@ -29,7 +29,7 @@ export interface IGetPatientProfile {
   photoDataUrl?: string;
   bslUnit?: string;
   nextVisit?: string;
-  toCall: boolean;
+  toCall?: boolean;
 }
 
 export interface IGetGraphingData {
