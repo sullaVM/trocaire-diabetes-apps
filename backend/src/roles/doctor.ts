@@ -138,23 +138,36 @@ export const getGraphingData = (request: Request, response: Response) => {
     });
 };
 
-export const storePatientLog = (request: Request, response: Response) => {
-  const storePatientLogRequest: requests.IStorePatientLog = {
-    patientID: request.body.patientID,
-    time: request.body.time,
-    note: request.body.note,
-  };
+export const storePatientLog = async (request: Request, response: Response) => {
+  try {
+    const storePatientLogRequest: requests.IStorePatientLog = {
+      patientID: request.body.patientID,
+      time: request.body.time,
+      note: request.body.note,
+    };
 
-  db.storePatientLog(storePatientLogRequest)
-    .then(result => {
-      response.status(200).send(result);
-    })
-    .catch(error => {
-      response.status(500).send({
-        success: false,
-        message: 'Request unsuccessful, Error:' + error,
+    const result = await db.storePatientLog(storePatientLogRequest);
+
+    const followUpReminderInWeeks = request.body.followUpReminderInWeeks;
+    if (followUpReminderInWeeks) {
+      const nextVisit = new Date(
+        Date.now() + followUpReminderInWeeks * 7 * 24 * 60 * 60 * 1000
+      );
+      const dateStr = nextVisit.toISOString().slice(0, 10);
+
+      await db.updatePatient({
+        patientID: request.body.patientID,
+        nextVisit: dateStr,
       });
+    }
+
+    response.status(200).send(result);
+  } catch (error) {
+    response.status(500).send({
+      success: false,
+      message: 'Request unsuccessful, Error:' + error,
     });
+  }
 };
 
 export const getPatientLogs = (request: Request, response: Response) => {

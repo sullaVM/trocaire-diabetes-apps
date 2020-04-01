@@ -272,7 +272,6 @@ export const updatePatient = async (
   const values: string[] = [];
   Object.entries(request).forEach(([key, value]) => {
     if (value) {
-      key.charAt(0).toUpperCase(); // The database names are UpperCamelCase.
       values.push(`${key}='${value}'`);
     }
   });
