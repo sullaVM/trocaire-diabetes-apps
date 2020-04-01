@@ -28,6 +28,8 @@ export interface IGetPatientProfile {
   mobileNumber?: number;
   photoDataUrl?: string;
   bslUnit?: string;
+  nextVisit?: string;
+  toCall: boolean;
 }
 
 export interface IGetGraphingData {

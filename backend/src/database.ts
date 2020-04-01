@@ -259,6 +259,8 @@ export const getPatientProfile = async (
           mobileNumber: results[0].MobileNumber,
           photoDataUrl: results[0].PhotoDataUrl,
           bslUnit: results[0].BslUnit === 1 ? 'mgDL' : 'mmolL',
+          nextVisit: results[0].NextVisit,
+          toCall: callPatient(results[0].NextVisit),
         });
       }
     });
@@ -266,6 +268,12 @@ export const getPatientProfile = async (
 
   return result;
 };
+
+function callPatient(nextVisit: string): boolean {
+  const date = new Date(nextVisit);
+  const now = new Date();
+  return date <= now;
+}
 
 export const updatePatient = async (
   request: requests.IUpdatePatient
