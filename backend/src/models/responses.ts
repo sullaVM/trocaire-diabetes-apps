@@ -2,18 +2,19 @@
  * User responses
  */
 
-export interface IUpdatePhoto {
+export interface ISimpleResponse {
   success: boolean;
+}
+
+export interface IDoctorID {
+  success: boolean;
+  doctorID?: number;
 }
 
 export interface ICreatePatient {
   success: boolean;
   message?: string;
   patientID?: number;
-}
-
-export interface IUpdatePatient {
-  success: boolean;
 }
 
 export interface IGetPatientProfile {
@@ -27,18 +28,6 @@ export interface IGetPatientProfile {
   mobileNumber?: number;
   photoDataUrl?: string;
   bslUnit?: string;
-}
-
-export interface IStoreRBP {
-  success: boolean;
-}
-
-export interface IStoreBSL {
-  success: boolean;
-}
-
-export interface IStoreWeight {
-  success: boolean;
 }
 
 export interface IGetGraphingData {
@@ -67,28 +56,20 @@ export interface IGetPatientID {
  * Doctor responses
  */
 
-export interface ICreateDoctor {
-  success: boolean;
-  doctorID?: number;
-}
-
-export interface IDeleteDoctor {
-  success: boolean;
-  doctorID?: number;
-}
-
-export interface IUpdateDoctor {
-  success: boolean;
-}
-
-export interface IGetDoctorID {
-  success: boolean;
-  doctorID?: number;
-}
-
 export interface IListDoctorsPatients {
   success: boolean;
   patientIDs?: number[];
+}
+
+export interface ISimplePatientProfile {
+  patientID: number;
+  firstName: string;
+  lastName: string;
+}
+
+export interface IGetPatientsToSee {
+  success: boolean;
+  patients?: ISimplePatientProfile[];
 }
 
 export interface IGetDoctorProfile {
@@ -115,25 +96,9 @@ export interface IGetAllClinics {
   clinics?: { clinicID: number; clinicName: string }[];
 }
 
-export interface IAddDoctorToClinic {
-  success: boolean;
-}
-
 export interface ICreateClinic {
   success: boolean;
   clinicID?: number;
-}
-
-export interface IAddDoctorToInvitedDoctors {
-  success: boolean;
-}
-
-export interface IDeleteDoctorToInvitedDoctors {
-  success: boolean;
-}
-
-export interface IVerifyInvitedDoctor {
-  success: boolean;
 }
 
 export interface IGetPatientPassword {
@@ -144,12 +109,4 @@ export interface IGetPatientPassword {
 export interface IGetPatientToken {
   success: boolean;
   sessionToken: string;
-}
-
-export interface ISetPatientToken {
-  success: boolean;
-}
-
-export interface IClearPatientToken {
-  success: boolean;
 }

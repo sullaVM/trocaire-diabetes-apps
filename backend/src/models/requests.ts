@@ -160,3 +160,7 @@ export interface ISetPatientToken {
 export interface IClearPatientToken {
   tokenID: string;
 }
+
+export interface IGetPatientsToSee {
+  doctorID: string;
+}

@@ -36,6 +36,7 @@ import {
   storePatientLog,
   updatePatient,
   updatePhoto,
+  getPatientsToSee,
 } from './roles/doctor';
 
 import {
@@ -311,13 +312,13 @@ const initApi = (router: Router) => {
 
   // Doctor's Patient Requests
   router.post('/createPatient', isDoctorLoggedIn, createPatient);
-
   router.post('/getPatientProfile', isDoctorLoggedIn, getPatientProfile);
   router.post('/getDoctorsPatients', isDoctorLoggedIn, getDoctorsPatients);
   router.post('/getGraphingData', isDoctorLoggedIn, getGraphingData);
   router.post('/updatePatient', isDoctorLoggedIn, updatePatient);
   router.post('/getPatientLogs', isDoctorLoggedIn, getPatientLogs);
   router.post('/storePatientLog', isDoctorLoggedIn, storePatientLog);
+  router.post('/getPatientsToSee', isDoctorLoggedIn, getPatientsToSee);
 
   // Clinic Requests
   router.post('/getAllClinics', isDoctorLoggedIn, getAllClinics);

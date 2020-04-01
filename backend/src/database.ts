@@ -20,6 +20,7 @@ import {
   StorageSharedKeyCredential,
   BlobDownloadResponseModel,
 } from '@azure/storage-blob';
+import { resolveContent } from 'nodemailer/lib/shared';
 
 fs.readFile('dbconfig.json', 'utf8', (error, data) => {
   if (error) {
@@ -33,7 +34,7 @@ fs.readFile('dbconfig.json', 'utf8', (error, data) => {
 
 export const updatePhoto = async (
   request: requests.IUpdatePhoto
-): Promise<responses.IUpdatePhoto> => {
+): Promise<responses.ISimpleResponse> => {
   const account = process.env.AZURE_ACCOUNT_NAME || '';
   const accountKey = process.env.AZURE_ACCOUNT_KEY || '';
   const sharedKeyCredential = new StorageSharedKeyCredential(
@@ -69,7 +70,7 @@ export const updatePhoto = async (
 
   const query = `UPDATE Patients SET PhotoDataUrl = '${photoDataUrl}' WHERE PatientID = '${request.patientID}';`;
 
-  const result = await new Promise<responses.IUpdatePhoto>(resolve => {
+  const result = await new Promise<responses.ISimpleResponse>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -216,10 +217,10 @@ export const getPatientToken = async (
 
 export const setPatientToken = async (
   request: requests.ISetPatientToken
-): Promise<responses.ISetPatientToken> => {
+): Promise<responses.ISimpleResponse> => {
   const query = `UPDATE Patients SET SessionToken='${request.sessionToken}' WHERE PatientID=${request.patientID};`;
 
-  const result = await new Promise<responses.ISetPatientToken>(
+  const result = await new Promise<responses.ISimpleResponse>(
     (resolve, reject) => {
       db.query(query, (error, results, fields) => {
         if (error) {
@@ -268,7 +269,7 @@ export const getPatientProfile = async (
 
 export const updatePatient = async (
   request: requests.IUpdatePatient
-): Promise<responses.IUpdatePatient> => {
+): Promise<responses.ISimpleResponse> => {
   const values: string[] = [];
   Object.entries(request).forEach(([key, value]) => {
     if (value) {
@@ -279,7 +280,7 @@ export const updatePatient = async (
     request.patientID
   }';`;
 
-  const result = await new Promise<responses.IUpdatePatient>(resolve => {
+  const result = await new Promise<responses.ISimpleResponse>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -294,11 +295,11 @@ export const updatePatient = async (
 
 export const storeRBP = async (
   request: requests.IStoreRBP
-): Promise<responses.IStoreRBP> => {
+): Promise<responses.ISimpleResponse> => {
   const query = `INSERT INTO RBP (TimeTaken, PatientID, Systole, Diastole)
   VALUES ('${request.time}','${request.patientID}','${request.systole}','${request.diastole}');`;
 
-  const result = await new Promise<responses.IStoreRBP>(resolve => {
+  const result = await new Promise<responses.ISimpleResponse>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -313,7 +314,7 @@ export const storeRBP = async (
 
 export const storeBSL = async (
   request: requests.IStoreBSL
-): Promise<responses.IStoreBSL> => {
+): Promise<responses.ISimpleResponse> => {
   const mmolL =
     request.unit && request.unit === 'mgDL'
       ? request.value / 18
@@ -322,7 +323,7 @@ export const storeBSL = async (
   const query = `INSERT INTO BSL (TimeTaken, PatientID, MmolL)
   VALUES ('${request.time}','${request.patientID}','${mmolL}')`;
 
-  const result = await new Promise<responses.IStoreBSL>(resolve => {
+  const result = await new Promise<responses.ISimpleResponse>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -337,11 +338,11 @@ export const storeBSL = async (
 
 export const storeWeight = async (
   request: requests.IStoreWeight
-): Promise<responses.IStoreWeight> => {
+): Promise<responses.ISimpleResponse> => {
   const query = `INSERT INTO Weight (TimeTaken, PatientID, WeightKG)
   VALUES ('${request.time}','${request.patientID}','${request.weightKG}')`;
 
-  const result = await new Promise<responses.IStoreWeight>(resolve => {
+  const result = await new Promise<responses.ISimpleResponse>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -480,6 +481,40 @@ export const getPatientLogs = async (
   return result;
 };
 
+export const getPatientsToSee = async (
+  request: requests.IGetPatientsToSee
+): Promise<responses.IGetPatientsToSee> => {
+  try {
+    const need = ['PatientID', 'FirstName', 'LastName'];
+    const query = `SELECT ${need.join(',')} FROM Patients WHERE DoctorID='${
+      request.doctorID
+    }' AND NextVisit <= CURDATE();`;
+
+    return new Promise<responses.IGetPatientsToSee>((resolve, reject) => {
+      db.query(query, (error, results, _fields) => {
+        if (error || !results) {
+          reject(error);
+        }
+
+        const patients = [];
+        if (results.length > 0) {
+          for (const entry of results) {
+            patients.push({
+              patientID: entry.PatientID,
+              firstName: entry.FirstName,
+              lastName: entry.lastName,
+            });
+          }
+        }
+
+        resolve({ success: true, patients: patients });
+      });
+    });
+  } catch (error) {
+    return { success: false };
+  }
+};
+
 export const getPatientID = async (
   request: requests.IGetPatientID
 ): Promise<responses.IGetPatientID> => {
@@ -507,11 +542,11 @@ export const getPatientID = async (
 
 export const createDoctor = async (
   request: requests.ICreateDoctor
-): Promise<responses.ICreateDoctor> => {
+): Promise<responses.IDoctorID> => {
   const query = `INSERT INTO Doctors (FirstName, LastName, LicenseNo, Email, UserName,Password)
   VALUES ('${request.firstName}','${request.lastName}','${request.licenseNumber}','${request.email}','${request.userName}','${request.password}');`;
 
-  const result = await new Promise<responses.ICreateDoctor>(resolve => {
+  const result = await new Promise<responses.IDoctorID>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -526,11 +561,11 @@ export const createDoctor = async (
 
 export const deleteDoctor = async (
   request: requests.IDeleteDoctor
-): Promise<responses.IDeleteDoctor> => {
+): Promise<responses.IDoctorID> => {
   const query = `DELETE FROM Doctors WHERE DoctorID=
 '${request.doctorID}');`;
 
-  const result = await new Promise<responses.IDeleteDoctor>(resolve => {
+  const result = await new Promise<responses.IDoctorID>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -604,7 +639,7 @@ export const listDoctorsPatients = async (
 
 export const updateDoctor = async (
   request: requests.IUpdateDoctor
-): Promise<responses.IUpdateDoctor> => {
+): Promise<responses.ISimpleResponse> => {
   const values: string[] = [];
   Object.entries(request).forEach(([key, value]) => {
     if (value) {
@@ -615,7 +650,7 @@ export const updateDoctor = async (
     request.doctorID
   }';`;
 
-  const result = await new Promise<responses.IUpdateDoctor>(resolve => {
+  const result = await new Promise<responses.ISimpleResponse>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -719,7 +754,7 @@ export const createClinic = async (
 
 export const addDoctorToClinic = async (
   request: requests.IAddDoctorToClinic
-): Promise<responses.IAddDoctorToClinic> => {
+): Promise<responses.ISimpleResponse> => {
   const query = `INSERT INTO ClinicsToDoctors (ClinicID, DoctorID)
   VALUE ('${request.clinicID}','${request.doctorID}');`;
 
@@ -738,10 +773,10 @@ export const addDoctorToClinic = async (
 
 export const getDoctorID = async (
   request: requests.IGetDoctorID
-): Promise<responses.IGetDoctorID> => {
+): Promise<responses.IDoctorID> => {
   const query = `SELECT * FROM Doctors WHERE Email='${request.email}';`;
 
-  const result = await new Promise<responses.IGetDoctorID>(resolve => {
+  const result = await new Promise<responses.IDoctorID>(resolve => {
     db.query(query, (error, results, fields) => {
       if (error) {
         resolve({ success: false });
@@ -766,12 +801,12 @@ export const getDoctorID = async (
 // Call these within a try...catch block to ensure errors are caught.
 export const addDoctorToInvitedDoctors = async (
   request: requests.IAddDoctorToInvitedDoctors
-): Promise<responses.IAddDoctorToInvitedDoctors> => {
+): Promise<responses.ISimpleResponse> => {
   try {
     const query = `INSERT INTO InvitedDoctors (Email)
   VALUE ('${request.email}');`;
 
-    const result = await new Promise<responses.IAddDoctorToInvitedDoctors>(
+    const result = await new Promise<responses.ISimpleResponse>(
       (resolve, reject) => {
         db.query(query, (error, results, fields) => {
           if (error) {
@@ -785,19 +820,17 @@ export const addDoctorToInvitedDoctors = async (
     return result;
   } catch (error) {
     console.log(error);
-    return {
-      success: false,
-    };
+    return { success: false };
   }
 };
 
 export const deleteDoctorToInvitedDoctors = async (
   request: requests.IDeleteDoctorToInvitedDoctors
-): Promise<responses.IDeleteDoctorToInvitedDoctors> => {
+): Promise<responses.ISimpleResponse> => {
   try {
     const query = `DELETE FROM InvitedDoctors WHERE Email='${request.email}';`;
 
-    const result = await new Promise<responses.IDeleteDoctorToInvitedDoctors>(
+    const result = await new Promise<responses.ISimpleResponse>(
       (resolve, reject) => {
         db.query(query, (error, results, fields) => {
           if (error) {
@@ -811,19 +844,17 @@ export const deleteDoctorToInvitedDoctors = async (
     return result;
   } catch (error) {
     console.log(error);
-    return {
-      success: false,
-    };
+    return { success: false };
   }
 };
 
 export const verifyInvitedDoctor = async (
   request: requests.IVerifyInvitedDoctor
-): Promise<responses.IVerifyInvitedDoctor> => {
+): Promise<responses.ISimpleResponse> => {
   try {
     const query = `SELECT * FROM InvitedDoctors WHERE Email='${request.email}';`;
 
-    const result = await new Promise<responses.IVerifyInvitedDoctor>(
+    const result = await new Promise<responses.ISimpleResponse>(
       (resolve, reject) => {
         db.query(query, (error, results, fields) => {
           if (error) {
@@ -843,9 +874,7 @@ export const verifyInvitedDoctor = async (
     return result;
   } catch (error) {
     console.log(error);
-    return {
-      success: false,
-    };
+    return { success: false };
   }
 };
 

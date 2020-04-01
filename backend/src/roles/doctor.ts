@@ -170,6 +170,23 @@ export const storePatientLog = async (request: Request, response: Response) => {
   }
 };
 
+// Get a list of patients that haven't been seen as scheduled.
+export const getPatientsToSee = async (
+  request: Request,
+  response: Response
+) => {
+  try {
+    const patients = await db.getPatientsToSee({
+      doctorID: request.body.doctorID,
+    });
+    console.log(patients);
+    response.status(200).send(patients);
+  } catch (error) {
+    console.log(error);
+    response.status(500);
+  }
+};
+
 export const getPatientLogs = (request: Request, response: Response) => {
   const getPatientLogsRequest: requests.IGetPatientLogs = {
     patientID: request.body.patientID,
