@@ -49,6 +49,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_info_black_18dp" />
 
+    <ImageView
+        android:id="@+id/phone"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/phone" />
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"

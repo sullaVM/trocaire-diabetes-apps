@@ -44,11 +44,18 @@ public class DashboardArrayAdapter extends ArrayAdapter<Patient> {
         TextView name = v.findViewById(R.id.textView);
         ImageView profilePhoto = v.findViewById(R.id.imageView);
         TextView mobileNumber = v.findViewById(R.id.textView2);
+        ImageView phone = v.findViewById(R.id.phone);
 
         // Get patient
         Patient patient = patientList.get(position);
 
         // Fill UI components
+
+        if (patient.getToCall()) {
+            phone.setVisibility(View.VISIBLE);
+        } else {
+            phone.setVisibility(View.INVISIBLE);
+        }
 
         name.setText(patient.getName());
         mobileNumber.setText(Integer.toString(patient.getNumber()));

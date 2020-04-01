@@ -15,10 +15,11 @@ public class Patient implements Parcelable {
     private Integer pregnant;
     private String bslUnit;
     private Integer patientID;
+    private boolean toCall;
 
     public Patient(Integer doctorID, String firstName, String lastName, String height,
                    Integer mobileNumber, String photoDataUrl, String password, Integer pregnant,
-                   String bslUnit, Integer patientID)
+                   String bslUnit, Integer patientID, boolean toCall)
     {
         this.doctorID = doctorID;
         this.firstName = firstName;
@@ -30,7 +31,7 @@ public class Patient implements Parcelable {
         this.pregnant = pregnant;
         this.bslUnit = bslUnit;
         this.patientID = patientID;
-
+        this.toCall = toCall;
     }
 
     protected Patient(Parcel in) {
@@ -106,4 +107,6 @@ public class Patient implements Parcelable {
     }
 
     public Integer getPatientID() { return this.patientID; }
+
+    public boolean getToCall() { return this.toCall; }
 }

@@ -43,6 +43,7 @@
         <item>Four</item>
         <item>Five</item>
     </string-array>
+
     <string name="prompt_surname">Last Name</string>
     <string name="prompt_height">Height (cm)</string>
     <string name="prompt_phone">Phone Number</string>
@@ -64,5 +65,8 @@
     <string name="log">COMMENTS</string>
     <string name="add_comment">COMMENT</string>
     <string name="new_comment">ADD COMMENT</string>
+    <string name="next_reminder">Remind me to contact patient in:</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_description">Here are the list of patients you have not seen in a while:</string>
     <string name="prompt_comment">Comment</string>
 </resources>

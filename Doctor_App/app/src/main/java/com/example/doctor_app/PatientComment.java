@@ -13,19 +13,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.doctor_app.data.requests.StorePatientLogRequest;
 import com.example.doctor_app.data.responses.StorePatientLogResponse;
 
 import java.sql.Timestamp;
 
-public class PatientComment extends AppCompatActivity {
+public class PatientComment extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private String patientName;
     private int patientID;
 
     private EditText commentInput;
+
+    private int weeks = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,12 @@ public class PatientComment extends AppCompatActivity {
         toolbar.setTitle("Patient " + patientName);
         setSupportActionBar(toolbar);
         commentInput = findViewById(R.id.editText);
+
+        String[] numbers = new String[]{"1 week", "2 weeks", "3 weeks", "4 weeks"};
+        Spinner spinner = findViewById(R.id.weeks_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, numbers);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
     public void submit(View view) {
@@ -54,7 +65,7 @@ public class PatientComment extends AppCompatActivity {
         Log.println(Log.INFO, "StorePatientLog", "patientID: " + patientID +
                 " time: " + time + " note: " + comment);
 
-        StorePatientLogRequest log = new StorePatientLogRequest(patientID,time,comment);
+        StorePatientLogRequest log = new StorePatientLogRequest(patientID, time, comment, weeks);
 
         log.makeRequest(getBaseContext(), new Consumer<StorePatientLogResponse>() {
             @Override
@@ -68,6 +79,17 @@ public class PatientComment extends AppCompatActivity {
         });
 
         this.finish();
+    }
+
+    // Spinner
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+        weeks = position + 1;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // Do nothing. Default is 1 week.
     }
 
     // Top bar menu

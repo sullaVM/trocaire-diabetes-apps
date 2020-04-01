@@ -133,9 +133,6 @@ public class PatientSignUpDetails extends AppCompatActivity {
         String w = weight.getText().toString();
         int p = pregnant.isChecked() ? CreatePatientRequest.PREGNANT : CreatePatientRequest.NOT_PREGNANT;
 
-        Bitmap bitmap = extractThumbnail(photo,5,5);
-        photoDataUrl = bitmapToString(bitmap);
-
         // Put into the intent
         Intent intent = new Intent(this, PatientSignUpPass.class);
         intent.putExtra("firstName", fName);
@@ -144,8 +141,13 @@ public class PatientSignUpDetails extends AppCompatActivity {
         intent.putExtra("height", h);
         intent.putExtra("weight", w);
         intent.putExtra("pregnant", p);
-        intent.putExtra("photoDataUrl", photoDataUrl);
         intent.putExtra("doctorID", doctorID);
+
+        if (photo != null) {
+            Bitmap bitmap = extractThumbnail(photo,5,5);
+            photoDataUrl = bitmapToString(bitmap);
+            intent.putExtra("photoDataUrl", photoDataUrl);
+        }
 
         // Start the intent (goes to the next stage of patient sign up: setting the password)
         startActivity(intent);

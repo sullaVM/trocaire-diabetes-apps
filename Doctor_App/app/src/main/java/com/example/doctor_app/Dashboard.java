@@ -91,7 +91,7 @@ public class Dashboard extends AppCompatActivity {
     private void successProfile(GetPatientProfileResponse response, int patientID) {
         Patient patient = new Patient(response.doctorID, response.firstName, response.lastName,
                 response.height, response.mobileNumber, response.photoDataUrl, response.password,
-                    response.pregnant, response.bslUnit, patientID);
+                    response.pregnant, response.bslUnit, patientID, response.toCall);
         patientDataSet.add(patient);
 
         if (patientDataSet.size() == 0) {

@@ -101,9 +101,12 @@ public class PatientSignUpPass extends AppCompatActivity {
         Log.println(Log.INFO, "lastName", lastName);
         Log.println(Log.INFO, "height", height);
         Log.println(Log.INFO, "mobileNumber", Integer.toString(mobileNumber));
-        Log.println(Log.INFO, "photoDataUrl", photoDataUrl);
         Log.println(Log.INFO, "password", password);
         Log.println(Log.INFO, "pregnant", Integer.toString(pregnant));
+
+        if (photoDataUrl != null) {
+            Log.println(Log.INFO, "photoDataUrl", photoDataUrl);
+        }
 
         // Create the patient using the API
         CreatePatientRequest patientRequest = new CreatePatientRequest(doctorID, mEditText.getText().toString(), password, firstName,

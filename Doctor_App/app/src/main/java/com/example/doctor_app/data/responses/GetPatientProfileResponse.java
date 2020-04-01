@@ -23,4 +23,6 @@ public class GetPatientProfileResponse extends PatientResponse {
     public Integer pregnant;
     @Nullable
     public String bslUnit;
+    @Nullable
+    public boolean toCall;
 }

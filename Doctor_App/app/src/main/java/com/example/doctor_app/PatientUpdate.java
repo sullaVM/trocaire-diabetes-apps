@@ -136,7 +136,7 @@ public class PatientUpdate extends AppCompatActivity {
 
         Patient patient = new Patient(doc, fir, las,
                 hei, mob, photoDataUrl, password,
-                pre, bslUnit, patientID);
+                pre, bslUnit, patientID, false);
 
         Intent intent = new Intent(getApplicationContext(), Info.class);
         intent.putExtra("info", patient);
