@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,10 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.doctor_app.data.requests.CreatePatientRequest;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileReader;
 
 import static android.media.ThumbnailUtils.extractThumbnail;
 
@@ -67,9 +63,6 @@ public class PatientSignUpDetails extends AppCompatActivity {
         // Get next button
         next = findViewById(R.id.next);
 
-        // Get file name to save photo to
-        photoDataUrl = Integer.toString(findNumber());
-
         // Set listeners
         profilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,28 +76,6 @@ public class PatientSignUpDetails extends AppCompatActivity {
                 enterData();
             }
         });
-    }
-
-    private int findNumber() {
-        int val = 0;
-        String[] text;
-        File testFile = new File(this.getFilesDir(), "TextFile.txt");
-        if (testFile != null) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(testFile));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    text = line.split(" ");
-                    val = Integer.parseInt(text[0]);
-                    Log.println(Log.INFO, "value", Integer.toString(val));
-                }
-                reader.close();
-            } catch (Exception e) {
-                Log.e("ReadWriteFile", "Unable to read the TextFile.txt file.");
-            }
-        }
-        return val + 1;
     }
 
     private void takePhoto() {
@@ -155,13 +126,5 @@ public class PatientSignUpDetails extends AppCompatActivity {
 
         // Start the intent (goes to the next stage of patient sign up: setting the password)
         startActivity(intent);
-    }
-
-    public String bitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, os);
-        byte[] bytes = os.toByteArray();
-        String result = Base64.encodeToString(bytes, Base64.DEFAULT);
-        return result;
     }
 }

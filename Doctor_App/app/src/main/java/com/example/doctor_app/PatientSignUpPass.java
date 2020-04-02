@@ -1,7 +1,6 @@
 package com.example.doctor_app;
 
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,10 +17,6 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.example.doctor_app.data.requests.CreatePatientRequest;
 import com.example.doctor_app.data.responses.CreatePatientResponse;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class PatientSignUpPass extends AppCompatActivity {
@@ -130,32 +125,6 @@ public class PatientSignUpPass extends AppCompatActivity {
     }
 
     private void success(int doctorID, int patientID, String photoDataUrl, Intent intent) {
-
-        // Save the profile photo name locally
-        try {
-            // Creates a file in the primary external storage space of the
-            // current application.
-            // If the file does not exist, it is created.
-            File textFile = new File(this.getFilesDir(), "TextFile.txt");
-            if (!textFile.exists())
-                textFile.createNewFile();
-
-            // Adds a line to the file
-            BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true /*append*/));
-
-            writer.write(photoDataUrl + " " + ".\n");
-            writer.close();
-
-            // Refresh the data so it can seen when the device is plugged in a
-            // computer. You may have to unplug and replug the device to see the
-            // latest changes. This is not necessary if the user should not modify
-            // the files.
-            MediaScannerConnection.scanFile(this, new String[]{textFile.toString()},
-                    null, null);
-        } catch (IOException e) {
-            Log.e("ReadWriteFile", "Unable to write data.");
-        }
-
         // Finish
         intent = new Intent(getApplicationContext(), Dashboard.class);
         intent.putExtra("tag", doctorID);

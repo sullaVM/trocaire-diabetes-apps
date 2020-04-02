@@ -62,11 +62,11 @@
     <string name="update_details">Edit Details</string>
     <string name="edit">Edit</string>
     <string name="doctor_id">Doctor ID</string>
-    <string name="log">COMMENTS</string>
-    <string name="add_comment">COMMENT</string>
-    <string name="new_comment">ADD COMMENT</string>
+    <string name="log">NOTES</string>
+    <string name="add_comment">NOTE</string>
+    <string name="new_comment">ADD NOTE</string>
     <string name="next_reminder">Remind me to contact patient in:</string>
     <string name="notifications">Notifications</string>
     <string name="notifications_description">Here are the list of patients you have not seen in a while:</string>
-    <string name="prompt_comment">Comment</string>
+    <string name="prompt_comment">Note</string>
 </resources>
