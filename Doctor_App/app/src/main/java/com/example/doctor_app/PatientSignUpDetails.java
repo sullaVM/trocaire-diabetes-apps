@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import static android.media.ThumbnailUtils.extractThumbnail;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +20,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+
+import static android.media.ThumbnailUtils.extractThumbnail;
 
 public class PatientSignUpDetails extends AppCompatActivity {
 
@@ -144,8 +145,11 @@ public class PatientSignUpDetails extends AppCompatActivity {
         intent.putExtra("doctorID", doctorID);
 
         if (photo != null) {
-            Bitmap bitmap = extractThumbnail(photo,5,5);
-            photoDataUrl = bitmapToString(bitmap);
+            Bitmap bitmap = extractThumbnail(photo, photo.getWidth() / 4, photo.getHeight() / 4);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            photoDataUrl = Base64.encodeToString(byteArray, Base64.NO_WRAP);
             intent.putExtra("photoDataUrl", photoDataUrl);
         }
 
@@ -153,9 +157,9 @@ public class PatientSignUpDetails extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public String bitmapToString(Bitmap bitmap){
-        ByteArrayOutputStream os = new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,90, os);
+    public String bitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, os);
         byte[] bytes = os.toByteArray();
         String result = Base64.encodeToString(bytes, Base64.DEFAULT);
         return result;

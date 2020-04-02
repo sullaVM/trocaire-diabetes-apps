@@ -515,7 +515,7 @@ export const getPatientsToSee = async (
           }
         }
 
-        resolve({ success: true, patients: patients });
+        resolve({ success: true, patients });
       });
     });
   } catch (error) {

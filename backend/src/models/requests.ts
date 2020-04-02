@@ -18,7 +18,7 @@ export interface ICreatePatient {
   base64encodedstring: string;
   password: string;
   bslUnit: string;
-  VisitFrequencyInWeeks?: number;
+  visitFrequencyInWeeks?: number;
   NextVisit?: string;
 }
 

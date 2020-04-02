@@ -110,7 +110,7 @@ public class PatientSignUpPass extends AppCompatActivity {
 
         // Create the patient using the API
         CreatePatientRequest patientRequest = new CreatePatientRequest(doctorID, mEditText.getText().toString(), password, firstName,
-                lastName, height, mobileNumber, photoDataUrl, pregnant, "mmolL");
+                lastName, height, mobileNumber, pregnant, "mmolL", photoDataUrl);
         patientRequest.makeRequest(getBaseContext(), new Consumer<CreatePatientResponse>() {
             @Override
             public void accept(CreatePatientResponse response) {

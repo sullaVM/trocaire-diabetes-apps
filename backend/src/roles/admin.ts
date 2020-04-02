@@ -207,7 +207,7 @@ export const deleteDoctor = (request: Request, response: Response) => {
 export const createClinic = (request: Request, response: Response) => {
   const clinicName = request.body.clinicName;
   const createClinicRequest: requests.ICreateClinic = {
-    clinicName: clinicName,
+    clinicName,
   };
 
   db.createClinic(createClinicRequest)
