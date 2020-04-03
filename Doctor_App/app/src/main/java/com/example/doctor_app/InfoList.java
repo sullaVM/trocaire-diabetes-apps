@@ -25,7 +25,6 @@ import com.example.doctor_app.data.responses.GetGraphingDataResponse;
 import com.example.doctor_app.data.responses.RBPRecord;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 

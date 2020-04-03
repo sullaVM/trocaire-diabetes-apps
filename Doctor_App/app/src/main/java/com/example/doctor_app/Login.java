@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.doctor_app.data.requests.GetDoctorIDRequest;
 import com.example.doctor_app.data.requests.SessionLoginRequest;
-import com.example.doctor_app.data.responses.DoctorResponse;
 import com.example.doctor_app.data.responses.GetDoctorIDResponse;
 import com.example.doctor_app.data.responses.SessionLoginResponse;
 import com.google.android.gms.tasks.OnCompleteListener;

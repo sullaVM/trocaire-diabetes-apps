@@ -15,12 +15,12 @@ public class CreatePatientRequest extends Request<CreatePatientResponse> {
     private String lastName;
     private String height;
     private Integer mobileNumber;
-    private String photoDataUrl;
     private Integer pregnant;
     @Nullable
     private String bslUnit;
+    private String base64encodedstring;
 
-    public CreatePatientRequest(Integer doctorID, String userName, String password, String firstName, String lastName, String height, Integer mobileNumber, String photoDataUrl, Integer pregnant, @Nullable String bslUnit) {
+    public CreatePatientRequest(Integer doctorID, String userName, String password, String firstName, String lastName, String height, Integer mobileNumber, Integer pregnant, @Nullable String bslUnit, String base64encodedstring) {
         this.doctorID = doctorID;
         this.userName = userName;
         this.password = password;
@@ -28,9 +28,9 @@ public class CreatePatientRequest extends Request<CreatePatientResponse> {
         this.lastName = lastName;
         this.height = height;
         this.mobileNumber = mobileNumber;
-        this.photoDataUrl = photoDataUrl;
         this.pregnant = pregnant;
         this.bslUnit = bslUnit;
+        this.base64encodedstring = base64encodedstring;
     }
 
     @Override
