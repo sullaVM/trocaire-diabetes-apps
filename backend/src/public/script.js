@@ -46,9 +46,14 @@ async function signIn() {
           email: email,
           idToken: idToken,
         });
-        console.log(response);
-        localStorage.setItem('doctorID', response.data.doctorID);
-        window.location.assign('/');
+
+        const doctorID = response.data.doctorID;
+        if (!doctorID) {
+          window.location.assign('/');
+        } else {
+          localStorage.setItem('doctorID', doctorID);
+          window.location.assign(`/?doctorID=${doctorID}`);
+        }
       }
 
       // TODO(sulla): Redirect instead of alert
@@ -164,6 +169,11 @@ async function initApp() {
     const doctorIDInput = document.getElementById('doctor-id');
     if (doctorIDInput) {
       doctorIDInput.value = localStorage.getItem('doctorID');
+    }
+
+    const getDashboard = document.getElementById('get-dashboard');
+    if (getDashboard) {
+      getDashboard.href = `/?doctorID=${localStorage.getItem('doctorID')}`;
     }
 
     const user = await new Promise((resolve, reject) => {

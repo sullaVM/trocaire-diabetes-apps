@@ -118,6 +118,8 @@ export interface IGetDoctorID {
 
 export interface IListDoctorsPatients {
   doctorID: number;
+  // Template: SELECT [dbSelection, *] from Patients...
+  dbSelection: string;
 }
 
 export interface IGetDoctorProfile {

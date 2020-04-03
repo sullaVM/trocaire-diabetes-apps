@@ -19,13 +19,14 @@ export interface ICreatePatient {
 
 export interface IGetPatientProfile {
   success: boolean;
+  patientID?: number;
   doctorID?: number;
   firstName?: string;
   lastName?: string;
   userName?: string;
   height?: string;
   pregnant?: number;
-  mobileNumber?: number;
+  mobileNumber?: string;
   photoDataUrl?: string;
   bslUnit?: string;
   nextVisit?: string;
@@ -61,12 +62,13 @@ export interface IGetPatientID {
 export interface IListDoctorsPatients {
   success: boolean;
   patientIDs?: number[];
+  patientsProfiles?: IGetPatientProfile[];
 }
 
 export interface ISimplePatientProfile {
   patientID: number;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface IGetPatientsToSee {

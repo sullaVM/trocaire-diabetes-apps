@@ -1,6 +1,7 @@
 // Queries accessible by a doctor.
 import * as db from '../database';
 import * as requests from '../models/requests';
+import * as responses from '../models/responses';
 import { pwEncryptSaltRounds } from '../roles/admin';
 import { hash } from 'bcrypt';
 import { Request, Response } from 'express';
@@ -104,6 +105,7 @@ export const updatePatient = (request: Request, response: Response) => {
 export const getDoctorsPatients = (request: Request, response: Response) => {
   const getDoctorsPatientsRequest: requests.IListDoctorsPatients = {
     doctorID: request.body.doctorID,
+    dbSelection: 'PatientID',
   };
 
   db.listDoctorsPatients(getDoctorsPatientsRequest)
@@ -116,6 +118,20 @@ export const getDoctorsPatients = (request: Request, response: Response) => {
         message: 'Request unsuccessful, Error:' + error,
       });
     });
+};
+
+export const getDoctorsPatientsProfiles = async (doctorID: number) => {
+  try {
+    const getDoctorsPatientsRequest: requests.IListDoctorsPatients = {
+      doctorID: doctorID,
+      dbSelection: '*',
+    };
+
+    return db.listDoctorsPatients(getDoctorsPatientsRequest);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 export const getGraphingData = (request: Request, response: Response) => {

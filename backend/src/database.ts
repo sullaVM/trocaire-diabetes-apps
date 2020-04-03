@@ -619,7 +619,8 @@ export const getDoctorProfile = async (
 export const listDoctorsPatients = async (
   request: requests.IListDoctorsPatients
 ): Promise<responses.IListDoctorsPatients> => {
-  const query = `SELECT PatientID FROM Patients WHERE DoctorID='${request.doctorID}';`;
+  const dbSelection = request.dbSelection;
+  const query = `SELECT ${dbSelection} FROM Patients WHERE DoctorID='${request.doctorID}';`;
 
   const result = await new Promise<responses.IListDoctorsPatients>(resolve => {
     db.query(query, (error, results, fields) => {
@@ -631,12 +632,31 @@ export const listDoctorsPatients = async (
         resolve({ success: false });
       } else {
         const patientIDs = [];
+        const patientsProfiles: responses.IGetPatientProfile[] = [];
         for (const entry of results) {
-          patientIDs.push(entry.PatientID);
+          if (dbSelection === 'PatientID') {
+            patientIDs.push(entry.PatientID);
+          } else if (dbSelection === '*') {
+            patientsProfiles.push({
+              success: true,
+              patientID: entry.PatientID,
+              firstName: entry.FirstName,
+              lastName: entry.LastName,
+              userName: entry.UserName,
+              height: entry.Height,
+              pregnant: entry.Pregnant,
+              mobileNumber: entry.MobileNumber,
+              photoDataUrl: entry.PhotoDataUrl,
+              bslUnit: entry.BslUnit === 1 ? 'mgDL' : 'mmolL',
+              nextVisit: entry.NextVisit,
+              toCall: callPatient(entry.NextVisit),
+            });
+          }
         }
         resolve({
           success: true,
           patientIDs,
+          patientsProfiles,
         });
       }
     });

@@ -5,7 +5,7 @@ html {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
+  font-size: 1em;
 }
 
 #body-wrap {
@@ -241,4 +241,28 @@ textarea {
   width: 300px;
   margin: 20px auto;
   text-align: center;
+}
+
+.patient-card {
+  width: inherit;
+  background-color: #d9e9f3;
+  margin: 0;
+  padding: 15px;
+  min-height: 50px;
+}
+
+.patient-card:hover {
+  background-color: #c0d7e5;
+}
+
+.patient-card text {
+  margin-left: 5px;
+}
+
+.patient-info {
+  width: inherit;
+  background-color: #f3f3f3;
+  margin: 0 0 8px 0;
+  padding: 15px;
+  min-height: 50px;
 }

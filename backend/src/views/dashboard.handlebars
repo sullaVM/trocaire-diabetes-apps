@@ -1,34 +1,48 @@
-<p>
-  Welcome to the Admin Dashboard for the Trocaire Diabetes Management app!
-</p>
+{{#if patientsExist}}
+<h1>Your Patients</h1>
 
-<p>
-  The Admin Dashboard is a supplementary application to the Diabetes
-  Management Doctor app. This web app allows you to:
-  <ul>
-    <li>Invite a Doctor
-      <p>In order to use the Android app, a doctor must be invited by
-        a Trocaire administrator or doctor to signup to the services.
-        Anyone uninvited will not be blocked from creating an account.
-        This is a security measure to prevent unknown users from signing up.
-      </p>
-    </li>
+<div id="patient-list">
+  <img src="/images/phone.png" height="20px" style="float: left;">
+  <p style="margin: 10px;">
+    You haven't seen this patient in more than your
+    set weeks. Go to the Anrdoid Doctor app for more information.
+  </p>
 
-    <li>Register a Clinic
-      <p>Register an existing clinic if you can't find it from your list.
-      </p>
-    </li>
+  {{#each patients}}
+  <div class="patient-card">
 
-    <li>Join a Clinic
-      <p>If you have a doctor account, you can join a clinic to manage patients
-        who belong to it.
-      </p>
-    </li>
-  </ul>
-</p>
+    {{#if_eq this.photoDataUrl "undefined"}}
+    <img src="/images/user.png" height='50px' width="auto" style="float: left; margin-right: 5px;">
+    {{else}}
+    <img src="{{this.photoDataUrl}}" height='50px' width="auto" style="float: left; margin-right: 5px;">
+    {{/if_eq}}
+    <text>
+      <b>{{this.firstName}} {{this.lastName}}</b>
+    </text>
 
-<form action="/api/getPatientsToSee" method="POST">
-  <input type="hidden" name="doctorID" id="doctor-id" required>
+    {{#if this.toCall}}
+    <img src="/images/phone.png" height="20px" style="float: right;">
+    {{/if}}
 
-  <input type="submit" class="action-submit" name="submit" value="Get Patients Scheduled To Call">
-</form>
+    </br>
+    <text>
+      {{this.mobileNumber}}
+    </text>
+  </div>
+
+  <div class="patient-info">
+    Patient ID: {{this.patientID}} <br>
+    Height: {{this.height}} cm <br>
+    Pregnant:
+    {{#if_eq this.pregnant 0}}
+    No
+    {{else}}
+    Yes
+    {{/if_eq}}
+  </div>
+  {{/each}}
+
+  {{else}}
+  <h2>Welcome, Admin!</h2>
+  {{/if}}
+</div>

@@ -12,6 +12,7 @@ import express, {
   NextFunction,
   Router,
   response,
+  request,
 } from 'express';
 
 import {
@@ -37,6 +38,7 @@ import {
   updatePatient,
   updatePhoto,
   getPatientsToSee,
+  getDoctorsPatientsProfiles,
 } from './roles/doctor';
 
 import {
@@ -91,13 +93,45 @@ const doctorSignupPage = (_request: Request, response: Response) => {
   response.sendFile(join(__dirname + '/../src/private/signup.html'));
 };
 
-const dashboard = (_request: Request, response: Response) => {
-  response.render('dashboard', {
-    layout: 'main',
-    helpers: {
-      title: 'Dashboard',
-    },
-  });
+const dashboard = async (request: Request, response: Response) => {
+  try {
+    let patientsExist = false;
+
+    const doctorID = request.query.doctorID;
+    if (doctorID) {
+      const result = await getDoctorsPatientsProfiles(doctorID);
+      if (result) {
+        const patients = result.patientsProfiles;
+        patientsExist = true;
+
+        console.log(patients);
+        response.render('dashboard', {
+          layout: 'main',
+          patientsExist,
+          patients,
+          helpers: {
+            title: 'Dashboard',
+            if_eq: function(a: string, b: string, opts: any) {
+              if (a == b) {
+                return opts.fn(this);
+              } else {
+                return opts.inverse(this);
+              }
+            },
+          },
+        });
+      }
+    } else {
+      throw new Error('Doctor not found!');
+    }
+  } catch (error) {
+    response.render('dashboard', {
+      layout: 'main',
+      helpers: {
+        title: 'dashboard',
+      },
+    });
+  }
 };
 
 const clinicSignupPage = (_request: Request, response: Response) => {
@@ -150,6 +184,15 @@ const editProfilePage = (_request: Request, response: Response) => {
     layout: 'main',
     helpers: {
       title: 'Edit Profile',
+    },
+  });
+};
+
+const helpPage = (_request: Request, response: Response) => {
+  response.render('help', {
+    layout: 'main',
+    helpers: {
+      title: 'Help Page',
     },
   });
 };
@@ -287,6 +330,8 @@ const initRoutes = (app: Express) => {
   // Clinic Pages
   app.get('/clinicSignup', isAdminLoggedIn, clinicSignupPage);
   app.get('/addDoctorToClinics', isDoctorLoggedIn, addDoctorToClinicsPage);
+
+  app.get('/help', isAdminLoggedIn, helpPage);
 
   // Doctor Profile Edit Request
   app.get('/editProfile', isDoctorLoggedIn, editProfilePage);
