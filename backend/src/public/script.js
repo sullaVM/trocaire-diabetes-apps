@@ -14,6 +14,7 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 async function signIn() {
   try {
     if (firebase.auth().currentUser) {
+      window.localStorage.clear();
       firebase.auth().signOut();
       await axios.get('/sessionLogout');
     } else {
@@ -77,6 +78,7 @@ async function signIn() {
 }
 
 async function signOut() {
+  window.localStorage.clear();
   firebase.auth().signOut();
   await axios.get('/sessionLogout');
   window.location.assign('/');

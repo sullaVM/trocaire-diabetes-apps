@@ -3,46 +3,45 @@
 
 <div id="patient-list">
   <img src="/images/phone.png" height="20px" style="float: left;">
-  <p style="margin: 10px;">
-    You haven't seen this patient in more than your
-    set weeks. Go to the Anrdoid Doctor app for more information.
-  </p>
+  <div style="margin-left: 25px;">
+    This means that you haven't seen this patient in a while. Go to the Anrdoid Doctor app for more information.
+    </p>
 
-  {{#each patients}}
-  <div class="patient-card">
+    {{#each patients}}
+    <div class="patient-card">
 
-    {{#if_eq this.photoDataUrl "undefined"}}
-    <img src="/images/user.png" height='50px' width="auto" style="float: left; margin-right: 5px;">
+      {{#if_eq this.photoDataUrl "undefined"}}
+      <img src="/images/user.png" height='50px' width="auto" style="float: left; margin-right: 5px;">
+      {{else}}
+      <img src="{{this.photoDataUrl}}" height='50px' width="auto" style="float: left; margin-right: 5px;">
+      {{/if_eq}}
+      <text>
+        <b>{{this.firstName}} {{this.lastName}}</b>
+      </text>
+
+      {{#if this.toCall}}
+      <img src="/images/phone.png" height="20px" style="float: right;">
+      {{/if}}
+
+      </br>
+      <text>
+        {{this.mobileNumber}}
+      </text>
+    </div>
+
+    <div class="patient-info">
+      Patient ID: {{this.patientID}} <br>
+      Height: {{this.height}} cm <br>
+      Pregnant:
+      {{#if_eq this.pregnant 0}}
+      No
+      {{else}}
+      Yes
+      {{/if_eq}}
+    </div>
+    {{/each}}
+
     {{else}}
-    <img src="{{this.photoDataUrl}}" height='50px' width="auto" style="float: left; margin-right: 5px;">
-    {{/if_eq}}
-    <text>
-      <b>{{this.firstName}} {{this.lastName}}</b>
-    </text>
-
-    {{#if this.toCall}}
-    <img src="/images/phone.png" height="20px" style="float: right;">
+    <h2>Welcome, Admin!</h2>
     {{/if}}
-
-    </br>
-    <text>
-      {{this.mobileNumber}}
-    </text>
   </div>
-
-  <div class="patient-info">
-    Patient ID: {{this.patientID}} <br>
-    Height: {{this.height}} cm <br>
-    Pregnant:
-    {{#if_eq this.pregnant 0}}
-    No
-    {{else}}
-    Yes
-    {{/if_eq}}
-  </div>
-  {{/each}}
-
-  {{else}}
-  <h2>Welcome, Admin!</h2>
-  {{/if}}
-</div>
