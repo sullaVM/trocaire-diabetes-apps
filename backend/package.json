@@ -48,7 +48,7 @@
     "cookie-parser": "^1.4.4",
     "crypto-random-string": "^3.2.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-handlebars": "^3.1.0",
     "express-validator": "^6.4.0",
     "firebase-admin": "^8.9.2",
